@@ -1,9 +1,0 @@
-{
-	"auth": {
-		"belkaad390038": {
-			"service": "Cognito",
-			"providerPlugin": "awscloudformation",
-			"dependsOn": []
-		}
-	}
-}
