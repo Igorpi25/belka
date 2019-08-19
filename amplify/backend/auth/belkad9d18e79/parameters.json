@@ -59,9 +59,9 @@
     "dependsOn": [],
     "thirdPartyAuth": false,
     "triggers": "{}",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://zennnn-dev.com/\"],\"LogoutURLs\":[\"https://zennnn-dev.com/\"]}",
     "parentStack": {
         "Ref": "AWS::StackId"
     },
-    "permissions": []
+    "permissions": [],
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://zennnn-dev.com/signin/\"],\"LogoutURLs\":[\"https://zennnn-dev.com/\"]}"
 }

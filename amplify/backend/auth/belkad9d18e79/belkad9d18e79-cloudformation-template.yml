@@ -100,17 +100,11 @@ Parameters:
                       
   dependsOn:
     Type: CommaDelimitedList
-      
-  hostedUIProviderCreds:
-    Type: String
-                
+        
   thirdPartyAuth:
     Type: String
             
   triggers:
-    Type: String
-              
-  oAuthMetadata:
     Type: String
                     
   parentStack:
@@ -118,7 +112,13 @@ Parameters:
                 
   permissions:
     Type: CommaDelimitedList
-    
+      
+  hostedUIProviderCreds:
+    Type: String
+              
+  oAuthMetadata:
+    Type: String
+            
 Conditions:
   ShouldNotCreateEnvResources: !Equals [ !Ref env, NONE ]
 
@@ -167,6 +167,16 @@ Resources:
         
         -
           Name: email
+          Required: true
+          Mutable: true
+        
+        -
+          Name: family_name
+          Required: true
+          Mutable: true
+        
+        -
+          Name: given_name
           Required: true
           Mutable: true
         
