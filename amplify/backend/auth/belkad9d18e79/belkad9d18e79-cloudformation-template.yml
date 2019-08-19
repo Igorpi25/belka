@@ -97,14 +97,26 @@ Parameters:
       
   hostedUIProviderMeta:
     Type: String
-              
+                      
+  dependsOn:
+    Type: CommaDelimitedList
+      
   hostedUIProviderCreds:
+    Type: String
+                
+  thirdPartyAuth:
+    Type: String
+            
+  triggers:
     Type: String
               
   oAuthMetadata:
     Type: String
-                      
-  dependsOn:
+                    
+  parentStack:
+    Type: String
+                
+  permissions:
     Type: CommaDelimitedList
     
 Conditions:
@@ -183,6 +195,17 @@ Resources:
         SnsCallerArn: !GetAtt SNSRole.Arn
         ExternalId: belkad9d18e79_role_external_id
     
+  
+    
+    
+  
+    
+    
+  
+   
+    
+  # Updating lambda role with permissions to Cognito
+  
   
   UserPoolClientWeb:
   # Created provide application access to user pool
