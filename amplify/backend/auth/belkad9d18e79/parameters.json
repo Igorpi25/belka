@@ -71,6 +71,6 @@
         "Ref": "AWS::StackId"
     },
     "permissions": [],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://zennnn-dev.com/signin/\"],\"LogoutURLs\":[\"https://zennnn-dev.com/\"]}",
-    "verificationBucketName": "belkad9d18e79verificationbucket"
+    "verificationBucketName": "belkad9d18e79verificationbucket",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://dev.d2qe2vztgjyt54.amplifyapp.com/signin/\"],\"LogoutURLs\":[\"https://dev.d2qe2vztgjyt54.amplifyapp.com/\"]}"
 }

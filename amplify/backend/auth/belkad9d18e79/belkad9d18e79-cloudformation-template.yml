@@ -125,13 +125,13 @@ Parameters:
   permissions:
     Type: CommaDelimitedList
       
+  verificationBucketName:
+    Type: String
+              
   hostedUIProviderCreds:
     Type: String
               
   oAuthMetadata:
-    Type: String
-              
-  verificationBucketName:
     Type: String
             
 Conditions:
