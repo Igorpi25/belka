@@ -7,6 +7,9 @@
       <button @click.prevent="onSubmit">
         Submit
       </button>
+      <div>
+        <a href="#" @click.prevent="googleSignIn">Google</a>
+      </div>
     </form>
     <div>
       Info: {{ infoMessage }}
@@ -60,6 +63,16 @@ export default {
         this.loading = false
       }
     },
+    async googleSignIn () {
+      try {
+        const credentials = await this.$Amplify.Auth.federatedSignIn({ provider: 'Google' })
+        // eslint-disable-next-line
+        console.log(credentials)
+      } catch (error) {
+        this.errorMessage = error.message || error
+        throw new Error(error)
+      }
+    }
   }
 }
 </script>
