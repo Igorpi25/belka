@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import { Auth } from 'aws-amplify'
 export default {
   name: 'SignIn',
   data () {
@@ -46,7 +45,7 @@ export default {
         this.errorMessage = ''
         const isValid = this.$refs.form && this.$refs.form.checkValidity()
         if (isValid) {
-          const user = await Auth.signIn(this.formModel.login, this.formModel.password)
+          const user = await this.$Amplify.Auth.signIn(this.formModel.login, this.formModel.password)
           // eslint-disable-next-line
           console.log(user)
           this.$store.commit('setUser', user)

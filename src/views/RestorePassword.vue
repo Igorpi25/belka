@@ -2,9 +2,7 @@
   <div>
     <h1>Restore password</h1>
     <form ref="form">
-      <input v-model="formModel.code" type="tel" required placeholder="Code">
       <input v-model="formModel.email" type="email" required placeholder="Email">
-      <input v-model="formModel.password" type="password" required placeholder="New password">
       <button @click.prevent="onSubmit">
         Submit
       </button>
@@ -16,9 +14,8 @@
 </template>
 
 <script>
-import { Auth } from 'aws-amplify'
 export default {
-  name: 'ChangePassword',
+  name: 'RestorePassword',
   data() {
     return {
       loading: false,
@@ -27,18 +24,11 @@ export default {
       showConfirmPassword: false,
       formModel: {
         email: '',
-        code: '',
-        password: '',
-        passwordConfirm: ''
       },
       confirmRules: [
         v => (v && v === this.formModel.password) || 'Введенные пароли не совпадают.'
       ]
     }
-  },
-  mounted () {
-    this.formModel.email = this.$route.query.email || ''
-    this.formModel.code = this.$route.query.code || ''
   },
   methods: {
    async onSubmit (e) {
@@ -48,11 +38,7 @@ export default {
         this.errorMessage = ''
         const isValid = await this.$refs.form.validate()
         if (isValid) {
-          const response = await Auth.forgotPasswordSubmit(
-            this.formModel.email,
-            this.formModel.code,
-            this.formModel.password
-          )
+          const response = await this.$Amplify.Auth.forgotPassword(this.formModel.email)
           this.$router.push({ name: 'home' })
           // eslint-disable-next-line
           console.log('Submit', response)

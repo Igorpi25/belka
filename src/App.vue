@@ -17,8 +17,6 @@
 </template>
 
 <script>
-import { Auth, Hub } from 'aws-amplify'
-
 export default {
   computed: {
     isLoggedIn () {
@@ -27,12 +25,12 @@ export default {
   },
   created () {
     this.$store.commit('init')
-    Hub.listen('auth', (data) => {
+    this.$Amplify.Hub.listen('auth', (data) => {
       switch (data.payload.event) {
         case 'signIn':
           // eslint-disable-next-line
           console.log('Sign In From Hub', data.payload.data)
-          Auth.currentAuthenticatedUser()
+          this.$Amplify.Auth.currentAuthenticatedUser()
             .then(user => {
               this.$store.commit('setUser', user)
               this.$store.commit('init')
