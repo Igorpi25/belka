@@ -30,7 +30,7 @@ function confirm() {
   const urlParams = new URLSearchParams(window.location.search);
   const encoded = urlParams.get('data');
   const code = urlParams.get('code');
-  const decoded = JSON.parse(atob(encoded))
+  const decoded = JSON.parse(atob(encoded));
   const {
     userName,
     redirectUrl,
@@ -57,5 +57,4 @@ function confirm() {
       window.location.replace(redirectUrl);
     }
   });
-
 }

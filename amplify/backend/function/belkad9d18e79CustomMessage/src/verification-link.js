@@ -16,7 +16,8 @@ exports.handler = (event, context, callback) => {
     })).toString('base64');
     const bucketUrl = `http://${resourcePrefix}verificationbucket-${process.env.ENV}.s3-website-${region}.amazonaws.com`;
     const url = `${bucketUrl}/?data=${payload}&code=${codeParameter}`;
-    const message = `${process.env.EMAILMESSAGE}. \n ${url}`;
+    const link = `<a href="${url}" target="_blank" rel="noopener noreferrer">Verfiy email</a>`;
+    const message = `${process.env.EMAILMESSAGE}. \n ${link}`;
     event.response.smsMessage = message;
     event.response.emailSubject = process.env.EMAILSUBJECT;
     event.response.emailMessage = message;
