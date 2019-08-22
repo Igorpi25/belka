@@ -44,6 +44,8 @@ function confirm() {
     Username: userName,
   };
 
+  console.log('Decoded', decoded)
+
   AWS.config.region = region; 
 
   var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();

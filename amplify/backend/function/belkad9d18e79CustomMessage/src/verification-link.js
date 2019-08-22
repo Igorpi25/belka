@@ -21,6 +21,7 @@ exports.handler = (event, context, callback) => {
     event.response.smsMessage = message;
     event.response.emailSubject = process.env.EMAILSUBJECT;
     event.response.emailMessage = message;
+    console.log('codeParameter', codeParameter);
     console.log('event.response', event.response);
     callback(null, event);
   } else {
