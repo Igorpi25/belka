@@ -8,6 +8,11 @@ exports.handler = (event, context, callback) => {
     const redirectUrl = `${process.env.REDIRECTURL}/?username=${userName}`;
     const resourcePrefix = process.env.RESOURCENAME.split('CustomMessage')[0];
 
+    console.log('resourcePrefix', resourcePrefix);
+    console.log('process.env', process.env);
+    console.log('process.env.RESOURCENAME', process.env.RESOURCENAME);
+    console.log('process.env.resourceName', process.env.resourceName);
+
     const payload = Buffer.from(JSON.stringify({
       userName,
       redirectUrl,
@@ -17,11 +22,10 @@ exports.handler = (event, context, callback) => {
     const bucketUrl = `http://${resourcePrefix}verificationbucket-${process.env.ENV}.s3-website-${region}.amazonaws.com`;
     const url = `${bucketUrl}/?data=${payload}&code=${codeParameter}`;
     const link = `<a href="${url}" target="_blank" rel="noopener noreferrer">Verfiy email</a>`;
-    const message = `${process.env.EMAILMESSAGE}. ${link}. \n ${url}`;
+    const message = `${process.env.EMAILMESSAGE}. \n ${link}.`;
     event.response.smsMessage = message;
     event.response.emailSubject = process.env.EMAILSUBJECT;
     event.response.emailMessage = message;
-    console.log('codeParameter', codeParameter);
     console.log('event.response', event.response);
     callback(null, event);
   } else {
