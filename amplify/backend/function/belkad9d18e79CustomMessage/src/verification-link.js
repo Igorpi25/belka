@@ -9,9 +9,8 @@ exports.handler = (event, context, callback) => {
     const resourcePrefix = process.env.RESOURCENAME.split('CustomMessage')[0];
 
     console.log('resourcePrefix', resourcePrefix);
-    console.log('process.env', process.env);
-    console.log('process.env.RESOURCENAME', process.env.RESOURCENAME);
-    console.log('process.env.resourceName', process.env.resourceName);
+    console.log('event', JSON.stringify(event));
+    console.log('context', context);
 
     const payload = Buffer.from(JSON.stringify({
       userName,

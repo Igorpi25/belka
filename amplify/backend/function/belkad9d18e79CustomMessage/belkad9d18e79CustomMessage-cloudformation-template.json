@@ -119,7 +119,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "belka-dev-20190817194703-deployment",
-					"S3Key": "amplify-builds/belkad9d18e79CustomMessage-6d32734779636f38756c-build.zip"
+					"S3Key": "amplify-builds/belkad9d18e79CustomMessage-69316e68756932496d34-build.zip"
 				}
 			}
 		},
