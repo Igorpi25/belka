@@ -6,11 +6,10 @@ exports.handler = (event, context, callback) => {
     const { region, userName } = event;
     const { clientId } = event.callerContext;
     const redirectUrl = `${process.env.REDIRECTURL}/?username=${userName}`;
-    const resourcePrefix = process.env.RESOURCENAME.split('CustomMessage')[0];
-
-    console.log('resourcePrefix', resourcePrefix);
-    console.log('event', JSON.stringify(event));
-    console.log('context', context);
+    // get resourceName from function-parameters.json file
+    // function name includes prefix
+    const resourceName = process.env.RESOURCENAME || process.env.AWS_LAMBDA_FUNCTION_NAME;
+    const resourcePrefix = resourceName.split('CustomMessage')[0];
 
     const payload = Buffer.from(JSON.stringify({
       userName,
