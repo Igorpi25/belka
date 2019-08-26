@@ -72,5 +72,5 @@
     },
     "permissions": [],
     "verificationBucketName": "belkad9d18e79verificationbucket",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://dev.d2qe2vztgjyt54.amplifyapp.com/signin/\"],\"LogoutURLs\":[\"https://dev.d2qe2vztgjyt54.amplifyapp.com/\"]}"
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://dev.d2qe2vztgjyt54.amplifyapp.com/finish-google-signin/\"],\"LogoutURLs\":[\"https://dev.d2qe2vztgjyt54.amplifyapp.com/signin/\"]}"
 }

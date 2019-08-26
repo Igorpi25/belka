@@ -40,5 +40,22 @@ export default new Router({
       name: 'change-password',
       component: () => import('./views/ChangePassword.vue')
     },
+    {
+      path: '/email-confirm',
+      name: 'email-confirm',
+      beforeEnter: (to, from, next) => {
+        if (to.query.username) {
+          if (to.query.state === 'success') {
+            alert('Email confirmed')
+          } else if (to.query.state === 'confirmed') {
+            alert('Email already confirmed')
+          } else if (to.query.state === 'error') {
+            alert(to.query.message)
+            // Add message to Analytics
+          }
+        }
+        next('/')
+      }
+    },
   ]
 })

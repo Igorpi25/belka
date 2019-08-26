@@ -18,9 +18,11 @@
             },
             "function": {
                 "belkad9d18e79CustomMessage": {
-                    "REDIRECTURL": "https://dev.d2qe2vztgjyt54.amplifyapp.com/restore-password/confirm/",
+                    "REDIRECTURL": "https://dev.d2qe2vztgjyt54.amplifyapp.com",
                     "EMAILSUBJECT": "Verification link",
-                    "EMAILMESSAGE": "Please click the link below to verify your email address"
+                    "EMAILMESSAGE": "Please click the link below to verify your email address",
+                    "FPEMAILSUBJECT": "Restore password",
+                    "FPEMAILMESSAGE": "Please click the link below to restore password"
                 }
             }
         }

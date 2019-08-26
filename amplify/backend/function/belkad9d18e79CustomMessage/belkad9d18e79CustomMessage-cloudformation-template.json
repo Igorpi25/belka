@@ -14,6 +14,14 @@
 			"Type": "String",
 			"Default": ""
 		},
+		"FPEMAILMESSAGE": {
+			"Type": "String",
+			"Default": ""
+		},
+		"FPEMAILSUBJECT": {
+			"Type": "String",
+			"Default": ""
+		},
 		"modules": {
 			"Type": "String",
 			"Default": "",
@@ -104,6 +112,12 @@
 						"EMAILMESSAGE": {
 							"Ref": "EMAILMESSAGE"
 						},
+						"FPEMAILSUBJECT": {
+							"Ref": "FPEMAILSUBJECT"
+						},
+						"FPEMAILMESSAGE": {
+							"Ref": "FPEMAILMESSAGE"
+						},
 						"RESOURCENAME": {
 							"Ref": "resourceName"
 						}
@@ -119,7 +133,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "belka-dev-20190817194703-deployment",
-					"S3Key": "amplify-builds/belkad9d18e79CustomMessage-34584c5056447346426b-build.zip"
+					"S3Key": "amplify-builds/belkad9d18e79CustomMessage-50486d68734d66465858-build.zip"
 				}
 			}
 		},
