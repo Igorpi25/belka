@@ -45,7 +45,7 @@ export default {
     },
     signIn () {
       const ga = window.gapi.auth2.getAuthInstance()
-      ga.signIn().then(
+      ga.signIn({ prompt: 'select_account' }).then(
         googleUser => {
           this.getAWSCredentials(googleUser)
         },
