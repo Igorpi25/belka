@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { Auth } from 'aws-amplify'
+import Auth from '@aws-amplify/auth'
 
 Vue.use(Vuex)
 

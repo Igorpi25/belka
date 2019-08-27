@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import Auth from '@aws-amplify/auth'
+
 export default {
   name: 'SignUp',
   data() {
@@ -41,7 +43,7 @@ export default {
         const isValid = this.$refs.form && this.$refs.form.checkValidity()
         if (isValid) {
           const { firstName, lastName, email, password } = this.formModel
-          const response = await this.$Amplify.Auth.signUp({
+          const response = await Auth.signUp({
             username: email,
             password,
             attributes: {
@@ -50,7 +52,7 @@ export default {
               email
             }
           })
-          this.$router.push({ name: 'welcome' })
+          this.$router.push('/')
           // eslint-disable-next-line
           console.log(response)
         }

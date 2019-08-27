@@ -10,35 +10,27 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: () => import('./views/Home.vue')
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('./views/Home.vue')
+      component: () => import(/* webpackChunkName: "require-auth" */ '@/views/Home.vue')
     },
     {
       path: '/signin',
       name: 'signin',
-      component: () => import('./views/SignIn.vue')
+      component: () => import(/* webpackChunkName: "require-not-auth" */ '@/views/SignIn.vue')
     },
     {
       path: '/signup',
       name: 'signup',
-      component: () => import('./views/SignUp.vue')
+      component: () => import(/* webpackChunkName: "require-not-auth" */ '@/views/SignUp.vue')
     },
     {
       path: '/restore-password',
       name: 'restore-password',
-      component: () => import('./views/RestorePassword.vue')
+      component: () => import(/* webpackChunkName: "require-not-auth" */ '@/views/RestorePassword.vue')
     },
     {
       path: '/change-password',
       name: 'change-password',
-      component: () => import('./views/ChangePassword.vue')
+      component: () => import(/* webpackChunkName: "require-not-auth" */ '@/views/ChangePassword.vue')
     },
     {
       path: '/email-confirm',
@@ -56,6 +48,14 @@ export default new Router({
         }
         next('/')
       }
+    },
+    {
+      path: '/start-google-signin',
+      component: () => import(/* webpackChunkName: "google-signin-start" */ './views/GoogleSignInStart.vue')
+    },
+    {
+      path: '/finish-google-signin',
+      component: () => import(/* webpackChunkName: "google-signin-finish" */ './views/GoogleSignInFinish.vue')
     },
   ]
 })

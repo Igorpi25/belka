@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import Auth from '@aws-amplify/auth'
+
 export default {
   name: 'RestorePassword',
   data() {
@@ -38,7 +40,7 @@ export default {
         this.errorMessage = ''
         const isValid = await this.$refs.form.validate()
         if (isValid) {
-          const response = await this.$Amplify.Auth.forgotPassword(this.formModel.email)
+          const response = await Auth.forgotPassword(this.formModel.email)
           this.$router.push({ name: 'home' })
           // eslint-disable-next-line
           console.log('Submit', response)

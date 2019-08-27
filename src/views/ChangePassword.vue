@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import Auth from '@aws-amplify/auth'
+
 export default {
   name: 'ChangePassword',
   data() {
@@ -47,7 +49,7 @@ export default {
         this.errorMessage = ''
         const isValid = await this.$refs.form.validate()
         if (isValid) {
-          const response = await this.$Amplify.Auth.forgotPasswordSubmit(
+          const response = await Auth.forgotPasswordSubmit(
             this.formModel.email,
             this.formModel.code,
             this.formModel.password
