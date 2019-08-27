@@ -9,6 +9,9 @@
     </div>
     <section>
       Logged In: {{ Number(isLoggedIn) }}
+      <div v-if="isLoggedIn">
+        <button @click="signOut">Log out</button>
+      </div>
     </section>
     <section>
       <router-view/>
@@ -27,7 +30,7 @@ export default {
     },
   },
   created () {
-    this.$store.commit('init')
+    this.$store.dispatch('checkAuth')
     Hub.listen('auth', (data) => {
       switch (data.payload.event) {
         case 'signIn':
@@ -51,6 +54,11 @@ export default {
       }
     })
   },
+  methods: {
+    signOut () {
+      Auth.signOut()
+    }
+  }
 }
 </script>
 
