@@ -130,6 +130,12 @@ Parameters:
               
   hostedUIProviderCreds:
     Type: String
+                      
+  authProviders:
+    Type: CommaDelimitedList
+      
+  googleClientId:
+    Type: String
               
   oAuthMetadata:
     Type: String
@@ -760,6 +766,13 @@ Resources:
             - cognito-idp.${region}.amazonaws.com/${client}
             - { region: !Ref "AWS::Region",  client: !Ref UserPool}
             
+      SupportedLoginProviders: 
+        
+        
+        accounts.google.com: !Ref googleClientId
+        
+        
+      
       AllowUnauthenticatedIdentities: !Ref allowUnauthenticatedIdentities
        
        
@@ -809,6 +822,9 @@ Outputs :
   AppClientSecret:
     Value: !GetAtt UserPoolClientInputs.appSecret
   
+  
+  GoogleWebClient:
+    Value: !Ref googleClientId
    
    
   

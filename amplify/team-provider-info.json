@@ -13,6 +13,7 @@
         "categories": {
             "auth": {
                 "belkad9d18e79": {
+                    "googleClientId": "608967944605-upablqhsus4618t5ut0mdecc122gumvk.apps.googleusercontent.com",
                     "hostedUIProviderCreds": "[{\"ProviderName\":\"Google\",\"client_id\":\"608967944605-upablqhsus4618t5ut0mdecc122gumvk.apps.googleusercontent.com\",\"client_secret\":\"Qi4MUwMWcQvWrz-gXFbxyrtY\"}]"
                 }
             },

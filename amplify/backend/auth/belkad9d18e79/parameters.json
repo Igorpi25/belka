@@ -65,12 +65,15 @@
             ]
         }
     ],
-    "thirdPartyAuth": false,
+    "thirdPartyAuth": true,
     "triggers": "{\"CustomMessage\":[\"verification-link\"]}",
     "parentStack": {
         "Ref": "AWS::StackId"
     },
     "permissions": [],
     "verificationBucketName": "belkad9d18e79verificationbucket",
+    "authProviders": [
+        "accounts.google.com"
+    ],
     "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://dev.d2qe2vztgjyt54.amplifyapp.com/finish-google-signin/\"],\"LogoutURLs\":[\"https://dev.d2qe2vztgjyt54.amplifyapp.com/signin/\"]}"
 }
