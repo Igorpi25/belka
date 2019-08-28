@@ -1,7 +1,7 @@
 <template>
   <div>
-    <button @click="signIn">
-      Sign In
+    <button @click.prevent="signIn">
+      Google Sign In
     </button>
   </div>
 </template>
@@ -13,6 +13,7 @@ import Auth from '@aws-amplify/auth'
 const CLIENT_ID = '608967944605-upablqhsus4618t5ut0mdecc122gumvk.apps.googleusercontent.com'
 
 export default {
+  name: 'GoogleSignIn',
   created () {
     const ga = window.gapi && window.gapi.auth2
       ? window.gapi.auth2.getAuthInstance()
@@ -51,6 +52,11 @@ export default {
         },
         error => {
           console.log(error)
+          if (error.error === 'popup_closed_by_user') {
+            console.log('Popup closed by user')
+          } else {
+            console.log(error)
+          }
         }
       )
     },

@@ -1,15 +1,16 @@
 <template>
   <div>
-    <h1>Lig In</h1>
+    <h1>Log In</h1>
     <form ref="form">
       <input v-model="formModel.login" type="email" required placeholder="Email">
       <input v-model="formModel.password" type="password" required minlength="8" placeholder="Password">
       <button @click.prevent="onSubmit">
         Submit
       </button>
-      <div>
+      <!-- <div>
         <a href="#" @click.prevent="googleSignIn">Google</a>
-      </div>
+      </div> -->
+      <GoogleSignIn />
     </form>
     <div>
       Info: {{ infoMessage }}
@@ -22,9 +23,13 @@
 
 <script>
 import Auth from '@aws-amplify/auth'
+import GoogleSignIn from '@/components/GoogleSignIn.vue'
 
 export default {
   name: 'SignIn',
+  components: {
+    GoogleSignIn
+  },
   data () {
     return {
       loading: false,
