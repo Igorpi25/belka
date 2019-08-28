@@ -55,8 +55,10 @@ export default {
     })
   },
   methods: {
-    signOut () {
-      Auth.signOut()
+    async signOut () {
+      await Auth.signOut()
+      this.$store.commit('setUser')
+      this.$router.push('/signin')
     }
   }
 }
