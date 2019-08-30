@@ -4,16 +4,17 @@
 export const createProject = `mutation CreateProject($input: CreateProjectInput!) {
   createProject(input: $input) {
     id
+    owner
     name
     description
     status
     specs {
       items {
         id
+        owner
         number
         description
         client
-        items
         status
         projectId
         createdAt
@@ -29,16 +30,17 @@ export const createProject = `mutation CreateProject($input: CreateProjectInput!
 export const updateProject = `mutation UpdateProject($input: UpdateProjectInput!) {
   updateProject(input: $input) {
     id
+    owner
     name
     description
     status
     specs {
       items {
         id
+        owner
         number
         description
         client
-        items
         status
         projectId
         createdAt
@@ -54,16 +56,17 @@ export const updateProject = `mutation UpdateProject($input: UpdateProjectInput!
 export const deleteProject = `mutation DeleteProject($input: DeleteProjectInput!) {
   deleteProject(input: $input) {
     id
+    owner
     name
     description
     status
     specs {
       items {
         id
+        owner
         number
         description
         client
-        items
         status
         projectId
         createdAt
@@ -79,13 +82,36 @@ export const deleteProject = `mutation DeleteProject($input: DeleteProjectInput!
 export const createSpec = `mutation CreateSpec($input: CreateSpecInput!) {
   createSpec(input: $input) {
     id
+    owner
     number
     description
     client
-    items
+    specs {
+      id
+      article
+      name
+      count {
+        count
+      }
+      price {
+        purchasePrice
+        price
+        amount
+      }
+      store {
+        net
+        gross
+      }
+      additional {
+        images
+        description
+      }
+      status
+    }
     status
     project {
       id
+      owner
       name
       description
       status
@@ -104,13 +130,36 @@ export const createSpec = `mutation CreateSpec($input: CreateSpecInput!) {
 export const updateSpec = `mutation UpdateSpec($input: UpdateSpecInput!) {
   updateSpec(input: $input) {
     id
+    owner
     number
     description
     client
-    items
+    specs {
+      id
+      article
+      name
+      count {
+        count
+      }
+      price {
+        purchasePrice
+        price
+        amount
+      }
+      store {
+        net
+        gross
+      }
+      additional {
+        images
+        description
+      }
+      status
+    }
     status
     project {
       id
+      owner
       name
       description
       status
@@ -129,13 +178,36 @@ export const updateSpec = `mutation UpdateSpec($input: UpdateSpecInput!) {
 export const deleteSpec = `mutation DeleteSpec($input: DeleteSpecInput!) {
   deleteSpec(input: $input) {
     id
+    owner
     number
     description
     client
-    items
+    specs {
+      id
+      article
+      name
+      count {
+        count
+      }
+      price {
+        purchasePrice
+        price
+        amount
+      }
+      store {
+        net
+        gross
+      }
+      additional {
+        images
+        description
+      }
+      status
+    }
     status
     project {
       id
+      owner
       name
       description
       status

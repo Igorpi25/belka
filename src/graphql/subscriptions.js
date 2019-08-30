@@ -4,16 +4,17 @@
 export const onCreateProject = `subscription OnCreateProject {
   onCreateProject {
     id
+    owner
     name
     description
     status
     specs {
       items {
         id
+        owner
         number
         description
         client
-        items
         status
         projectId
         createdAt
@@ -29,16 +30,17 @@ export const onCreateProject = `subscription OnCreateProject {
 export const onUpdateProject = `subscription OnUpdateProject {
   onUpdateProject {
     id
+    owner
     name
     description
     status
     specs {
       items {
         id
+        owner
         number
         description
         client
-        items
         status
         projectId
         createdAt
@@ -54,16 +56,17 @@ export const onUpdateProject = `subscription OnUpdateProject {
 export const onDeleteProject = `subscription OnDeleteProject {
   onDeleteProject {
     id
+    owner
     name
     description
     status
     specs {
       items {
         id
+        owner
         number
         description
         client
-        items
         status
         projectId
         createdAt
@@ -79,13 +82,36 @@ export const onDeleteProject = `subscription OnDeleteProject {
 export const onCreateSpec = `subscription OnCreateSpec {
   onCreateSpec {
     id
+    owner
     number
     description
     client
-    items
+    specs {
+      id
+      article
+      name
+      count {
+        count
+      }
+      price {
+        purchasePrice
+        price
+        amount
+      }
+      store {
+        net
+        gross
+      }
+      additional {
+        images
+        description
+      }
+      status
+    }
     status
     project {
       id
+      owner
       name
       description
       status
@@ -104,13 +130,36 @@ export const onCreateSpec = `subscription OnCreateSpec {
 export const onUpdateSpec = `subscription OnUpdateSpec {
   onUpdateSpec {
     id
+    owner
     number
     description
     client
-    items
+    specs {
+      id
+      article
+      name
+      count {
+        count
+      }
+      price {
+        purchasePrice
+        price
+        amount
+      }
+      store {
+        net
+        gross
+      }
+      additional {
+        images
+        description
+      }
+      status
+    }
     status
     project {
       id
+      owner
       name
       description
       status
@@ -129,13 +178,36 @@ export const onUpdateSpec = `subscription OnUpdateSpec {
 export const onDeleteSpec = `subscription OnDeleteSpec {
   onDeleteSpec {
     id
+    owner
     number
     description
     client
-    items
+    specs {
+      id
+      article
+      name
+      count {
+        count
+      }
+      price {
+        purchasePrice
+        price
+        amount
+      }
+      store {
+        net
+        gross
+      }
+      additional {
+        images
+        description
+      }
+      status
+    }
     status
     project {
       id
+      owner
       name
       description
       status

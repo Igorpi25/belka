@@ -4,16 +4,17 @@
 export const getProject = `query GetProject($id: ID!) {
   getProject(id: $id) {
     id
+    owner
     name
     description
     status
     specs {
       items {
         id
+        owner
         number
         description
         client
-        items
         status
         projectId
         createdAt
@@ -34,6 +35,7 @@ export const listProjects = `query ListProjects(
   listProjects(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      owner
       name
       description
       status
@@ -50,13 +52,36 @@ export const listProjects = `query ListProjects(
 export const getSpec = `query GetSpec($id: ID!) {
   getSpec(id: $id) {
     id
+    owner
     number
     description
     client
-    items
+    specs {
+      id
+      article
+      name
+      count {
+        count
+      }
+      price {
+        purchasePrice
+        price
+        amount
+      }
+      store {
+        net
+        gross
+      }
+      additional {
+        images
+        description
+      }
+      status
+    }
     status
     project {
       id
+      owner
       name
       description
       status
@@ -80,13 +105,20 @@ export const listSpecs = `query ListSpecs(
   listSpecs(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      owner
       number
       description
       client
-      items
+      specs {
+        id
+        article
+        name
+        status
+      }
       status
       project {
         id
+        owner
         name
         description
         status
