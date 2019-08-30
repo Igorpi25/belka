@@ -1,0 +1,92 @@
+type Project 
+  @model 
+  @auth(rules: [
+    {allow: owner},
+    # {allow: groups, groups: ["Managers"], queries: null, mutations: [create, update, delete]},
+    # {allow: groups, groups: ["Employees"], queries: [get, list], mutations: null}
+  ])
+{
+  id: ID!
+  owner: String
+  name: String!
+  description: String
+  status: String
+  # specs: [Spec]
+  #   @connection(name: "ProjectSpecs")
+  #   @auth(rules: [{ allow: owner }])
+  createdAt: String
+	updatedAt: String
+}
+
+# type Spec 
+#   @model 
+#   # @auth(rules: [
+#     # {allow: owner},
+#     # {allow: groups, groups: ["Managers"], queries: null, mutations: [create, update, delete]},
+#     # {allow: groups, groups: ["Employees"], queries: [get, list], mutations: null}
+#   # ])
+# {
+#   id: ID!
+#   owner: String
+#   number: String
+#   description: String
+#   client: String
+#   specs: [Item]
+#     # @connection(name: "SpecItems")
+#     # @auth(rules: [{ allow: owner }])
+#   status: String
+#   project: Project @connection(name: "ProjectSpecs", keyField: "projectId")
+#   projectId: String
+#   createdAt: String
+# 	updatedAt: String
+# }
+
+# type Item 
+#   # @model 
+#   # @auth(rules: [
+#     # {allow: owner},
+#     # {allow: groups, groups: ["Managers"], queries: null, mutations: [create, update, delete]},
+#     # {allow: groups, groups: ["Employees"], queries: [get, list], mutations: null}
+#   # ])
+# {
+#   id: ID!
+#   article: String
+#   name: String
+#   count: ItemCount
+#   price: ItemPrice
+#   store: ItemStore
+#   additional: ItemAdditional
+#   status: String
+#   # spec: Project @connection(name: "SpecItems", keyField: "specId")
+#   # specId: String
+#   # owner: String
+#   # createdAt: String
+# 	# updatedAt: String
+# }
+
+# type ItemCount {
+#   count: Float
+# }
+
+# type ItemPrice {
+#   purchasePrice: Float
+#   price: Float
+#   amount: Float
+# }
+
+# type ItemStore {
+#   net: Float
+#   gross: Float
+#   size: ItemSize
+# }
+
+# type ItemSize {
+#   w: Float
+#   l: Float
+#   h: Float
+# }
+
+# type ItemAdditional {
+#   images: [String]
+#   description: String
+# }
