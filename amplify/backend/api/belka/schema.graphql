@@ -1,0 +1,36 @@
+type Project 
+  @model 
+  @auth(rules: [
+    {allow: owner},
+    # {allow: groups, groups: ["Managers"], queries: null, mutations: [create, update, delete]},
+    # {allow: groups, groups: ["Employees"], queries: [get, list], mutations: null}
+  ])
+{
+  id: ID!
+  name: String!
+  description: String
+  status: String
+  specs: [Spec] @connection(name: "ProjectSpecs")
+  createdAt: String!
+	updatedAt: String!
+}
+
+type Spec 
+  @model 
+  @auth(rules: [
+    {allow: owner},
+    # {allow: groups, groups: ["Managers"], queries: null, mutations: [create, update, delete]},
+    # {allow: groups, groups: ["Employees"], queries: [get, list], mutations: null}
+  ])
+{
+  id: ID!
+  number: String
+  description: String
+  client: String
+  items: [String]
+  status: String
+  project: Project @connection(name: "ProjectSpecs", keyField: "projectId")
+  projectId: String
+  createdAt: String!
+	updatedAt: String!
+}
