@@ -3,13 +3,14 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
       name: 'home',
+      meta: { requiresAuth: true },
       component: () => import(/* webpackChunkName: "require-auth" */ '@/views/Home.vue')
     },
     {
@@ -59,3 +60,24 @@ export default new Router({
     },
   ]
 })
+
+router.beforeEach(async (to, from, next) => {
+  // check amplify auth, for init
+  await store.dispatch('checkAuth')
+  const loggedIn = store.getters.loggedIn
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // этот путь требует авторизации, проверяем залогинен ли
+    // пользователь, и если нет, перенаправляем на страницу логина
+    if (!loggedIn) {
+      next({
+        name: 'signin'
+      })
+    } else {
+      next()
+    }
+  } else {
+    next() // всегда так или иначе нужно вызвать next()!
+  }
+})
+
+export default router
