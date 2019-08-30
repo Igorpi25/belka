@@ -8,20 +8,6 @@ export const getProject = `query GetProject($id: ID!) {
     name
     description
     status
-    specs {
-      items {
-        id
-        owner
-        number
-        description
-        client
-        status
-        projectId
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
     createdAt
     updatedAt
   }
@@ -39,93 +25,6 @@ export const listProjects = `query ListProjects(
       name
       description
       status
-      specs {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    nextToken
-  }
-}
-`;
-export const getSpec = `query GetSpec($id: ID!) {
-  getSpec(id: $id) {
-    id
-    owner
-    number
-    description
-    client
-    specs {
-      id
-      article
-      name
-      count {
-        count
-      }
-      price {
-        purchasePrice
-        price
-        amount
-      }
-      store {
-        net
-        gross
-      }
-      additional {
-        images
-        description
-      }
-      status
-    }
-    status
-    project {
-      id
-      owner
-      name
-      description
-      status
-      specs {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    projectId
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const listSpecs = `query ListSpecs(
-  $filter: ModelSpecFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listSpecs(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      owner
-      number
-      description
-      client
-      specs {
-        id
-        article
-        name
-        status
-      }
-      status
-      project {
-        id
-        owner
-        name
-        description
-        status
-        createdAt
-        updatedAt
-      }
-      projectId
       createdAt
       updatedAt
     }
