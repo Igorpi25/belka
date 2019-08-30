@@ -6,6 +6,7 @@
 export default {
   created () {
     // for redirect in same window
+    // eslint-disable-next-line
     console.log('Идет авторизация через google.')
     // if (window.opener) {
     //   // TODO check state query param?

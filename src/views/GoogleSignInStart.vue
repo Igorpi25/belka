@@ -50,6 +50,7 @@ export default {
           this.getAWSCredentials(googleUser)
         },
         error => {
+          // eslint-disable-next-line
           console.log(error)
         }
       )
@@ -61,7 +62,7 @@ export default {
         email: profile.getEmail(),
         name: profile.getName()
       }
-
+      // eslint-disable-next-line
       console.log('expires_at', expires_at)
 
       const credentials = await Auth.federatedSignIn(
@@ -72,6 +73,7 @@ export default {
         },
         user
       )
+      // eslint-disable-next-line
       console.log('credentials', credentials)
     },
     createScript () {

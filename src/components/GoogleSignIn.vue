@@ -51,10 +51,11 @@ export default {
           this.getAWSCredentials(googleUser)
         },
         error => {
-          console.log(error)
           if (error.error === 'popup_closed_by_user') {
+            // eslint-disable-next-line
             console.log('Popup closed by user')
           } else {
+            // eslint-disable-next-line
             console.log(error)
           }
         }
@@ -67,7 +68,7 @@ export default {
         email: profile.getEmail(),
         name: profile.getName()
       }
-
+      // eslint-disable-next-line
       console.log('expires_at', expires_at)
 
       const credentials = await Auth.federatedSignIn(
@@ -78,6 +79,7 @@ export default {
         },
         user
       )
+      // eslint-disable-next-line
       console.log('credentials', credentials)
     },
     createScript () {

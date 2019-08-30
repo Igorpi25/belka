@@ -53,9 +53,11 @@ export default {
         if (response && response.errors && response.errors.length > 0) {
           throw new Error(response.errors.join('\n'))
         }
+        // eslint-disable-next-line
         console.log('Data: ', response.data)
         this.projects = response.data.listProjects
       } catch (error) {
+        // eslint-disable-next-line
         console.log('Error: ', error)
         // Analytics.record({
         //   name: 'ListProjectsError',
@@ -73,9 +75,11 @@ export default {
         if (response && response.errors && response.errors.length > 0) {
           throw new Error(response.errors.join('\n'))
         }
+        // eslint-disable-next-line
         console.log('Data: ', response.data)
         return response.data.createProject
       } catch (error) {
+        // eslint-disable-next-line
         console.log('Error: ', error)
         // Analytics.record({
         //   name: 'CreateProjectError',
