@@ -30,13 +30,9 @@
     ],
     "userpoolClientLambdaRole": "belka22fcf50fc_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "useDefault": "manual",
+    "useDefault": "defaultSocial",
     "authSelections": "identityPoolAndUserPool",
     "resourceName": "belka2fcf50fc2fcf50fc",
-    "thirdPartyAuth": true,
-    "authProviders": [
-        "accounts.google.com"
-    ],
     "usernameAttributes": [
         "email"
     ],
@@ -45,7 +41,6 @@
     "hostedUIDomainName": "belka2fcf50fc-2fcf50fc",
     "authProvidersUserPool": [],
     "hostedUIProviderMeta": "[]",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://dev.d2qe2vztgjyt54.amplifyapp.com/\"],\"LogoutURLs\":[\"https://dev.d2qe2vztgjyt54.amplifyapp.com/signin/\"]}",
     "verificationBucketName": "belka2fcf50fc2fcf50fcverificationbucket",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -73,5 +68,6 @@
                 "Name"
             ]
         }
-    ]
+    ],
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://dev.d2qe2vztgjyt54.amplifyapp.com/\"],\"LogoutURLs\":[\"https://dev.d2qe2vztgjyt54.amplifyapp.com/signin/\"]}"
 }
