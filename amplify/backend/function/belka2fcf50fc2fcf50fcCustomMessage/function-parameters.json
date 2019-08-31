@@ -1,0 +1,14 @@
+{
+    "trigger": true,
+    "modules": [
+        "verification-link"
+    ],
+    "parentResource": "belka2fcf50fc2fcf50fc",
+    "functionName": "belka2fcf50fc2fcf50fcCustomMessage",
+    "parentStack": "auth",
+    "triggerEnvs": "[{\"key\":\"RESOURCENAME\",\"value\":\"resourceName\"}]",
+    "triggerTemplate": "CustomMessage.json.ejs",
+    "roleName": "belka2fcf50fc2fcf50fcCustomMessage",
+    "skipEdit": true,
+    "resourceName": "belka2fcf50fc2fcf50fcCustomMessage"
+}
