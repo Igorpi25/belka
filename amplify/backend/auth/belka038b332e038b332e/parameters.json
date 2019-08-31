@@ -1,0 +1,77 @@
+{
+    "identityPoolName": "belka038b332e_identitypool_038b332e",
+    "allowUnauthenticatedIdentities": false,
+    "resourceNameTruncated": "belka0038b332e",
+    "userPoolName": "belka038b332e_userpool_038b332e",
+    "autoVerifiedAttributes": [
+        "email"
+    ],
+    "mfaConfiguration": "OFF",
+    "mfaTypes": [
+        "SMS Text Message"
+    ],
+    "smsAuthenticationMessage": "Your authentication code is {####}",
+    "smsVerificationMessage": "Your verification code is {####}",
+    "emailVerificationSubject": "Your verification code",
+    "emailVerificationMessage": "Your verification code is {####}",
+    "defaultPasswordPolicy": false,
+    "passwordPolicyMinLength": 8,
+    "passwordPolicyCharacters": [],
+    "requiredAttributes": [
+        "email"
+    ],
+    "userpoolClientGenerateSecret": true,
+    "userpoolClientRefreshTokenValidity": 30,
+    "userpoolClientWriteAttributes": [
+        "email"
+    ],
+    "userpoolClientReadAttributes": [
+        "email"
+    ],
+    "userpoolClientLambdaRole": "belka0038b332e_userpoolclient_lambda_role",
+    "userpoolClientSetAttributes": false,
+    "useDefault": "manual",
+    "authSelections": "identityPoolAndUserPool",
+    "resourceName": "belka038b332e038b332e",
+    "thirdPartyAuth": true,
+    "authProviders": [
+        "accounts.google.com"
+    ],
+    "usernameAttributes": [
+        "email"
+    ],
+    "triggers": "{\"CustomMessage\":[\"verification-link\"]}",
+    "hostedUI": true,
+    "hostedUIDomainName": "belka038b332e-038b332e",
+    "authProvidersUserPool": [],
+    "hostedUIProviderMeta": "[]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://dev.d2qe2vztgjyt54.amplifyapp.com/\"],\"LogoutURLs\":[\"https://dev.d2qe2vztgjyt54.amplifyapp.com/signin/\"]}",
+    "verificationBucketName": "belka038b332e038b332everificationbucket",
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    },
+    "unauthRoleArn": {
+        "Fn::GetAtt": [
+            "UnauthRole",
+            "Arn"
+        ]
+    },
+    "parentStack": {
+        "Ref": "AWS::StackId"
+    },
+    "permissions": [],
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "belka038b332e038b332eCustomMessage",
+            "triggerProvider": "Cognito",
+            "attributes": [
+                "Arn",
+                "Name"
+            ]
+        }
+    ]
+}

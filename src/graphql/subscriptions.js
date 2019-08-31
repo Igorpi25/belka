@@ -1,8 +1,8 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateProject = `subscription OnCreateProject {
-  onCreateProject {
+export const onCreateProject = `subscription OnCreateProject($owner: String!) {
+  onCreateProject(owner: $owner) {
     id
     owner
     name
@@ -13,8 +13,8 @@ export const onCreateProject = `subscription OnCreateProject {
   }
 }
 `;
-export const onUpdateProject = `subscription OnUpdateProject {
-  onUpdateProject {
+export const onUpdateProject = `subscription OnUpdateProject($owner: String!) {
+  onUpdateProject(owner: $owner) {
     id
     owner
     name
@@ -25,8 +25,8 @@ export const onUpdateProject = `subscription OnUpdateProject {
   }
 }
 `;
-export const onDeleteProject = `subscription OnDeleteProject {
-  onDeleteProject {
+export const onDeleteProject = `subscription OnDeleteProject($owner: String!) {
+  onDeleteProject(owner: $owner) {
     id
     owner
     name

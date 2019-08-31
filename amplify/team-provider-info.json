@@ -1,0 +1,29 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "belka-dev-20190831211043-authRole",
+            "UnauthRoleArn": "arn:aws:iam::744966734673:role/belka-dev-20190831211043-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::744966734673:role/belka-dev-20190831211043-authRole",
+            "Region": "ap-northeast-1",
+            "DeploymentBucketName": "belka-dev-20190831211043-deployment",
+            "UnauthRoleName": "belka-dev-20190831211043-unauthRole",
+            "StackName": "belka-dev-20190831211043",
+            "StackId": "arn:aws:cloudformation:ap-northeast-1:744966734673:stack/belka-dev-20190831211043/5b973c40-cbe8-11e9-889f-06219e647854"
+        },
+        "categories": {
+            "function": {
+                "belka038b332e038b332eCustomMessage": {
+                    "REDIRECTURL": "https://dev.d2qe2vztgjyt54.amplifyapp.com",
+                    "EMAILSUBJECT": "Verification link",
+                    "EMAILMESSAGE": "Please click the link below to verify your email address"
+                }
+            },
+            "auth": {
+                "belka038b332e038b332e": {
+                    "googleClientId": "608967944605-upablqhsus4618t5ut0mdecc122gumvk.apps.googleusercontent.com",
+                    "hostedUIProviderCreds": "[]"
+                }
+            }
+        }
+    }
+}

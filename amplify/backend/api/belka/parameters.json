@@ -1,0 +1,11 @@
+{
+    "AppSyncApiName": "belka",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": "false",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authbelka038b332e038b332e",
+            "Outputs.UserPoolId"
+        ]
+    }
+}
