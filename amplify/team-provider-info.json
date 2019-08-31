@@ -1,0 +1,29 @@
+{
+    "develop": {
+        "awscloudformation": {
+            "AuthRoleName": "belkaapi-develop-20190831235720-authRole",
+            "UnauthRoleArn": "arn:aws:iam::744966734673:role/belkaapi-develop-20190831235720-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::744966734673:role/belkaapi-develop-20190831235720-authRole",
+            "Region": "ap-northeast-1",
+            "DeploymentBucketName": "belkaapi-develop-20190831235720-deployment",
+            "UnauthRoleName": "belkaapi-develop-20190831235720-unauthRole",
+            "StackName": "belkaapi-develop-20190831235720",
+            "StackId": "arn:aws:cloudformation:ap-northeast-1:744966734673:stack/belkaapi-develop-20190831235720/a2423de0-cbff-11e9-8609-0a0143fecb7c"
+        },
+        "categories": {
+            "function": {
+                "belkaapid7786dd4d7786dd4CustomMessage": {
+                    "REDIRECTURL": "https://dev.d2qe2vztgjyt54.amplifyapp.com",
+                    "EMAILSUBJECT": "Verification link",
+                    "EMAILMESSAGE": "Please click the link below to verify your email address"
+                }
+            },
+            "auth": {
+                "belkaapid7786dd4d7786dd4": {
+                    "googleClientId": "608967944605-upablqhsus4618t5ut0mdecc122gumvk.apps.googleusercontent.com",
+                    "hostedUIProviderCreds": "[]"
+                }
+            }
+        }
+    }
+}
