@@ -1,28 +1,54 @@
 <template>
-  <div>
+  <v-container>
     <h1>Log In</h1>
-    <form ref="form">
-      <input v-model="formModel.login" type="email" required placeholder="Email">
-      <input v-model="formModel.password" type="password" required minlength="8" placeholder="Password">
-      <button @click.prevent="onSubmit">
-        Submit
-      </button>
-      <!-- <div>
-        <a href="#" @click.prevent="googleSignIn">Google</a>
-      </div> -->
-      <GoogleSignIn />
-    </form>
-    <div>
-      Info: {{ infoMessage }}
-    </div>
-    <div>
-      Error: <span class="error">{{ errorMessage }}</span>
-    </div>
-  </div>
+    <v-slide-y-transition>
+      <v-alert
+        v-if="error"
+        type="error"
+        color="red"
+        dismissible
+      >
+        {{ errorMessage }}
+      </v-alert>
+    </v-slide-y-transition>
+    <v-form
+      ref="form"
+      v-model="valid"
+      lazy-validation
+    >
+      <v-container>
+        <v-text-field
+          v-model="email"
+          :rules="emailRules"
+          label="E-mail"
+          type="email"
+          required
+        ></v-text-field>
+        <v-text-field
+          v-model="password"
+          :rules="passwordRules"
+          label="Password"
+          type="password"
+          required
+        ></v-text-field>
+        <v-btn
+          :disabled="!valid"
+          :loading="loading"
+          :ripple="false"
+          color="primary"
+          class="mr-4"
+          @click="onSubmit"
+        >
+          Submit
+        </v-btn>
+        <span>or</span>
+        <GoogleSignIn class="ml-4" />
+      </v-container>
+    </v-form>
+  </v-container>
 </template>
 
 <script>
-import Auth from '@aws-amplify/auth'
 import GoogleSignIn from '@/components/GoogleSignIn.vue'
 
 export default {
@@ -33,46 +59,49 @@ export default {
   data () {
     return {
       loading: false,
-      infoMessage: '',
+      error: false,
       errorMessage: '',
       showPassword: false,
-      formModel: {
-        login: '',
-        password: '',
-      },
-    }
-  },
-  mounted () {
-    // TODO check federation for text message
-    if (this.$route.query.code && this.$route.query.state) {
-      this.infoMessage = 'Идет авторизация через google.'
+      valid: false,
+      email: '',
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      ],
+      password: '',
+      passwordRules: [
+        v => !!v || 'Password is required',
+        v => (v && v.length > 8) || 'Password must be more than 7 characters',
+      ],
     }
   },
   methods: {
     async onSubmit () {
       try {
         this.loading = true
-        this.errorMessage = ''
-        const isValid = this.$refs.form && this.$refs.form.checkValidity()
-        if (isValid) {
-          const user = await Auth.signIn(this.formModel.login, this.formModel.password)
+        this.closeError()
+        if (this.$refs.form.validate()) {
+          const user = await this.$Amplify.Auth.signIn(this.email, this.password)
           // eslint-disable-next-line
           console.log(user)
           this.$store.commit('setUser', user)
           this.$router.push({ name: 'home' })
-        } else {
-          this.errorMessage = 'Ошибка валидации'
         }
       } catch (error) {
+        this.error = true
         this.errorMessage = error.message || error
         throw new Error(error)
       } finally {
         this.loading = false
       }
     },
+    closeError () {
+      this.error = false
+      this.errorMessage = ''
+    },
     async googleSignIn () {
       try {
-        const credentials = await Auth.federatedSignIn({ provider: 'Google' })
+        const credentials = await this.$Amplify.Auth.federatedSignIn({ provider: 'Google' })
         // eslint-disable-next-line
         console.log(credentials)
       } catch (error) {

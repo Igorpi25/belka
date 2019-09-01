@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import Auth from '@aws-amplify/auth'
 // import awsconfig from '@/aws-exports'
 
 const CLIENT_ID = '608967944605-upablqhsus4618t5ut0mdecc122gumvk.apps.googleusercontent.com'
@@ -35,7 +34,7 @@ export default {
   methods: {
     async googleSignIn () {
       try {
-        const credentials = await Auth.federatedSignIn({ provider: 'Google' })
+        const credentials = await this.$Amplify.Auth.federatedSignIn({ provider: 'Google' })
         // eslint-disable-next-line
         console.log(credentials)
       } catch (error) {
@@ -65,7 +64,7 @@ export default {
       // eslint-disable-next-line
       console.log('expires_at', expires_at)
 
-      const credentials = await Auth.federatedSignIn(
+      const credentials = await this.$Amplify.Auth.federatedSignIn(
         'google',
         {
           token: id_token,

@@ -13,27 +13,27 @@ const router = new Router({
       path: '/',
       name: 'home',
       meta: { requiresAuth: true },
-      component: () => import(/* webpackChunkName: "require-auth" */ '@/views/Home.vue')
+      component: () => import('@/views/Home.vue')
     },
     {
       path: '/signin',
       name: 'signin',
-      component: () => import(/* webpackChunkName: "require-not-auth" */ '@/views/SignIn.vue')
+      component: () => import('@/views/SignIn.vue')
     },
     {
       path: '/signup',
       name: 'signup',
-      component: () => import(/* webpackChunkName: "require-not-auth" */ '@/views/SignUp.vue')
+      component: () => import('@/views/SignUp.vue')
     },
     {
       path: '/restore-password',
       name: 'restore-password',
-      component: () => import(/* webpackChunkName: "require-not-auth" */ '@/views/RestorePassword.vue')
+      component: () => import('@/views/RestorePassword.vue')
     },
     {
       path: '/change-password',
       name: 'change-password',
-      component: () => import(/* webpackChunkName: "require-not-auth" */ '@/views/ChangePassword.vue')
+      component: () => import('@/views/ChangePassword.vue')
     },
     {
       path: '/email-confirm',
@@ -54,11 +54,11 @@ const router = new Router({
     },
     {
       path: '/start-google-signin',
-      component: () => import(/* webpackChunkName: "google-signin-start" */ './views/GoogleSignInStart.vue')
+      component: () => import('./views/GoogleSignInStart.vue')
     },
     {
       path: '/finish-google-signin',
-      component: () => import(/* webpackChunkName: "google-signin-finish" */ './views/GoogleSignInFinish.vue')
+      component: () => import('./views/GoogleSignInFinish.vue')
     },
   ]
 })

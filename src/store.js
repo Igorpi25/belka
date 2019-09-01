@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Auth from '@aws-amplify/auth'
 
 Vue.use(Vuex)
 
@@ -30,7 +29,7 @@ export default new Vuex.Store({
         if (state.initialized) {
           return true
         } else {
-          const user = await Auth.currentAuthenticatedUser()
+          const user = await this._vm.$Amplify.Auth.currentAuthenticatedUser()
           commit('setUser', user)
           commit('init')
         }
