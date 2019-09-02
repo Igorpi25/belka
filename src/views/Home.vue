@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-toolbar flat color="transparent">
-      <h1>Projects</h1>
+      <h1>Проекты</h1>
       <div class="flex-grow-1"></div>
       <v-dialog
         v-model="dialog"
@@ -14,11 +14,11 @@
             color="primary"
             class="mb-2"
             v-on="on"
-          >New Project</v-btn>
+          >Создать проект</v-btn>
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">New Project</span>
+            <span class="headline">Новый проект</span>
           </v-card-title>
 
           <v-card-text>
@@ -40,13 +40,13 @@
               <v-container>
                 <v-text-field
                   ref="projectName"
-                  v-model="project.name"
+                  v-model="createModel.name"
                   label="Name"
                   required
                   :rules="[v => !!v || 'Name is required']"
                 ></v-text-field>
                 <v-textarea
-                  v-model="project.description"
+                  v-model="createModel.description"
                   label="Description"
                   required
                   :rules="[v => !!v || 'Description is required']"
@@ -62,7 +62,7 @@
               text
               @click="dialog = false"
             >
-              Cancel
+              Отмена
             </v-btn>
             <v-btn
               :disabled="!valid"
@@ -72,7 +72,7 @@
               color="primary"
               @click="createProject"
             >
-              Create
+              Создать
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -87,18 +87,65 @@
           :onSubscriptionMsg="onCreateProject"
         >
           <template slot-scope="{ loading, data, errors }">
-            <div v-if="loading">Loading...</div>
+            <div v-if="loading">Загрузка...</div>
 
             <div v-else-if="errors.length > 0">
               {{ errors }}
             </div>
 
             <div v-else-if="data">
-              <v-data-table
-                :headers="headers"
+              <v-data-iterator
                 :items="data.listProjects.items"
-                class="elevation-1"
-              ></v-data-table>
+                :items-per-page.sync="itemsPerPage"
+                :footer-props="{ itemsPerPageOptions }"
+              >
+                <template v-slot:default="props">
+                  <v-row>
+                    <v-col
+                      v-for="item in props.items"
+                      :key="item.name"
+                      cols="12"
+                      sm="12"
+                      md="6"
+                      @click="$router.push({
+                        name: 'project',
+                        params: {
+                          projectId: item.id
+                        }
+                      })"
+                    >
+                      <v-hover v-slot:default="{ hover }">
+                        <v-card :elevation="hover ? 6 : 2">
+                          <v-card-title><h4>{{ item.name }}</h4></v-card-title>
+                          <v-divider></v-divider>
+                          <v-list dense>
+                            <v-list-item>
+                              <v-list-item-content>Description:</v-list-item-content>
+                              <v-list-item-content class="align-end">{{ item.description }}</v-list-item-content>
+                            </v-list-item>
+                            <v-list-item>
+                              <v-list-item-content>Status:</v-list-item-content>
+                              <v-list-item-content class="align-end">{{ item.status }}</v-list-item-content>
+                            </v-list-item>
+                            <v-list-item>
+                              <v-list-item-content>Owner:</v-list-item-content>
+                              <v-list-item-content class="align-end">{{ item.owner }}</v-list-item-content>
+                            </v-list-item>
+                            <v-list-item>
+                              <v-list-item-content>Created:</v-list-item-content>
+                              <v-list-item-content class="align-end">{{ item.createdAt }}</v-list-item-content>
+                            </v-list-item>
+                            <v-list-item>
+                              <v-list-item-content>Updated:</v-list-item-content>
+                              <v-list-item-content class="align-end">{{ item.updatedAt }}</v-list-item-content>
+                            </v-list-item>
+                          </v-list>
+                        </v-card>
+                      </v-hover>
+                    </v-col>
+                  </v-row>
+                </template>
+              </v-data-iterator>
             </div>
           </template>
         </amplify-connect>
@@ -117,7 +164,7 @@
         text
         @click="error = false"
       >
-        Close
+        Закрыть
       </v-btn>
     </v-snackbar>
   </v-container>
@@ -129,9 +176,11 @@ import { createProject } from '@/graphql/mutations'
 import { onCreateProject } from '@/graphql/subscriptions'
 
 export default {
-  name: 'Home',
+  name: 'Project',
   data () {
     return {
+      itemsPerPageOptions: [4, 8],
+      itemsPerPage: 4,
       createLoading: false,
       error: false,
       errorMessage: '',
@@ -139,7 +188,7 @@ export default {
       createErrorMessage: '',
       dialog: false,
       valid: false,
-      project: {
+      createModel: {
         name: '',
         description: ''
       },
@@ -194,8 +243,10 @@ export default {
       try {
         this.createLoading = true
         if (this.$refs.form.validate()) {
-          const input = Object.assign({}, this.project, {
-            owner: this.$store.state.user.username
+          const input = Object.assign({}, this.createModel, {
+            owner: this.$store.state.user.username,
+            status: 'CREATED',
+            client: 'Client'
           })
           const response = await this.$Amplify.API.graphql(
             this.$Amplify.graphqlOperation(createProject, { input })
