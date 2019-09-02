@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-toolbar flat color="transparent">
-      <h1>Проекты</h1>
+      <h1>Спецификации</h1>
       <div class="flex-grow-1"></div>
       <v-dialog
         v-model="dialog"
@@ -44,13 +44,11 @@
                   label="Name"
                   required
                   :rules="[v => !!v || 'Name is required']"
-                ></v-text-field>
+                />
                 <v-textarea
                   v-model="createModel.description"
                   label="Description"
-                  required
-                  :rules="[v => !!v || 'Description is required']"
-                ></v-textarea>
+                />
               </v-container>
             </v-form>
           </v-card-text>
@@ -110,7 +108,8 @@
                       @click="$router.push({
                         name: 'project',
                         params: {
-                          projectId: item.id
+                          projectId: item.id,
+                          specId: item.spec.id
                         }
                       })"
                     >
@@ -172,7 +171,7 @@
 
 <script>
 import { listProjects } from '@/graphql/queries'
-import { createProject } from '@/graphql/mutations'
+import { createProject, createSpec } from '@/graphql/mutations'
 import { onCreateProject } from '@/graphql/subscriptions'
 
 export default {
@@ -205,12 +204,15 @@ export default {
     }
   },
   computed: {
+    owner () {
+      return this.$store.state.user.username
+    },
     listProjectsQuery () {
       return this.$Amplify.graphqlOperation(listProjects)
     },
     createProjectSubscription () {
       return this.$Amplify.graphqlOperation(onCreateProject, {
-        owner: this.$store.state.user.username
+        owner: this.owner
       })
     },
   },
@@ -239,14 +241,31 @@ export default {
       prevData.data.listProjects.items.push(newItem)
       return prevData.data
     },
+    async createSpec (input) {
+      try {
+        const response = await this.$Amplify.API.graphql(
+          this.$Amplify.graphqlOperation(createSpec, {
+            input
+          })
+        )
+        if (response && response.errors && response.errors.length > 0) {
+          throw new Error(response.errors.join('\n'))
+        }
+        return response.data.createSpec.id
+      } catch (error) {
+        throw error
+      }
+    },   
     async createProject () {
       try {
         this.createLoading = true
         if (this.$refs.form.validate()) {
+          const owner = this.owner
+          const projectSpecId = await this.createSpec({ owner })
           const input = Object.assign({}, this.createModel, {
-            owner: this.$store.state.user.username,
+            owner,
             status: 'CREATED',
-            client: 'Client'
+            projectSpecId
           })
           const response = await this.$Amplify.API.graphql(
             this.$Amplify.graphqlOperation(createProject, { input })

@@ -1,7 +1,7 @@
 type Project 
   @model 
   @auth(rules: [
-    {allow: owner},
+    { allow: owner },
     # { allow: owner, ownerField: "managers", operations: [create, update, delete] },
     # { allow: owner, ownerField: "freelancers", operations: [create] }
     # {allow: groups, groups: ["Managers"], queries: null, mutations: [create, update, delete]},
@@ -14,8 +14,10 @@ type Project
   description: String
   client: String
   status: ProjectStatus
-  spec: Spec
+  spec: Spec @connection
   managers: [String]
+  accauntants: [String]
+  warehousemans: [String]
   freelancers: [String]
   createdAt: String
 	updatedAt: String
@@ -25,26 +27,36 @@ enum ProjectStatus {
   CREATED
   IN_PROGRESS
   CLOSED
+  DELETED
+  ARCHIVED
 }
 
-type Spec {
-  waybills: [Waybill]
-}
-
-enum SpecStatus {
-  CREATED
-  IN_PROGRESS
-  CLOSED
-}
-
-type Waybill {
+type Spec 
+  @model 
+  @auth(rules: [
+    { allow: owner },
+  ])
+{
   id: ID!
+  owner: String
+  waybills: [Waybill] @connection(name: "SpecWaybills")
+}
+
+type Waybill 
+  @model 
+  @auth(rules: [
+    { allow: owner },
+  ])
+{
+  id: ID!
+  owner: String
   number: String
   description: String
   contractor: String
   purchaseDate: String
   deliveryDate: String
-  items: [Item]
+  spec: Spec @connection(name: "SpecWaybills")
+  items: [Item] @connection(name: "WaybillItems")
   status: WaybillStatus
   createdAt: String
 	updatedAt: String
@@ -52,10 +64,15 @@ type Waybill {
 
 enum WaybillStatus {
   CREATED
-  CLOSED
+  DELETED
+  ARCHIVED
 }
 
 type Item 
+  @model 
+  @auth(rules: [
+    { allow: owner },
+  ])
 {
   id: ID!
   article: String
@@ -64,9 +81,16 @@ type Item
   price: ItemPrice
   store: ItemStore
   additional: ItemAdditional
-  status: String
+  status: ItemStatus
+  waybill: Waybill @connection(name: "WaybillItems")
   createdAt: String
 	updatedAt: String
+}
+
+enum ItemStatus {
+  CREATED
+  DELETED
+  ARCHIVED
 }
 
 type ItemCount {
