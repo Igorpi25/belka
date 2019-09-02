@@ -8,9 +8,9 @@
     <v-layout>
       <v-flex>
         <amplify-connect
-          :query="listWaybillsQuery"
-          :subscription="createWaybillSubscription"
-          :onSubscriptionMsg="onCreateWaybill"
+          :query="getProjectQuery"
+          :subscription="updateProjectSubscription"
+          :onSubscriptionMsg="onUpdateProject"
         >
           <template slot-scope="{ loading, data, errors }">
             <div v-if="loading">Загрузка...</div>
@@ -19,10 +19,10 @@
               {{ errors }}
             </div>
 
-            <div v-else-if="data">
+            <div v-else-if="data.getProject.spec">
               <v-data-table
                 :headers="headers"
-                :items="data.listProjects.items"
+                :items="data.getProject.spec.waybills"
                 class="elevation-1"
               ></v-data-table>
             </div>
@@ -141,9 +141,9 @@
 </template>
 
 <script>
-import { getProject, listWaybills } from '@/graphql/queries'
-import { createWaybill } from '@/graphql/mutations'
-import { onCreateWaybill } from '@/graphql/subscriptions'
+import { getProject } from '@/graphql/queries'
+import { updateProject } from '@/graphql/mutations'
+import { onUpdateProject } from '@/graphql/subscriptions'
 
 export default {
   name: 'Project',
@@ -192,11 +192,13 @@ export default {
     projectId () {
       return this.$route.params.projectId
     },
-    listWaybillsQuery () {
-      return this.$Amplify.graphqlOperation(listWaybills)
+    getProjectQuery () {
+      return this.$Amplify.graphqlOperation(getProject, {
+        id: this.projectId
+      })
     },
-    createWaybillSubscription () {
-      return this.$Amplify.graphqlOperation(onCreateWaybill, {
+    updateProjectSubscription () {
+      return this.$Amplify.graphqlOperation(onUpdateProject, {
         owner: this.$store.state.user.username
       })
     },
@@ -206,11 +208,12 @@ export default {
       this.error = true
       this.errorMessage = message
     },
-    onCreateWaybill (prevData, newData) {
+    onUpdateProject (prevData, newData) {
       // eslint-disable-next-line
       console.log('New waybill from subscription...')
-      const newWaybill = newData.onCreateWaybill
-      prevData.data.listWaybills.items.push(newWaybill)
+      const newItem = newData.onUpdateProject
+      prevData.data.getProject = newItem
+      this.project = newItem
       return prevData.data
     },
     closeDialog () {
@@ -249,13 +252,19 @@ export default {
       try {
         this.createLoading = true
         if (this.$refs.form.validate()) {
-          const input = Object.assign({}, this.createModel, {
+          let spec = this.project.spec || {}
+          let waybills = spec.waybills || []
+          const newItem = Object.assign({}, this.createModel, {
             owner: this.$store.state.user.username,
-            projectId: this.projectId,
             status: 'CREATED'
           })
+          waybills.push(newItem)
+          spec.waybills = waybills
+          const input = {
+            spec
+          }
           const response = await this.$Amplify.API.graphql(
-            this.$Amplify.graphqlOperation(createWaybill, { input })
+            this.$Amplify.graphqlOperation(updateProject, { input })
           )
           if (response && response.errors && response.errors.length > 0) {
             throw new Error(response.errors.join('\n'))

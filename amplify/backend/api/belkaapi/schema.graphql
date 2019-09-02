@@ -2,6 +2,8 @@ type Project
   @model 
   @auth(rules: [
     {allow: owner},
+    # { allow: owner, ownerField: "managers", operations: [create, update, delete] },
+    # { allow: owner, ownerField: "freelancers", operations: [create] }
     # {allow: groups, groups: ["Managers"], queries: null, mutations: [create, update, delete]},
     # {allow: groups, groups: ["Employees"], queries: [get, list], mutations: null}
   ])
@@ -12,9 +14,9 @@ type Project
   description: String
   client: String
   status: ProjectStatus
-  waybills: [Waybill]
-    @connection(name: "ProjectWaybills")
-    # @auth(rules: [{ allow: owner }])
+  spec: Spec
+  managers: [String]
+  freelancers: [String]
   createdAt: String
 	updatedAt: String
 }
@@ -25,16 +27,18 @@ enum ProjectStatus {
   CLOSED
 }
 
-type Waybill 
-  @model 
-  @auth(rules: [
-    {allow: owner},
-    # {allow: groups, groups: ["Managers"], queries: null, mutations: [create, update, delete]},
-    # {allow: groups, groups: ["Employees"], queries: [get, list], mutations: null}
-  ])
-{
+type Spec {
+  waybills: [Waybill]
+}
+
+enum SpecStatus {
+  CREATED
+  IN_PROGRESS
+  CLOSED
+}
+
+type Waybill {
   id: ID!
-  owner: String
   number: String
   description: String
   contractor: String
@@ -42,8 +46,6 @@ type Waybill
   deliveryDate: String
   items: [Item]
   status: WaybillStatus
-  project: Project @connection(name: "ProjectWaybills", keyField: "projectId")
-  projectId: String
   createdAt: String
 	updatedAt: String
 }

@@ -235,8 +235,8 @@ export default {
     onCreateProject (prevData, newData) {
       // eslint-disable-next-line
       console.log('New project from subscription...')
-      const newProject = newData.onCreateProject
-      prevData.data.listProjects.items.push(newProject)
+      const newItem = newData.onCreateProject
+      prevData.data.listProjects.items.push(newItem)
       return prevData.data
     },
     async createProject () {
