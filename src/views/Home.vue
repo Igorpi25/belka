@@ -200,7 +200,7 @@ export default {
   },
   computed: {
     owner () {
-      return this.$store.state.user.username
+      return this.$store.getters.username
     },
     listProjectsQuery () {
       return this.$Amplify.graphqlOperation(listProjects)

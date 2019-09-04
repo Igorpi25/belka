@@ -114,7 +114,7 @@ export default {
   },
   computed: {
     owner () {
-      return this.$store.state.user.username
+      return this.$store.getters.username
     },
     getWaybillQuery () {
       return this.$Amplify.graphqlOperation(getWaybill, {

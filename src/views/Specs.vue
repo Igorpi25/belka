@@ -213,7 +213,7 @@ export default {
   },
   computed: {
     owner () {
-      return this.$store.state.user.username
+      return this.$store.getters.username
     },
     specId () {
       return this.$route.params.specId
