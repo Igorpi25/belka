@@ -1,5 +1,7 @@
 # belka
 
+[Amplify app link](https://develop.d2qe2vztgjyt54.amplifyapp.com/).
+
 ## Project setup
 ```
 npm install
@@ -27,5 +29,3 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
-
-I changed minory
