@@ -5,6 +5,11 @@ export const createProject = `mutation CreateProject($input: CreateProjectInput!
   createProject(input: $input) {
     id
     owner
+    team
+    managers
+    accauntants
+    warehousemans
+    freelancers
     name
     description
     client
@@ -12,14 +17,11 @@ export const createProject = `mutation CreateProject($input: CreateProjectInput!
     spec {
       id
       owner
+      team
       waybills {
         nextToken
       }
     }
-    managers
-    accauntants
-    warehousemans
-    freelancers
     createdAt
     updatedAt
   }
@@ -29,6 +31,11 @@ export const updateProject = `mutation UpdateProject($input: UpdateProjectInput!
   updateProject(input: $input) {
     id
     owner
+    team
+    managers
+    accauntants
+    warehousemans
+    freelancers
     name
     description
     client
@@ -36,14 +43,11 @@ export const updateProject = `mutation UpdateProject($input: UpdateProjectInput!
     spec {
       id
       owner
+      team
       waybills {
         nextToken
       }
     }
-    managers
-    accauntants
-    warehousemans
-    freelancers
     createdAt
     updatedAt
   }
@@ -53,6 +57,11 @@ export const deleteProject = `mutation DeleteProject($input: DeleteProjectInput!
   deleteProject(input: $input) {
     id
     owner
+    team
+    managers
+    accauntants
+    warehousemans
+    freelancers
     name
     description
     client
@@ -60,14 +69,11 @@ export const deleteProject = `mutation DeleteProject($input: DeleteProjectInput!
     spec {
       id
       owner
+      team
       waybills {
         nextToken
       }
     }
-    managers
-    accauntants
-    warehousemans
-    freelancers
     createdAt
     updatedAt
   }
@@ -77,10 +83,12 @@ export const createSpec = `mutation CreateSpec($input: CreateSpecInput!) {
   createSpec(input: $input) {
     id
     owner
+    team
     waybills {
       items {
         id
         owner
+        team
         number
         description
         contractor
@@ -99,10 +107,12 @@ export const updateSpec = `mutation UpdateSpec($input: UpdateSpecInput!) {
   updateSpec(input: $input) {
     id
     owner
+    team
     waybills {
       items {
         id
         owner
+        team
         number
         description
         contractor
@@ -121,10 +131,12 @@ export const deleteSpec = `mutation DeleteSpec($input: DeleteSpecInput!) {
   deleteSpec(input: $input) {
     id
     owner
+    team
     waybills {
       items {
         id
         owner
+        team
         number
         description
         contractor
@@ -143,6 +155,7 @@ export const createWaybill = `mutation CreateWaybill($input: CreateWaybillInput!
   createWaybill(input: $input) {
     id
     owner
+    team
     number
     description
     contractor
@@ -151,19 +164,21 @@ export const createWaybill = `mutation CreateWaybill($input: CreateWaybillInput!
     spec {
       id
       owner
+      team
       waybills {
         nextToken
       }
     }
-    items {
+    products {
       items {
         id
+        owner
+        team
         article
         name
         status
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -177,6 +192,7 @@ export const updateWaybill = `mutation UpdateWaybill($input: UpdateWaybillInput!
   updateWaybill(input: $input) {
     id
     owner
+    team
     number
     description
     contractor
@@ -185,19 +201,21 @@ export const updateWaybill = `mutation UpdateWaybill($input: UpdateWaybillInput!
     spec {
       id
       owner
+      team
       waybills {
         nextToken
       }
     }
-    items {
+    products {
       items {
         id
+        owner
+        team
         article
         name
         status
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -211,6 +229,7 @@ export const deleteWaybill = `mutation DeleteWaybill($input: DeleteWaybillInput!
   deleteWaybill(input: $input) {
     id
     owner
+    team
     number
     description
     contractor
@@ -219,19 +238,21 @@ export const deleteWaybill = `mutation DeleteWaybill($input: DeleteWaybillInput!
     spec {
       id
       owner
+      team
       waybills {
         nextToken
       }
     }
-    items {
+    products {
       items {
         id
+        owner
+        team
         article
         name
         status
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -241,9 +262,11 @@ export const deleteWaybill = `mutation DeleteWaybill($input: DeleteWaybillInput!
   }
 }
 `;
-export const createItem = `mutation CreateItem($input: CreateItemInput!) {
-  createItem(input: $input) {
+export const createProduct = `mutation CreateProduct($input: CreateProductInput!) {
+  createProduct(input: $input) {
     id
+    owner
+    team
     article
     name
     count {
@@ -271,6 +294,7 @@ export const createItem = `mutation CreateItem($input: CreateItemInput!) {
     waybill {
       id
       owner
+      team
       number
       description
       contractor
@@ -279,8 +303,9 @@ export const createItem = `mutation CreateItem($input: CreateItemInput!) {
       spec {
         id
         owner
+        team
       }
-      items {
+      products {
         nextToken
       }
       status
@@ -289,13 +314,14 @@ export const createItem = `mutation CreateItem($input: CreateItemInput!) {
     }
     createdAt
     updatedAt
-    owner
   }
 }
 `;
-export const updateItem = `mutation UpdateItem($input: UpdateItemInput!) {
-  updateItem(input: $input) {
+export const updateProduct = `mutation UpdateProduct($input: UpdateProductInput!) {
+  updateProduct(input: $input) {
     id
+    owner
+    team
     article
     name
     count {
@@ -323,6 +349,7 @@ export const updateItem = `mutation UpdateItem($input: UpdateItemInput!) {
     waybill {
       id
       owner
+      team
       number
       description
       contractor
@@ -331,8 +358,9 @@ export const updateItem = `mutation UpdateItem($input: UpdateItemInput!) {
       spec {
         id
         owner
+        team
       }
-      items {
+      products {
         nextToken
       }
       status
@@ -341,13 +369,14 @@ export const updateItem = `mutation UpdateItem($input: UpdateItemInput!) {
     }
     createdAt
     updatedAt
-    owner
   }
 }
 `;
-export const deleteItem = `mutation DeleteItem($input: DeleteItemInput!) {
-  deleteItem(input: $input) {
+export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!) {
+  deleteProduct(input: $input) {
     id
+    owner
+    team
     article
     name
     count {
@@ -375,6 +404,7 @@ export const deleteItem = `mutation DeleteItem($input: DeleteItemInput!) {
     waybill {
       id
       owner
+      team
       number
       description
       contractor
@@ -383,8 +413,9 @@ export const deleteItem = `mutation DeleteItem($input: DeleteItemInput!) {
       spec {
         id
         owner
+        team
       }
-      items {
+      products {
         nextToken
       }
       status
@@ -393,7 +424,6 @@ export const deleteItem = `mutation DeleteItem($input: DeleteItemInput!) {
     }
     createdAt
     updatedAt
-    owner
   }
 }
 `;

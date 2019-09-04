@@ -1,8 +1,8 @@
-type Project 
-  @model 
+type Project
+  @model
   @auth(rules: [
     { allow: owner },
-    # { allow: owner, ownerField: "managers", operations: [create, update, delete] },
+    { allow: owner, ownerField: "team" },
     # { allow: owner, ownerField: "freelancers", operations: [create] }
     # {allow: groups, groups: ["Managers"], queries: null, mutations: [create, update, delete]},
     # {allow: groups, groups: ["Employees"], queries: [get, list], mutations: null}
@@ -10,15 +10,16 @@ type Project
 {
   id: ID!
   owner: String
+  team: [String]
+  managers: [String]
+  accauntants: [String]
+  warehousemans: [String]
+  freelancers: [String]
   name: String!
   description: String
   client: String
   status: ProjectStatus
   spec: Spec @connection
-  managers: [String]
-  accauntants: [String]
-  warehousemans: [String]
-  freelancers: [String]
   createdAt: String
 	updatedAt: String
 }
@@ -31,32 +32,36 @@ enum ProjectStatus {
   ARCHIVED
 }
 
-type Spec 
-  @model 
+type Spec
+  @model
   @auth(rules: [
     { allow: owner },
+    { allow: owner, ownerField: "team" },
   ])
 {
   id: ID!
   owner: String
+  team: [String]
   waybills: [Waybill] @connection(name: "SpecWaybills")
 }
 
-type Waybill 
-  @model 
+type Waybill
+  @model
   @auth(rules: [
     { allow: owner },
+    { allow: owner, ownerField: "team" },
   ])
 {
   id: ID!
   owner: String
+  team: [String]
   number: String
   description: String
   contractor: String
   purchaseDate: String
   deliveryDate: String
   spec: Spec @connection(name: "SpecWaybills")
-  items: [Item] @connection(name: "WaybillItems")
+  products: [Product] @connection(name: "WaybillProducts")
   status: WaybillStatus
   createdAt: String
 	updatedAt: String
@@ -68,54 +73,57 @@ enum WaybillStatus {
   ARCHIVED
 }
 
-type Item 
-  @model 
+type Product
+  @model
   @auth(rules: [
     { allow: owner },
+    { allow: owner, ownerField: "team" },
   ])
 {
   id: ID!
+  owner: String
+  team: [String]
   article: String
   name: String
-  count: ItemCount
-  price: ItemPrice
-  store: ItemStore
-  additional: ItemAdditional
-  status: ItemStatus
-  waybill: Waybill @connection(name: "WaybillItems")
+  count: ProductCount
+  price: ProductPrice
+  store: ProductStore
+  additional: ProductAdditional
+  status: ProductStatus
+  waybill: Waybill @connection(name: "WaybillProducts")
   createdAt: String
 	updatedAt: String
 }
 
-enum ItemStatus {
+enum ProductStatus {
   CREATED
   DELETED
   ARCHIVED
 }
 
-type ItemCount {
+type ProductCount {
   count: Float
 }
 
-type ItemPrice {
+type ProductPrice {
   purchasePrice: Float
   price: Float
   amount: Float
 }
 
-type ItemStore {
+type ProductStore {
   net: Float
   gross: Float
-  size: ItemSize
+  size: ProductSize
 }
 
-type ItemSize {
+type ProductSize {
   w: Float
   l: Float
   h: Float
 }
 
-type ItemAdditional {
+type ProductAdditional {
   images: [String]
   description: String
 }

@@ -5,6 +5,11 @@ export const onCreateProject = `subscription OnCreateProject($owner: String!) {
   onCreateProject(owner: $owner) {
     id
     owner
+    team
+    managers
+    accauntants
+    warehousemans
+    freelancers
     name
     description
     client
@@ -12,14 +17,11 @@ export const onCreateProject = `subscription OnCreateProject($owner: String!) {
     spec {
       id
       owner
+      team
       waybills {
         nextToken
       }
     }
-    managers
-    accauntants
-    warehousemans
-    freelancers
     createdAt
     updatedAt
   }
@@ -29,6 +31,11 @@ export const onUpdateProject = `subscription OnUpdateProject($owner: String!) {
   onUpdateProject(owner: $owner) {
     id
     owner
+    team
+    managers
+    accauntants
+    warehousemans
+    freelancers
     name
     description
     client
@@ -36,14 +43,11 @@ export const onUpdateProject = `subscription OnUpdateProject($owner: String!) {
     spec {
       id
       owner
+      team
       waybills {
         nextToken
       }
     }
-    managers
-    accauntants
-    warehousemans
-    freelancers
     createdAt
     updatedAt
   }
@@ -53,6 +57,11 @@ export const onDeleteProject = `subscription OnDeleteProject($owner: String!) {
   onDeleteProject(owner: $owner) {
     id
     owner
+    team
+    managers
+    accauntants
+    warehousemans
+    freelancers
     name
     description
     client
@@ -60,14 +69,11 @@ export const onDeleteProject = `subscription OnDeleteProject($owner: String!) {
     spec {
       id
       owner
+      team
       waybills {
         nextToken
       }
     }
-    managers
-    accauntants
-    warehousemans
-    freelancers
     createdAt
     updatedAt
   }
@@ -77,10 +83,12 @@ export const onCreateSpec = `subscription OnCreateSpec($owner: String!) {
   onCreateSpec(owner: $owner) {
     id
     owner
+    team
     waybills {
       items {
         id
         owner
+        team
         number
         description
         contractor
@@ -99,10 +107,12 @@ export const onUpdateSpec = `subscription OnUpdateSpec($owner: String!) {
   onUpdateSpec(owner: $owner) {
     id
     owner
+    team
     waybills {
       items {
         id
         owner
+        team
         number
         description
         contractor
@@ -121,10 +131,12 @@ export const onDeleteSpec = `subscription OnDeleteSpec($owner: String!) {
   onDeleteSpec(owner: $owner) {
     id
     owner
+    team
     waybills {
       items {
         id
         owner
+        team
         number
         description
         contractor
@@ -143,6 +155,7 @@ export const onCreateWaybill = `subscription OnCreateWaybill($owner: String!) {
   onCreateWaybill(owner: $owner) {
     id
     owner
+    team
     number
     description
     contractor
@@ -151,19 +164,21 @@ export const onCreateWaybill = `subscription OnCreateWaybill($owner: String!) {
     spec {
       id
       owner
+      team
       waybills {
         nextToken
       }
     }
-    items {
+    products {
       items {
         id
+        owner
+        team
         article
         name
         status
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -177,6 +192,7 @@ export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: String!) {
   onUpdateWaybill(owner: $owner) {
     id
     owner
+    team
     number
     description
     contractor
@@ -185,19 +201,21 @@ export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: String!) {
     spec {
       id
       owner
+      team
       waybills {
         nextToken
       }
     }
-    items {
+    products {
       items {
         id
+        owner
+        team
         article
         name
         status
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -211,6 +229,7 @@ export const onDeleteWaybill = `subscription OnDeleteWaybill($owner: String!) {
   onDeleteWaybill(owner: $owner) {
     id
     owner
+    team
     number
     description
     contractor
@@ -219,19 +238,21 @@ export const onDeleteWaybill = `subscription OnDeleteWaybill($owner: String!) {
     spec {
       id
       owner
+      team
       waybills {
         nextToken
       }
     }
-    items {
+    products {
       items {
         id
+        owner
+        team
         article
         name
         status
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -241,9 +262,11 @@ export const onDeleteWaybill = `subscription OnDeleteWaybill($owner: String!) {
   }
 }
 `;
-export const onCreateItem = `subscription OnCreateItem($owner: String!) {
-  onCreateItem(owner: $owner) {
+export const onCreateProduct = `subscription OnCreateProduct($owner: String!) {
+  onCreateProduct(owner: $owner) {
     id
+    owner
+    team
     article
     name
     count {
@@ -271,6 +294,7 @@ export const onCreateItem = `subscription OnCreateItem($owner: String!) {
     waybill {
       id
       owner
+      team
       number
       description
       contractor
@@ -279,8 +303,9 @@ export const onCreateItem = `subscription OnCreateItem($owner: String!) {
       spec {
         id
         owner
+        team
       }
-      items {
+      products {
         nextToken
       }
       status
@@ -289,13 +314,14 @@ export const onCreateItem = `subscription OnCreateItem($owner: String!) {
     }
     createdAt
     updatedAt
-    owner
   }
 }
 `;
-export const onUpdateItem = `subscription OnUpdateItem($owner: String!) {
-  onUpdateItem(owner: $owner) {
+export const onUpdateProduct = `subscription OnUpdateProduct($owner: String!) {
+  onUpdateProduct(owner: $owner) {
     id
+    owner
+    team
     article
     name
     count {
@@ -323,6 +349,7 @@ export const onUpdateItem = `subscription OnUpdateItem($owner: String!) {
     waybill {
       id
       owner
+      team
       number
       description
       contractor
@@ -331,8 +358,9 @@ export const onUpdateItem = `subscription OnUpdateItem($owner: String!) {
       spec {
         id
         owner
+        team
       }
-      items {
+      products {
         nextToken
       }
       status
@@ -341,13 +369,14 @@ export const onUpdateItem = `subscription OnUpdateItem($owner: String!) {
     }
     createdAt
     updatedAt
-    owner
   }
 }
 `;
-export const onDeleteItem = `subscription OnDeleteItem($owner: String!) {
-  onDeleteItem(owner: $owner) {
+export const onDeleteProduct = `subscription OnDeleteProduct($owner: String!) {
+  onDeleteProduct(owner: $owner) {
     id
+    owner
+    team
     article
     name
     count {
@@ -375,6 +404,7 @@ export const onDeleteItem = `subscription OnDeleteItem($owner: String!) {
     waybill {
       id
       owner
+      team
       number
       description
       contractor
@@ -383,8 +413,9 @@ export const onDeleteItem = `subscription OnDeleteItem($owner: String!) {
       spec {
         id
         owner
+        team
       }
-      items {
+      products {
         nextToken
       }
       status
@@ -393,7 +424,6 @@ export const onDeleteItem = `subscription OnDeleteItem($owner: String!) {
     }
     createdAt
     updatedAt
-    owner
   }
 }
 `;

@@ -5,10 +5,10 @@
       <div class="flex-grow-1"></div>
     </v-toolbar>
 
-    <v-layout>
-      <v-flex>
+    <v-layout wrap>
+      <v-flex xs12>
         <amplify-connect
-          :query="getWaybillsQuery"
+          :query="getSpecQuery"
           :subscription="createWaybillSubscription"
           :onSubscriptionMsg="onCreateWaybill"
         >
@@ -19,104 +19,151 @@
               {{ errors }}
             </div>
 
-            <div v-else-if="data">
+            <div v-else-if="data.getSpec.waybills">
               <v-data-table
                 :headers="headers"
-                :items="data.listWaybills.items"
-                class="elevation-1"
-              ></v-data-table>
-              <v-dialog
-                v-model="dialog"
-                persistent 
-                max-width="500px"
+                :items="data.getSpec.waybills.items"
+                :single-expand="false"
+                :expanded.sync="expanded"
+                item-key="id"
+                show-expand
+                class="elevation-1 v-data-table--custom-expand"
               >
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                    :ripple="false"
-                    outlined
-                    rounded
-                    color="primary"
-                    class="mt-2"
-                    v-on="on"
-                  >
-                    <v-icon left>mdi-plus</v-icon>
-                    Создать накладную
-                  </v-btn>
+                <template v-slot:expanded-item="{ item, headers }">
+                  <td :colspan="headers.length">
+                    <amplify-connect
+                      :query="$Amplify.graphqlOperation(getWaybill, {
+                        id: item.id
+                      })"
+                      :subscription="createProductSubscription"
+                      :onSubscriptionMsg="onCreateProduct"
+                    >
+                      <template slot-scope="props">
+                        <div v-if="props.loading">Загрузка...</div>
+
+                        <div v-else-if="props.errors.length > 0">
+                          {{ errors }}
+                        </div>
+
+                        <div v-if="props.data.getWaybill">
+                          <v-data-table
+                            :headers="productsHeaders"
+                            :items="props.data.getWaybill.products.items"
+                            hide-default-header
+                            hide-default-footer
+                          />
+                          <v-btn
+                            :ripple="false"
+                            :loading="createProductLoading === item.id"
+                            outlined
+                            rounded
+                            color="primary"
+                            class="mt-2"
+                            @click="createProduct(item.id)"
+                          >
+                            <v-icon left>mdi-plus</v-icon>
+                            Создать продукт
+                          </v-btn>
+                        </div>
+                      </template>
+                    </amplify-connect>
+                  </td>
                 </template>
-                <v-card>
-                  <v-card-title>
-                    <span class="headline">Новая накладная</span>
-                  </v-card-title>
-
-                  <v-card-text>
-                    <v-slide-y-transition>
-                      <v-alert
-                        v-if="createError"
-                        type="error"
-                        color="red"
-                        dismissible
-                      >
-                        {{ createErrorMessage }}
-                      </v-alert>
-                    </v-slide-y-transition>
-                    <v-form
-                      ref="form"
-                      v-model="valid"
-                      lazy-validation
-                    >
-                      <v-container>
-                        <v-text-field
-                          ref="projectName"
-                          v-model="createModel.number"
-                          label="Number"
-                          required
-                          :rules="[v => !!v || 'Number is required']"
-                        />
-                        <v-textarea
-                          v-model="createModel.description"
-                          label="Description"
-                        ></v-textarea>
-                        <v-text-field
-                          v-model="createModel.contractor"
-                          label="Contractor"
-                        />
-                        <v-text-field
-                          v-model="createModel.purchaseDate"
-                          label="Purchase Date"
-                        />
-                        <v-text-field
-                          v-model="createModel.deliveryDate"
-                          label="Delivery Date"
-                        />
-                      </v-container>
-                    </v-form>
-                  </v-card-text>
-
-                  <v-card-actions>
-                    <div class="flex-grow-1"></div>
-                    <v-btn
-                      :ripple="false"
-                      text
-                      @click="dialog = false"
-                    >
-                      Отмена
-                    </v-btn>
-                    <v-btn
-                      :disabled="!valid"
-                      :loading="createLoading"
-                      :ripple="false"
-                      text
-                      color="primary"
-                      @click="createWaybill"
-                    >
-                      Создать
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
+              </v-data-table>
             </div>
           </template>
         </amplify-connect>
+      </v-flex>
+      <v-flex xs12>
+        <v-dialog
+          v-model="dialog"
+          persistent 
+          max-width="500px"
+        >
+          <template v-slot:activator="{ on }">
+            <v-btn
+              :ripple="false"
+              outlined
+              rounded
+              color="primary"
+              class="mt-2"
+              v-on="on"
+            >
+              <v-icon left>mdi-plus</v-icon>
+              Создать накладную
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="headline">Новая накладная</span>
+            </v-card-title>
+
+            <v-card-text>
+              <v-slide-y-transition>
+                <v-alert
+                  v-if="createError"
+                  type="error"
+                  color="red"
+                  dismissible
+                >
+                  {{ createErrorMessage }}
+                </v-alert>
+              </v-slide-y-transition>
+              <v-form
+                ref="form"
+                v-model="valid"
+                lazy-validation
+              >
+                <v-container>
+                  <v-text-field
+                    ref="projectName"
+                    v-model="createModel.number"
+                    label="Number"
+                    required
+                    :rules="[v => !!v || 'Number is required']"
+                  />
+                  <v-textarea
+                    v-model="createModel.description"
+                    label="Description"
+                  ></v-textarea>
+                  <v-text-field
+                    v-model="createModel.contractor"
+                    label="Contractor"
+                  />
+                  <v-text-field
+                    v-model="createModel.purchaseDate"
+                    label="Purchase Date"
+                  />
+                  <v-text-field
+                    v-model="createModel.deliveryDate"
+                    label="Delivery Date"
+                  />
+                </v-container>
+              </v-form>
+            </v-card-text>
+
+            <v-card-actions>
+              <div class="flex-grow-1"></div>
+              <v-btn
+                :ripple="false"
+                text
+                @click="dialog = false"
+              >
+                Отмена
+              </v-btn>
+              <v-btn
+                :disabled="!valid"
+                :loading="createLoading"
+                :ripple="false"
+                text
+                color="primary"
+                @click="createWaybill"
+              >
+                Создать
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-flex>
     </v-layout>
 
@@ -139,14 +186,17 @@
 </template>
 
 <script>
-import { listWaybills, getProject } from '@/graphql/queries'
-import { createWaybill} from '@/graphql/mutations'
-import { onCreateWaybill } from '@/graphql/subscriptions'
+import { getSpec, listWaybills, getWaybill } from '@/graphql/queries'
+import { createWaybill, createProduct } from '@/graphql/mutations'
+import { onCreateWaybill, onCreateProduct } from '@/graphql/subscriptions'
 
 export default {
   name: 'Project',
   data () {
     return {
+      createProductLoading: null,
+      productDialog: false,
+      expanded: [],
       getProjectLoading: false,
       error: false,
       errorMessage: '',
@@ -154,23 +204,30 @@ export default {
       createErrorMessage: '',
       createLoading: false,
       createModel: {
-        number: '',
-        description: '',
-        contractor: '',
-        purchaseDate: '',
-        deliveryDate: ''
+        number: null,
+        description: null,
+        contractor: null,
+        purchaseDate: null,
+        deliveryDate: null
       },
       dialog: false,
       valid: false,
       project: {},
       headers: [
         { text: 'Id', value: 'id' },
-        { text: 'Owner', value: 'owner' },
         { text: 'Number', value: 'number' },
         { text: 'Description', value: 'description' },
         { text: 'Purchase Date', value: 'purchaseDate' },
         { text: 'Contractor', value: 'contractor' },
         { text: 'Delivery Date', value: 'deliveryDate' },
+        { text: 'Status', value: 'status' },
+        { text: 'Created', value: 'createdAt' },
+        { text: 'Updated', value: 'updatedAt' },
+      ],
+      productsHeaders: [
+        { text: 'Id', value: 'id' },
+        { text: 'Article', value: 'article' },
+        { text: 'Name', value: 'name' },
         { text: 'Status', value: 'status' },
         { text: 'Created', value: 'createdAt' },
         { text: 'Updated', value: 'updatedAt' },
@@ -197,13 +254,24 @@ export default {
     specId () {
       return this.$route.params.specId
     },
-    getWaybillsQuery () {
-      return this.$Amplify.graphqlOperation(listWaybills, {
-        id: this.projectId
+    getSpecQuery () {
+      return this.$Amplify.graphqlOperation(getSpec, {
+        id: this.specId
       })
+    },
+    getWaybill () {
+      return getWaybill
+    },
+    listWaybillsQuery () {
+      return this.$Amplify.graphqlOperation(listWaybills)
     },
     createWaybillSubscription () {
       return this.$Amplify.graphqlOperation(onCreateWaybill, {
+        owner: this.owner
+      })
+    },
+    createProductSubscription () {
+      return this.$Amplify.graphqlOperation(onCreateProduct, {
         owner: this.owner
       })
     },
@@ -215,9 +283,19 @@ export default {
     },
     onCreateWaybill (prevData, newData) {
       // eslint-disable-next-line
-      console.log('New waybill from subscription...')
+      console.log('New waybill from subscription...', prevData, newData)
       const newItem = newData.onCreateWaybill
-      prevData.data.listWaybills.items.push(newItem)
+      prevData.data.getSpec.waybills.items.push(newItem)
+      // const index = prevData.data.listWaybills.items
+      //   .findIndex(el => el.id === newItem.id)
+      // prevData.data.listWaybills.items.splice(index, 1, newItem)
+      return prevData.data
+    },
+    onCreateProduct (prevData, newData) {
+      // eslint-disable-next-line
+      console.log('New product from subscription...', prevData, newData)
+      const newItem = newData.onCreateProduct
+      prevData.data.getWaybill.products.items.push(newItem)
       // const index = prevData.data.listWaybills.items
       //   .findIndex(el => el.id === newItem.id)
       // prevData.data.listWaybills.items.splice(index, 1, newItem)
@@ -230,30 +308,6 @@ export default {
           this.$refs.form.reset()
         }
       }, 300)
-    },
-    async getProject () {
-      try {
-        this.getProjectLoading = true
-        const response = await this.$Amplify.API.graphql(
-          this.$Amplify.graphqlOperation(getProject, { id: this.projectId })
-        )
-        if (response && response.errors && response.errors.length > 0) {
-          throw new Error(response.errors.join('\n'))
-        }
-        this.project = response.data.getProject
-      } catch (error) {
-        this.showError(error)
-        // eslint-disable-next-line
-        console.log('Error: ', error)
-        // Analytics.record({
-        //   name: 'GetProjectError',
-        //   attributes: {
-        //     error: e.message
-        //   }
-        // })
-      } finally {
-        this.getProjectLoading = false
-      }
     },
     async createWaybill () {
       try {
@@ -290,7 +344,53 @@ export default {
       } finally {
         this.createLoading = false
       }
+    },
+    async createProduct (productWaybillId) {
+      try {
+        this.createProductLoading = productWaybillId
+        const input = {
+          status: 'CREATED',
+          owner: this.owner,
+          productWaybillId
+        }
+        const response = await this.$Amplify.API.graphql(
+          this.$Amplify.graphqlOperation(createProduct, { input })
+        )
+        if (response && response.errors && response.errors.length > 0) {
+          throw new Error(response.errors.join('\n'))
+        }
+        // eslint-disable-next-line
+        console.log('Data: ', response.data)
+        this.closeDialog()
+        return response.data.createProduct
+      } catch (error) {
+        this.error = true
+        this.errorMessage = error
+        // eslint-disable-next-line
+        console.log('Error: ', error)
+        // Analytics.record({
+        //   name: 'CreateProductError',
+        //   attributes: {
+        //     error: e.message
+        //   }
+        // })
+      } finally {
+        this.createProductLoading = null
+      }
     }
   }
 }
 </script>
+
+<style>
+.v-data-table.v-data-table--custom-expand .expanded.expanded__content {
+  box-shadow: none;
+}
+.v-data-table.v-data-table--custom-expand .expanded.expanded__content:hover {
+  background: transparent;
+}
+.v-data-table.v-data-table--custom-expand .expanded.expanded__content td {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+</style>

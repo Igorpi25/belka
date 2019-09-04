@@ -188,8 +188,8 @@ export default {
       dialog: false,
       valid: false,
       createModel: {
-        name: '',
-        description: ''
+        name: null,
+        description: null
       },
       headers: [
         { text: 'Id', value: 'id' },

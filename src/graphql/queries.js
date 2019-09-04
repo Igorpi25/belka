@@ -5,6 +5,11 @@ export const getProject = `query GetProject($id: ID!) {
   getProject(id: $id) {
     id
     owner
+    team
+    managers
+    accauntants
+    warehousemans
+    freelancers
     name
     description
     client
@@ -12,14 +17,11 @@ export const getProject = `query GetProject($id: ID!) {
     spec {
       id
       owner
+      team
       waybills {
         nextToken
       }
     }
-    managers
-    accauntants
-    warehousemans
-    freelancers
     createdAt
     updatedAt
   }
@@ -34,6 +36,11 @@ export const listProjects = `query ListProjects(
     items {
       id
       owner
+      team
+      managers
+      accauntants
+      warehousemans
+      freelancers
       name
       description
       client
@@ -41,11 +48,8 @@ export const listProjects = `query ListProjects(
       spec {
         id
         owner
+        team
       }
-      managers
-      accauntants
-      warehousemans
-      freelancers
       createdAt
       updatedAt
     }
@@ -57,10 +61,12 @@ export const getSpec = `query GetSpec($id: ID!) {
   getSpec(id: $id) {
     id
     owner
+    team
     waybills {
       items {
         id
         owner
+        team
         number
         description
         contractor
@@ -84,6 +90,7 @@ export const listSpecs = `query ListSpecs(
     items {
       id
       owner
+      team
       waybills {
         nextToken
       }
@@ -96,6 +103,7 @@ export const getWaybill = `query GetWaybill($id: ID!) {
   getWaybill(id: $id) {
     id
     owner
+    team
     number
     description
     contractor
@@ -104,19 +112,21 @@ export const getWaybill = `query GetWaybill($id: ID!) {
     spec {
       id
       owner
+      team
       waybills {
         nextToken
       }
     }
-    items {
+    products {
       items {
         id
+        owner
+        team
         article
         name
         status
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -135,6 +145,7 @@ export const listWaybills = `query ListWaybills(
     items {
       id
       owner
+      team
       number
       description
       contractor
@@ -143,8 +154,9 @@ export const listWaybills = `query ListWaybills(
       spec {
         id
         owner
+        team
       }
-      items {
+      products {
         nextToken
       }
       status
@@ -155,9 +167,11 @@ export const listWaybills = `query ListWaybills(
   }
 }
 `;
-export const getItem = `query GetItem($id: ID!) {
-  getItem(id: $id) {
+export const getProduct = `query GetProduct($id: ID!) {
+  getProduct(id: $id) {
     id
+    owner
+    team
     article
     name
     count {
@@ -185,6 +199,7 @@ export const getItem = `query GetItem($id: ID!) {
     waybill {
       id
       owner
+      team
       number
       description
       contractor
@@ -193,8 +208,9 @@ export const getItem = `query GetItem($id: ID!) {
       spec {
         id
         owner
+        team
       }
-      items {
+      products {
         nextToken
       }
       status
@@ -203,18 +219,19 @@ export const getItem = `query GetItem($id: ID!) {
     }
     createdAt
     updatedAt
-    owner
   }
 }
 `;
-export const listItems = `query ListItems(
-  $filter: ModelItemFilterInput
+export const listProducts = `query ListProducts(
+  $filter: ModelProductFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listItems(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listProducts(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      owner
+      team
       article
       name
       count {
@@ -237,6 +254,7 @@ export const listItems = `query ListItems(
       waybill {
         id
         owner
+        team
         number
         description
         contractor
@@ -248,7 +266,6 @@ export const listItems = `query ListItems(
       }
       createdAt
       updatedAt
-      owner
     }
     nextToken
   }
