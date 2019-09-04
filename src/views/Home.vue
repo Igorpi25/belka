@@ -106,9 +106,8 @@
                       sm="12"
                       md="6"
                       @click="$router.push({
-                        name: 'project',
+                        name: 'specs',
                         params: {
-                          projectId: item.id,
                           specId: item.spec.id
                         }
                       })"

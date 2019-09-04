@@ -16,10 +16,10 @@ const router = new Router({
       component: () => import('@/views/Home.vue')
     },
     {
-      path: '/projects/:projectId/spec/:specId',
-      name: 'project',
+      path: '/specs/:specId',
+      name: 'specs',
       meta: { requiresAuth: true },
-      component: () => import('@/views/Project.vue')
+      component: () => import('@/views/Specs.vue')
     },
     {
       path: '/signin',
