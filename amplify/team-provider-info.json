@@ -25,5 +25,32 @@
                 }
             }
         }
+    },
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "belkaapi-dev-20190904171511-authRole",
+            "UnauthRoleArn": "arn:aws:iam::744966734673:role/belkaapi-dev-20190904171511-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::744966734673:role/belkaapi-dev-20190904171511-authRole",
+            "Region": "ap-northeast-1",
+            "DeploymentBucketName": "belkaapi-dev-20190904171511-deployment",
+            "UnauthRoleName": "belkaapi-dev-20190904171511-unauthRole",
+            "StackName": "belkaapi-dev-20190904171511",
+            "StackId": "arn:aws:cloudformation:ap-northeast-1:744966734673:stack/belkaapi-dev-20190904171511/1d2357d0-ceec-11e9-8364-0a8788cf6370"
+        },
+        "categories": {
+            "auth": {
+                "belkaapid7786dd4d7786dd4": {
+                    "hostedUIProviderCreds": "[]",
+                    "googleClientId": "608967944605-upablqhsus4618t5ut0mdecc122gumvk.apps.googleusercontent.com"
+                }
+            },
+            "function": {
+                "belkaapid7786dd4d7786dd4CustomMessage": {
+                    "REDIRECTURL": "https://dev.d2qe2vztgjyt54.amplifyapp.com",
+                    "EMAILSUBJECT": "Verification link",
+                    "EMAILMESSAGE": "Please click the link below to verify your email address"
+                }
+            }
+        }
     }
 }
