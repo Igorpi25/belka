@@ -126,16 +126,12 @@
                               <v-list-item-content class="align-end">{{ item.status }}</v-list-item-content>
                             </v-list-item>
                             <v-list-item>
-                              <v-list-item-content>Owner:</v-list-item-content>
-                              <v-list-item-content class="align-end">{{ item.owner }}</v-list-item-content>
-                            </v-list-item>
-                            <v-list-item>
                               <v-list-item-content>Created:</v-list-item-content>
-                              <v-list-item-content class="align-end">{{ item.createdAt }}</v-list-item-content>
+                              <v-list-item-content class="align-end">{{ item.createdAt | localDate }}</v-list-item-content>
                             </v-list-item>
                             <v-list-item>
                               <v-list-item-content>Updated:</v-list-item-content>
-                              <v-list-item-content class="align-end">{{ item.updatedAt }}</v-list-item-content>
+                              <v-list-item-content class="align-end">{{ item.updatedAt | localDate }}</v-list-item-content>
                             </v-list-item>
                           </v-list>
                         </v-card>

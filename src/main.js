@@ -27,6 +27,31 @@ Vue.component('amplify-connect', components.Connect)
 
 Amplify.configure(awsconfig)
 
+const localDate = (dateString, format) => {
+  if (!dateString) return ''
+  const d = new Date(dateString)
+  if (!(d instanceof Date)) return ''
+  const locale = process.env.VUE_APP_I18N_LOCALE || 'ru'
+  let options = {}
+  switch (format) {
+    case 'long':
+      options = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }
+      break
+    case 'short':
+      options = { month: 'long', day: 'numeric' }
+      break
+    case 'time':
+      options = { hour: '2-digit', minute: '2-digit' }
+      break
+    default:
+      options = { year: 'numeric', month: 'numeric', day: 'numeric' }
+      break
+  }
+  return d.toLocaleString(locale, options)
+}
+
+Vue.filter('localDate', localDate)
+
 Vue.config.productionTip = false
 
 new Vue({

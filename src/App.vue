@@ -7,7 +7,9 @@
       dark
     >
       <v-toolbar-title class="headline">
-        Zennnn
+        <router-link to="/">
+          Zennnn
+        </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
@@ -142,5 +144,9 @@ export default {
 <style>
 .w-full {
   width: 100%;
+}
+.v-toolbar__title.headline a {
+  color: #ffffff;
+  text-decoration: none;
 }
 </style>

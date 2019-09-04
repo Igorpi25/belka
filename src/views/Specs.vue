@@ -29,44 +29,15 @@
                 show-expand
                 class="elevation-1 v-data-table--custom-expand"
               >
+                <template v-slot:item.createdAt="{ item }">
+                  {{ item.createdAt | localDate }}
+                </template>
+                <template v-slot:item.updatedAt="{ item }">
+                  {{ item.updatedAt | localDate }}
+                </template>
                 <template v-slot:expanded-item="{ item, headers }">
                   <td :colspan="headers.length">
-                    <amplify-connect
-                      :query="$Amplify.graphqlOperation(getWaybill, {
-                        id: item.id
-                      })"
-                      :subscription="createProductSubscription"
-                      :onSubscriptionMsg="onCreateProduct"
-                    >
-                      <template slot-scope="props">
-                        <div v-if="props.loading">Загрузка...</div>
-
-                        <div v-else-if="props.errors.length > 0">
-                          {{ errors }}
-                        </div>
-
-                        <div v-if="props.data.getWaybill">
-                          <v-data-table
-                            :headers="productsHeaders"
-                            :items="props.data.getWaybill.products.items"
-                            hide-default-header
-                            hide-default-footer
-                          />
-                          <v-btn
-                            :ripple="false"
-                            :loading="createProductLoading === item.id"
-                            outlined
-                            rounded
-                            color="primary"
-                            class="mt-2"
-                            @click="createProduct(item.id)"
-                          >
-                            <v-icon left>mdi-plus</v-icon>
-                            Создать продукт
-                          </v-btn>
-                        </div>
-                      </template>
-                    </amplify-connect>
+                    <Waybill :id="item.id" />
                   </td>
                 </template>
               </v-data-table>
@@ -186,15 +157,19 @@
 </template>
 
 <script>
-import { getSpec, listWaybills, getWaybill } from '@/graphql/queries'
-import { createWaybill, createProduct } from '@/graphql/mutations'
-import { onCreateWaybill, onCreateProduct } from '@/graphql/subscriptions'
+import { getSpec, listWaybills } from '@/graphql/queries'
+import { createWaybill } from '@/graphql/mutations'
+import { onCreateWaybill } from '@/graphql/subscriptions'
+
+import Waybill from '@/components/Waybill.vue'
 
 export default {
   name: 'Project',
+  components: {
+    Waybill
+  },
   data () {
     return {
-      createProductLoading: null,
       productDialog: false,
       expanded: [],
       getProjectLoading: false,
@@ -224,14 +199,6 @@ export default {
         { text: 'Created', value: 'createdAt' },
         { text: 'Updated', value: 'updatedAt' },
       ],
-      productsHeaders: [
-        { text: 'Id', value: 'id' },
-        { text: 'Article', value: 'article' },
-        { text: 'Name', value: 'name' },
-        { text: 'Status', value: 'status' },
-        { text: 'Created', value: 'createdAt' },
-        { text: 'Updated', value: 'updatedAt' },
-      ],
       projects: []
     }
   },
@@ -248,9 +215,6 @@ export default {
     owner () {
       return this.$store.state.user.username
     },
-    projectId () {
-      return this.$route.params.projectId
-    },
     specId () {
       return this.$route.params.specId
     },
@@ -258,9 +222,6 @@ export default {
       return this.$Amplify.graphqlOperation(getSpec, {
         id: this.specId
       })
-    },
-    getWaybill () {
-      return getWaybill
     },
     listWaybillsQuery () {
       return this.$Amplify.graphqlOperation(listWaybills)
@@ -270,11 +231,7 @@ export default {
         owner: this.owner
       })
     },
-    createProductSubscription () {
-      return this.$Amplify.graphqlOperation(onCreateProduct, {
-        owner: this.owner
-      })
-    },
+    
   },
   methods: {
     showError (message) {
@@ -286,16 +243,6 @@ export default {
       console.log('New waybill from subscription...', prevData, newData)
       const newItem = newData.onCreateWaybill
       prevData.data.getSpec.waybills.items.push(newItem)
-      // const index = prevData.data.listWaybills.items
-      //   .findIndex(el => el.id === newItem.id)
-      // prevData.data.listWaybills.items.splice(index, 1, newItem)
-      return prevData.data
-    },
-    onCreateProduct (prevData, newData) {
-      // eslint-disable-next-line
-      console.log('New product from subscription...', prevData, newData)
-      const newItem = newData.onCreateProduct
-      prevData.data.getWaybill.products.items.push(newItem)
       // const index = prevData.data.listWaybills.items
       //   .findIndex(el => el.id === newItem.id)
       // prevData.data.listWaybills.items.splice(index, 1, newItem)
@@ -345,39 +292,6 @@ export default {
         this.createLoading = false
       }
     },
-    async createProduct (productWaybillId) {
-      try {
-        this.createProductLoading = productWaybillId
-        const input = {
-          status: 'CREATED',
-          owner: this.owner,
-          productWaybillId
-        }
-        const response = await this.$Amplify.API.graphql(
-          this.$Amplify.graphqlOperation(createProduct, { input })
-        )
-        if (response && response.errors && response.errors.length > 0) {
-          throw new Error(response.errors.join('\n'))
-        }
-        // eslint-disable-next-line
-        console.log('Data: ', response.data)
-        this.closeDialog()
-        return response.data.createProduct
-      } catch (error) {
-        this.error = true
-        this.errorMessage = error
-        // eslint-disable-next-line
-        console.log('Error: ', error)
-        // Analytics.record({
-        //   name: 'CreateProductError',
-        //   attributes: {
-        //     error: e.message
-        //   }
-        // })
-      } finally {
-        this.createProductLoading = null
-      }
-    }
   }
 }
 </script>
