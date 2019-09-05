@@ -105,12 +105,6 @@
                       cols="12"
                       sm="12"
                       md="6"
-                      @click="$router.push({
-                        name: 'specs',
-                        params: {
-                          specId: item.spec.id
-                        }
-                      })"
                     >
                       <v-hover v-slot:default="{ hover }">
                         <v-card :elevation="hover ? 6 : 2">
@@ -134,6 +128,21 @@
                               <v-list-item-content class="align-end">{{ item.updatedAt | localDate }}</v-list-item-content>
                             </v-list-item>
                           </v-list>
+                          <v-card-actions>
+                            <v-btn
+                              :ripple="false"
+                              text
+                              color="primary"
+                              @click="$router.push({
+                                name: 'specs',
+                                params: {
+                                  specId: item.spec.id
+                                }
+                              })"
+                            >
+                              Открыть
+                            </v-btn>
+                          </v-card-actions>
                         </v-card>
                       </v-hover>
                     </v-col>
