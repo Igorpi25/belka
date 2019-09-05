@@ -41,20 +41,20 @@
         >
           Submit
         </v-btn>
-        <span>or</span>
-        <GoogleSignIn class="ml-4" />
+        <!-- <span>or</span> -->
+        <!-- <GoogleSignIn class="ml-4" /> -->
       </v-container>
     </v-form>
   </v-container>
 </template>
 
 <script>
-import GoogleSignIn from '@/components/GoogleSignIn.vue'
+// import GoogleSignIn from '@/components/GoogleSignIn.vue'
 
 export default {
   name: 'SignIn',
   components: {
-    GoogleSignIn
+    // GoogleSignIn
   },
   data () {
     return {
