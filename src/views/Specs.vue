@@ -29,6 +29,22 @@
                 show-expand
                 class="elevation-1 v-data-table--custom-expand"
               >
+                <template v-slot:item.number="{ item }">
+                  <Editable
+                    :value="item.number"
+                    placeholder="Number"
+                    arrow-move
+                    @input="updateWaybill({ id: item.id, number: $event })"
+                  />
+                </template>
+                <template v-slot:item.description="{ item }">
+                  <Editable
+                    :value="item.description"
+                    placeholder="Description"
+                    arrow-move
+                    @input="updateWaybill({ id: item.id, description: $event })"
+                  />
+                </template>
                 <template v-slot:item.createdAt="{ item }">
                   {{ item.createdAt | localDate }}
                 </template>
@@ -158,15 +174,17 @@
 
 <script>
 import { getSpec, listWaybills } from '@/graphql/queries'
-import { createWaybill } from '@/graphql/mutations'
+import { createWaybill, updateWaybill } from '@/graphql/mutations'
 import { onCreateWaybill } from '@/graphql/subscriptions'
 
 import Waybill from '@/components/Waybill.vue'
+import Editable from '@/components/Editable.vue'
 
 export default {
   name: 'Project',
   components: {
-    Waybill
+    Waybill,
+    Editable
   },
   data () {
     return {
@@ -290,6 +308,29 @@ export default {
         // })
       } finally {
         this.createLoading = false
+      }
+    },
+    async updateWaybill (input) {
+      try {
+        const response = await this.$Amplify.API.graphql(
+          this.$Amplify.graphqlOperation(updateWaybill, { input })
+        )
+        if (response && response.errors && response.errors.length > 0) {
+          throw new Error(response.errors.join('\n'))
+        }
+        // eslint-disable-next-line
+        console.log('Update Data: ', response.data)
+      } catch (error) {
+        this.error = true
+        this.errorMessage = error
+        // eslint-disable-next-line
+        console.log('Error: ', error)
+        // Analytics.record({
+        //   name: 'UpdateProjectError',
+        //   attributes: {
+        //     error: e.message
+        //   }
+        // })
       }
     },
   }

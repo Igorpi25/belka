@@ -98,7 +98,7 @@ export default {
 
   methods: {
     input: debounce(function (e) {
-      const text = e.target.innerText
+      const text = e.target.innerText || null
       this.internalValue = text
       this.$emit('input', text)
     }, DEBOUNCE),
