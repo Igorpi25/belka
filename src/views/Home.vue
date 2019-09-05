@@ -108,12 +108,26 @@
                     >
                       <v-hover v-slot:default="{ hover }">
                         <v-card :elevation="hover ? 6 : 2">
-                          <v-card-title><h4>{{ item.name }}</h4></v-card-title>
+                          <v-card-title>
+                            <h4>
+                              <Editable
+                                :value="item.name"
+                                placeholder="Name"
+                                @input="updateProject({ id: item.id, name: $event })"
+                              />
+                            </h4>
+                          </v-card-title>
                           <v-divider></v-divider>
                           <v-list dense>
                             <v-list-item>
                               <v-list-item-content>Description:</v-list-item-content>
-                              <v-list-item-content class="align-end">{{ item.description }}</v-list-item-content>
+                              <v-list-item-content class="align-end">
+                                <Editable
+                                  :value="item.description"
+                                  placeholder="Description"
+                                  @input="updateProject({ id: item.id, description: $event })"
+                                />
+                              </v-list-item-content>
                             </v-list-item>
                             <v-list-item>
                               <v-list-item-content>Status:</v-list-item-content>
@@ -175,11 +189,16 @@
 
 <script>
 import { listProjects } from '@/graphql/queries'
-import { createProject, createSpec } from '@/graphql/mutations'
+import { createProject, createSpec, updateProject } from '@/graphql/mutations'
 import { onCreateProject } from '@/graphql/subscriptions'
+
+import Editable from '@/components/Editable.vue'
 
 export default {
   name: 'Project',
+  components: {
+    Editable
+  },
   data () {
     return {
       itemsPerPageOptions: [4, 8],
@@ -278,7 +297,7 @@ export default {
             throw new Error(response.errors.join('\n'))
           }
           // eslint-disable-next-line
-          console.log('Data: ', response.data)
+          console.log('Create Data: ', response.data)
           this.closeDialog()
           return response.data.createProject
         }
@@ -296,7 +315,30 @@ export default {
       } finally {
         this.createLoading = false
       }
-    }
+    },
+    async updateProject (input) {
+      try {
+        const response = await this.$Amplify.API.graphql(
+          this.$Amplify.graphqlOperation(updateProject, { input })
+        )
+        if (response && response.errors && response.errors.length > 0) {
+          throw new Error(response.errors.join('\n'))
+        }
+        // eslint-disable-next-line
+        console.log('Update Data: ', response.data)
+      } catch (error) {
+        this.error = true
+        this.errorMessage = error
+        // eslint-disable-next-line
+        console.log('Error: ', error)
+        // Analytics.record({
+        //   name: 'UpdateProjectError',
+        //   attributes: {
+        //     error: e.message
+        //   }
+        // })
+      }
+    },
   }
 }
 </script>
