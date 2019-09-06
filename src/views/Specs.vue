@@ -173,7 +173,7 @@
 </template>
 
 <script>
-import { getSpec, listWaybills } from '@/graphql/queries'
+import { getSpec } from '@/graphql/queries'
 import { createWaybill, updateWaybill } from '@/graphql/mutations'
 import { onCreateWaybill } from '@/graphql/subscriptions'
 
@@ -240,9 +240,6 @@ export default {
       return this.$Amplify.graphqlOperation(getSpec, {
         id: this.specId
       })
-    },
-    listWaybillsQuery () {
-      return this.$Amplify.graphqlOperation(listWaybills)
     },
     createWaybillSubscription () {
       return this.$Amplify.graphqlOperation(onCreateWaybill, {

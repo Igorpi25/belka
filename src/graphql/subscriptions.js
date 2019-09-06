@@ -27,8 +27,8 @@ export const onCreateProject = `subscription OnCreateProject($owner: String!) {
   }
 }
 `;
-export const onUpdateProject = `subscription OnUpdateProject($owner: String!) {
-  onUpdateProject(owner: $owner) {
+export const onUpdateProject = `subscription OnUpdateProject($owner: String!, $id: ID!) {
+  onUpdateProject(owner: $owner, id: $id) {
     id
     owner
     team
@@ -53,106 +53,8 @@ export const onUpdateProject = `subscription OnUpdateProject($owner: String!) {
   }
 }
 `;
-export const onDeleteProject = `subscription OnDeleteProject($owner: String!) {
-  onDeleteProject(owner: $owner) {
-    id
-    owner
-    team
-    managers
-    accauntants
-    warehousemans
-    freelancers
-    name
-    description
-    client
-    status
-    spec {
-      id
-      owner
-      team
-      waybills {
-        nextToken
-      }
-    }
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const onCreateSpec = `subscription OnCreateSpec($owner: String!) {
-  onCreateSpec(owner: $owner) {
-    id
-    owner
-    team
-    waybills {
-      items {
-        id
-        owner
-        team
-        number
-        description
-        contractor
-        purchaseDate
-        deliveryDate
-        status
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-}
-`;
-export const onUpdateSpec = `subscription OnUpdateSpec($owner: String!) {
-  onUpdateSpec(owner: $owner) {
-    id
-    owner
-    team
-    waybills {
-      items {
-        id
-        owner
-        team
-        number
-        description
-        contractor
-        purchaseDate
-        deliveryDate
-        status
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-}
-`;
-export const onDeleteSpec = `subscription OnDeleteSpec($owner: String!) {
-  onDeleteSpec(owner: $owner) {
-    id
-    owner
-    team
-    waybills {
-      items {
-        id
-        owner
-        team
-        number
-        description
-        contractor
-        purchaseDate
-        deliveryDate
-        status
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-}
-`;
-export const onCreateWaybill = `subscription OnCreateWaybill($owner: String!) {
-  onCreateWaybill(owner: $owner) {
+export const onCreateWaybill = `subscription OnCreateWaybill($owner: String!, $waybillSpecId: ID!) {
+  onCreateWaybill(owner: $owner, waybillSpecId: $waybillSpecId) {
     id
     owner
     team
@@ -176,6 +78,9 @@ export const onCreateWaybill = `subscription OnCreateWaybill($owner: String!) {
         team
         article
         name
+        quantity
+        unit
+        link
         status
         createdAt
         updatedAt
@@ -188,8 +93,8 @@ export const onCreateWaybill = `subscription OnCreateWaybill($owner: String!) {
   }
 }
 `;
-export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: String!) {
-  onUpdateWaybill(owner: $owner) {
+export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: String!, $id: ID!) {
+  onUpdateWaybill(owner: $owner, id: $id) {
     id
     owner
     team
@@ -213,6 +118,9 @@ export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: String!) {
         team
         article
         name
+        quantity
+        unit
+        link
         status
         createdAt
         updatedAt
@@ -225,55 +133,18 @@ export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: String!) {
   }
 }
 `;
-export const onDeleteWaybill = `subscription OnDeleteWaybill($owner: String!) {
-  onDeleteWaybill(owner: $owner) {
-    id
-    owner
-    team
-    number
-    description
-    contractor
-    purchaseDate
-    deliveryDate
-    spec {
-      id
-      owner
-      team
-      waybills {
-        nextToken
-      }
-    }
-    products {
-      items {
-        id
-        owner
-        team
-        article
-        name
-        status
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    status
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const onCreateProduct = `subscription OnCreateProduct($owner: String!) {
-  onCreateProduct(owner: $owner) {
+export const onCreateProduct = `subscription OnCreateProduct($owner: String!, $productWaybillId: ID!) {
+  onCreateProduct(owner: $owner, productWaybillId: $productWaybillId) {
     id
     owner
     team
     article
     name
-    count {
-      count
-    }
-    price {
+    quantity
+    unit
+    costs {
       purchasePrice
+      clientPrice
       price
       amount
     }
@@ -285,11 +156,15 @@ export const onCreateProduct = `subscription OnCreateProduct($owner: String!) {
         l
         h
       }
+      inStock
+      dimension
+      cargoPlaceNumber
     }
-    additional {
+    info {
       images
       description
     }
+    link
     status
     waybill {
       id
@@ -317,18 +192,18 @@ export const onCreateProduct = `subscription OnCreateProduct($owner: String!) {
   }
 }
 `;
-export const onUpdateProduct = `subscription OnUpdateProduct($owner: String!) {
-  onUpdateProduct(owner: $owner) {
+export const onUpdateProduct = `subscription OnUpdateProduct($owner: String!, $id: ID!) {
+  onUpdateProduct(owner: $owner, id: $id) {
     id
     owner
     team
     article
     name
-    count {
-      count
-    }
-    price {
+    quantity
+    unit
+    costs {
       purchasePrice
+      clientPrice
       price
       amount
     }
@@ -340,66 +215,15 @@ export const onUpdateProduct = `subscription OnUpdateProduct($owner: String!) {
         l
         h
       }
+      inStock
+      dimension
+      cargoPlaceNumber
     }
-    additional {
+    info {
       images
       description
     }
-    status
-    waybill {
-      id
-      owner
-      team
-      number
-      description
-      contractor
-      purchaseDate
-      deliveryDate
-      spec {
-        id
-        owner
-        team
-      }
-      products {
-        nextToken
-      }
-      status
-      createdAt
-      updatedAt
-    }
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const onDeleteProduct = `subscription OnDeleteProduct($owner: String!) {
-  onDeleteProduct(owner: $owner) {
-    id
-    owner
-    team
-    article
-    name
-    count {
-      count
-    }
-    price {
-      purchasePrice
-      price
-      amount
-    }
-    store {
-      net
-      gross
-      size {
-        w
-        l
-        h
-      }
-    }
-    additional {
-      images
-      description
-    }
+    link
     status
     waybill {
       id

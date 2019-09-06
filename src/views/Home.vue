@@ -3,78 +3,13 @@
     <v-toolbar flat color="transparent">
       <h1>Спецификации</h1>
       <div class="flex-grow-1"></div>
-      <v-dialog
-        v-model="dialog"
-        persistent 
-        max-width="500px"
-      >
-        <template v-slot:activator="{ on }">
-          <v-btn
-            :ripple="false"
-            color="primary"
-            class="mb-2"
-            v-on="on"
-          >Создать проект</v-btn>
-        </template>
-        <v-card>
-          <v-card-title>
-            <span class="headline">Новый проект</span>
-          </v-card-title>
-
-          <v-card-text>
-            <v-slide-y-transition>
-              <v-alert
-                v-if="createError"
-                type="error"
-                color="red"
-                dismissible
-              >
-                {{ createErrorMessage }}
-              </v-alert>
-            </v-slide-y-transition>
-            <v-form
-              ref="form"
-              v-model="valid"
-              lazy-validation
-            >
-              <v-container>
-                <v-text-field
-                  ref="projectName"
-                  v-model="createModel.name"
-                  label="Name"
-                  required
-                  :rules="[v => !!v || 'Name is required']"
-                />
-                <v-textarea
-                  v-model="createModel.description"
-                  label="Description"
-                />
-              </v-container>
-            </v-form>
-          </v-card-text>
-
-          <v-card-actions>
-            <div class="flex-grow-1"></div>
-            <v-btn
-              :ripple="false"
-              text
-              @click="dialog = false"
-            >
-              Отмена
-            </v-btn>
-            <v-btn
-              :disabled="!valid"
-              :loading="createLoading"
-              :ripple="false"
-              text
-              color="primary"
-              @click="createProject"
-            >
-              Создать
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+      <v-btn
+        :loading="createLoading"
+        :ripple="false"
+        color="primary"
+        class="mb-2"
+        @click="createProject"
+      >Создать</v-btn>
     </v-toolbar>
 
     <v-layout>
@@ -106,59 +41,7 @@
                       sm="12"
                       md="6"
                     >
-                      <v-hover v-slot:default="{ hover }">
-                        <v-card :elevation="hover ? 6 : 2">
-                          <v-card-title>
-                            <h4>
-                              <Editable
-                                :value="item.name"
-                                placeholder="Name"
-                                @input="updateProject({ id: item.id, name: $event })"
-                              />
-                            </h4>
-                          </v-card-title>
-                          <v-divider></v-divider>
-                          <v-list dense>
-                            <v-list-item>
-                              <v-list-item-content>Description:</v-list-item-content>
-                              <v-list-item-content class="align-end">
-                                <Editable
-                                  :value="item.description"
-                                  placeholder="Description"
-                                  @input="updateProject({ id: item.id, description: $event })"
-                                />
-                              </v-list-item-content>
-                            </v-list-item>
-                            <v-list-item>
-                              <v-list-item-content>Status:</v-list-item-content>
-                              <v-list-item-content class="align-end">{{ item.status }}</v-list-item-content>
-                            </v-list-item>
-                            <v-list-item>
-                              <v-list-item-content>Created:</v-list-item-content>
-                              <v-list-item-content class="align-end">{{ item.createdAt | localDate }}</v-list-item-content>
-                            </v-list-item>
-                            <v-list-item>
-                              <v-list-item-content>Updated:</v-list-item-content>
-                              <v-list-item-content class="align-end">{{ item.updatedAt | localDate }}</v-list-item-content>
-                            </v-list-item>
-                          </v-list>
-                          <v-card-actions>
-                            <v-btn
-                              :ripple="false"
-                              text
-                              color="primary"
-                              @click="$router.push({
-                                name: 'specs',
-                                params: {
-                                  specId: item.spec.id
-                                }
-                              })"
-                            >
-                              Открыть
-                            </v-btn>
-                          </v-card-actions>
-                        </v-card>
-                      </v-hover>
+                      <ProjectItem :item="item" />
                     </v-col>
                   </v-row>
                 </template>
@@ -189,43 +72,41 @@
 
 <script>
 import { listProjects } from '@/graphql/queries'
-import { createProject, createSpec, updateProject } from '@/graphql/mutations'
+import { createProject, createSpec } from '@/graphql/mutations'
 import { onCreateProject } from '@/graphql/subscriptions'
 
-import Editable from '@/components/Editable.vue'
+import ProjectItem from '@/components/ProjectItem.vue'
 
 export default {
   name: 'Project',
   components: {
-    Editable
+    ProjectItem
   },
-  data () {
-    return {
-      itemsPerPageOptions: [4, 8],
-      itemsPerPage: 4,
-      createLoading: false,
-      error: false,
-      errorMessage: '',
-      createError: false,
-      createErrorMessage: '',
-      dialog: false,
-      valid: false,
-      createModel: {
-        name: null,
-        description: null
-      },
-      headers: [
-        { text: 'Id', value: 'id' },
-        { text: 'Owner', value: 'owner' },
-        { text: 'Name', value: 'name' },
-        { text: 'Description', value: 'description' },
-        { text: 'Status', value: 'status' },
-        { text: 'Created', value: 'createdAt' },
-        { text: 'Updated', value: 'updatedAt' },
-      ],
-      projects: []
-    }
-  },
+  data: () => ({
+    itemsPerPageOptions: [4, 8],
+    itemsPerPage: 4,
+    createLoading: false,
+    error: false,
+    errorMessage: '',
+    createError: false,
+    createErrorMessage: '',
+    dialog: false,
+    valid: false,
+    createModel: {
+      name: null,
+      description: null
+    },
+    headers: [
+      { text: 'Id', value: 'id' },
+      { text: 'Owner', value: 'owner' },
+      { text: 'Name', value: 'name' },
+      { text: 'Description', value: 'description' },
+      { text: 'Status', value: 'status' },
+      { text: 'Created', value: 'createdAt' },
+      { text: 'Updated', value: 'updatedAt' },
+    ],
+    projects: []
+  }),
   computed: {
     owner () {
       return this.$store.getters.username
@@ -239,24 +120,7 @@ export default {
       })
     },
   },
-  watch: {
-    dialog (val) {
-      if (val) {
-        this.$nextTick(() => { this.$refs.projectName.focus() })
-      } else {
-        this.closeDialog()
-      }
-    },
-  },
   methods: {
-    closeDialog () {
-      this.dialog = false
-      setTimeout(() => {
-        if (this.$refs.form) {
-          this.$refs.form.reset()
-        }
-      }, 300)
-    },
     onCreateProject (prevData, newData) {
       // eslint-disable-next-line
       console.log('New project from subscription...')
@@ -282,25 +146,21 @@ export default {
     async createProject () {
       try {
         this.createLoading = true
-        if (this.$refs.form.validate()) {
-          const owner = this.owner
-          const projectSpecId = await this.createSpec({ owner })
-          const input = Object.assign({}, this.createModel, {
-            owner,
-            status: 'CREATED',
-            projectSpecId
-          })
-          const response = await this.$Amplify.API.graphql(
-            this.$Amplify.graphqlOperation(createProject, { input })
-          )
-          if (response && response.errors && response.errors.length > 0) {
-            throw new Error(response.errors.join('\n'))
-          }
-          // eslint-disable-next-line
-          console.log('Create Data: ', response.data)
-          this.closeDialog()
-          return response.data.createProject
+        const owner = this.owner
+        const projectSpecId = await this.createSpec({ owner })
+        const input = {
+          owner,
+          status: 'CREATED',
+          projectSpecId
         }
+        const response = await this.$Amplify.API.graphql(
+          this.$Amplify.graphqlOperation(createProject, { input })
+        )
+        if (response && response.errors && response.errors.length > 0) {
+          throw new Error(response.errors.join('\n'))
+        }
+        // eslint-disable-next-line
+        console.log('Create Data: ', response.data)
       } catch (error) {
         this.createError = true
         this.createErrorMessage = error
@@ -314,29 +174,6 @@ export default {
         // })
       } finally {
         this.createLoading = false
-      }
-    },
-    async updateProject (input) {
-      try {
-        const response = await this.$Amplify.API.graphql(
-          this.$Amplify.graphqlOperation(updateProject, { input })
-        )
-        if (response && response.errors && response.errors.length > 0) {
-          throw new Error(response.errors.join('\n'))
-        }
-        // eslint-disable-next-line
-        console.log('Update Data: ', response.data)
-      } catch (error) {
-        this.error = true
-        this.errorMessage = error
-        // eslint-disable-next-line
-        console.log('Error: ', error)
-        // Analytics.record({
-        //   name: 'UpdateProjectError',
-        //   attributes: {
-        //     error: e.message
-        //   }
-        // })
       }
     },
   }

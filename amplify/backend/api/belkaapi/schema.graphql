@@ -1,5 +1,5 @@
 type Project
-  @model
+  @model(queries: { list: "listProjects" }, mutations: { create: "createProject", update: "updateProject" }, subscriptions: { level: OFF })
   @auth(rules: [
     { allow: owner },
     { allow: owner, ownerField: "team" },
@@ -10,12 +10,12 @@ type Project
 {
   id: ID!
   owner: String
-  team: [String]
-  managers: [String]
-  accauntants: [String]
-  warehousemans: [String]
-  freelancers: [String]
-  name: String!
+  team: [String!]
+  managers: [String!]
+  accauntants: [String!]
+  warehousemans: [String!]
+  freelancers: [String!]
+  name: String
   description: String
   client: String
   status: ProjectStatus
@@ -27,13 +27,13 @@ type Project
 enum ProjectStatus {
   CREATED
   IN_PROGRESS
-  CLOSED
+  COMPLETED
   DELETED
   ARCHIVED
 }
 
 type Spec
-  @model
+  @model(queries: { get: "getSpec" }, mutations: { create: "createSpec" }, subscriptions: null)
   @auth(rules: [
     { allow: owner },
     { allow: owner, ownerField: "team" },
@@ -42,11 +42,11 @@ type Spec
   id: ID!
   owner: String
   team: [String]
-  waybills: [Waybill] @connection(name: "SpecWaybills")
+  waybills: [Waybill!] @connection(name: "SpecWaybills")
 }
 
 type Waybill
-  @model
+  @model(queries: { get: "getWaybill" }, mutations: { create: "createWaybill", update: "updateWaybill" }, subscriptions: { level: OFF })
   @auth(rules: [
     { allow: owner },
     { allow: owner, ownerField: "team" },
@@ -54,14 +54,14 @@ type Waybill
 {
   id: ID!
   owner: String
-  team: [String]
+  team: [String!]
   number: String
   description: String
   contractor: String
   purchaseDate: String
   deliveryDate: String
   spec: Spec @connection(name: "SpecWaybills")
-  products: [Product] @connection(name: "WaybillProducts")
+  products: [Product!] @connection(name: "WaybillProducts")
   status: WaybillStatus
   createdAt: String
 	updatedAt: String
@@ -69,12 +69,15 @@ type Waybill
 
 enum WaybillStatus {
   CREATED
+  IN_PRODUCTION
+  IN_PROCESSING
+  IN_STOCK
   DELETED
   ARCHIVED
 }
 
 type Product
-  @model
+  @model(queries: null, mutations: { create: "createProduct", update: "updateProduct" }, subscriptions: { level: OFF })
   @auth(rules: [
     { allow: owner },
     { allow: owner, ownerField: "team" },
@@ -82,13 +85,16 @@ type Product
 {
   id: ID!
   owner: String
-  team: [String]
+  team: [String!]
   article: String
   name: String
-  count: ProductCount
-  price: ProductPrice
+  quantity: Int
+  # TODO add connection with type ProductUnit, array in project
+  unit: String
+  costs: ProductCosts
   store: ProductStore
-  additional: ProductAdditional
+  info: ProductInfo
+  link: String
   status: ProductStatus
   waybill: Waybill @connection(name: "WaybillProducts")
   createdAt: String
@@ -97,16 +103,16 @@ type Product
 
 enum ProductStatus {
   CREATED
+  IN_PRODUCTION
+  IN_PROCESSING
+  IN_STOCK
   DELETED
   ARCHIVED
 }
 
-type ProductCount {
-  count: Float
-}
-
-type ProductPrice {
+type ProductCosts {
   purchasePrice: Float
+  clientPrice: Float
   price: Float
   amount: Float
 }
@@ -115,6 +121,10 @@ type ProductStore {
   net: Float
   gross: Float
   size: ProductSize
+  inStock: Boolean
+  dimension: Float
+  # TODO add connection with type CargoPlace, @model
+  cargoPlaceNumber: Int
 }
 
 type ProductSize {
@@ -123,7 +133,16 @@ type ProductSize {
   h: Float
 }
 
-type ProductAdditional {
+type ProductInfo {
   images: [String]
   description: String
+}
+
+type Subscription {
+  onCreateProject(owner: String!): Project @aws_subscribe(mutations: ["createProject"])
+  onUpdateProject(owner: String!, id: ID!): Project @aws_subscribe(mutations: ["updateProject"])
+  onCreateWaybill(owner: String!, waybillSpecId: ID!): Waybill @aws_subscribe(mutations: ["createWaybill"])
+  onUpdateWaybill(owner: String!, id: ID!): Waybill @aws_subscribe(mutations: ["updateWaybill"])
+  onCreateProduct(owner: String!, productWaybillId: ID!): Product @aws_subscribe(mutations: ["createProduct"])
+  onUpdateProduct(owner: String!, id: ID!): Product @aws_subscribe(mutations: ["updateProduct"])
 }
