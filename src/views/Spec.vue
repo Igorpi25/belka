@@ -10,10 +10,7 @@
         <div v-if="loading">Загрузка...</div>
 
         <div v-else-if="errors.length > 0">
-          <ErrorMessages
-            :items="errors"
-            @close="i => errors.splice(i, 1)"
-          />
+          <ErrorMessages :items.sync="errors" />
         </div>
 
         <div v-else-if="items">
@@ -30,33 +27,49 @@
             <template v-slot:item.number="{ item }">
               <Editable
                 :value="item.number"
+                :version="item.version"
                 placeholder="Номер"
+                outlined
                 arrow-move
-                @input="updateWaybill({ id: item.id, number: $event })"
+                arrow-move-mode="row"
+                sibling-item-selector="td"
+                @input="updateWaybill({ id: item.id, number: $event, expectedVersion: item.version })"
               />
             </template>
             <template v-slot:item.purchaseDate="{ item }">
               <Editable
                 :value="item.purchaseDate"
+                :version="item.version"
                 placeholder="Дата закупки"
+                outlined
                 arrow-move
-                @input="updateWaybill({ id: item.id, purchaseDate: $event })"
+                arrow-move-mode="row"
+                sibling-item-selector="td"
+                @input="updateWaybill({ id: item.id, purchaseDate: $event, expectedVersion: item.version })"
               />
             </template>
             <template v-slot:item.contractor="{ item }">
               <Editable
                 :value="item.contractor"
+                :version="item.version"
                 placeholder="Поставщик"
+                outlined
                 arrow-move
-                @input="updateWaybill({ id: item.id, contractor: $event })"
+                arrow-move-mode="row"
+                sibling-item-selector="td"
+                @input="updateWaybill({ id: item.id, contractor: $event, expectedVersion: item.version })"
               />
             </template>
             <template v-slot:item.deliveryDate="{ item }">
               <Editable
                 :value="item.deliveryDate"
+                :version="item.version"
                 placeholder="Дата отправки"
+                outlined
                 arrow-move
-                @input="updateWaybill({ id: item.id, deliveryDate: $event })"
+                arrow-move-mode="row"
+                sibling-item-selector="td"
+                @input="updateWaybill({ id: item.id, deliveryDate: $event, expectedVersion: item.version })"
               />
             </template>
             <template v-slot:item.createdAt="{ item }">
@@ -71,9 +84,7 @@
               </td>
             </template>
             <template v-slot:item.action="{ item }">
-              <v-slide-x-reverse-transition
-                mode="out-in"
-              >
+              <v-scale-transition mode="out-in">
                 <v-progress-circular
                   v-if="deleteLoading === item.id"
                   :width="2"
@@ -84,15 +95,16 @@
                 <v-icon
                   v-else
                   small
-                  @click="deleteWaybill(item.id)"
+                  @click="deleteWaybill({ id: item.id, expectedVersion: item.version })"
                 >
                   {{ icons.mdiDelete }}
                 </v-icon>
-              </v-slide-x-reverse-transition>
+              </v-scale-transition>
             </template>
           </v-data-table>
           <v-btn
             :ripple="false"
+            :loading="createLoading"
             outlined
             rounded
             color="primary"
@@ -119,8 +131,10 @@ import { onCreateWaybill, onUpdateWaybill, onDeleteWaybill } from '@/graphql/sub
 import WaybillItem from '@/components/WaybillItem.vue'
 import Editable from '@/components/Editable.vue'
 
+import { errorMessage, confirmDialog } from '@/utils/helpers'
+
 export default {
-  name: 'Project',
+  name: 'Spec',
   components: {
     WaybillItem,
     Editable,
@@ -238,17 +252,19 @@ export default {
         this.loading = true
         const response = await this.$Amplify.API.graphql(this.getSpecQuery)
         if (response && response.errors && response.errors.length > 0) {
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
+          throw response
         }
         this.items = response.data.getSpec.waybills.items || []
       } catch (error) {
+        this.items = null
+        this.errors = error.errors || []
+        const message = errorMessage(error)
         // eslint-disable-next-line
-        console.log('Error: ', error)
+        console.log('Error: ', message)
         // Analytics.record({
         //   name: 'GetSpecError',
         //   attributes: {
-        //     error: e.message
+        //     error: message
         //   }
         // })
       } finally {
@@ -268,16 +284,17 @@ export default {
           this.$Amplify.graphqlOperation(createWaybill, { input })
         )
         if (response && response.errors && response.errors.length > 0) {
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
+          throw response
         }
       } catch (error) {
+        this.errors = error.errors || []
+        const message = errorMessage(error)
         // eslint-disable-next-line
-        console.log('Error: ', error)
+        console.log('Error: ', message)
         // Analytics.record({
         //   name: 'CreateWaybillError',
         //   attributes: {
-        //     error: e.message
+        //     error: message
         //   }
         // })
       } finally {
@@ -291,58 +308,52 @@ export default {
           this.$Amplify.graphqlOperation(updateWaybill, { input })
         )
         if (response && response.errors && response.errors.length > 0) {
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
+          throw response
         }
       } catch (error) {
+        this.errors = error.errors || []
+        const message = errorMessage(error)
         // eslint-disable-next-line
-        console.log('Error: ', error)
+        console.log('Error: ', message)
         // Analytics.record({
         //   name: 'UpdateWaybillError',
         //   attributes: {
-        //     error: e.message
+        //     error: message
         //   }
         // })
       } finally {
         this.updateLoading = null
       }
     },
-    async deleteWaybill (id) {
+    async deleteWaybill (input) {
       try {
         const msg = 'Вы действительно хотите удалить накладную?'
-        const confirm = await this.confirmDialog(msg)
+        const confirm = await confirmDialog(msg)
         if (confirm === 'not_confirmed') {
           return
         }
-        this.deleteLoading = id
-        const input = { id }
+        this.deleteLoading = input.id
         const response = await this.$Amplify.API.graphql(
           this.$Amplify.graphqlOperation(deleteWaybill, { input })
         )
         if (response && response.errors && response.errors.length > 0) {
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
+          throw response
         }
       } catch (error) {
         if (error === 'not_confirmed') return
+        this.errors = error.errors || []
+        const message = errorMessage(error)
         // eslint-disable-next-line
-        console.log('Error: ', error)
+        console.log('Error: ', message)
         // Analytics.record({
         //   name: 'DeleteWaybillError',
         //   attributes: {
-        //     error: e.message
+        //     error: message
         //   }
         // })
       } finally {
         this.deleteLoading = null
       }
-    },
-    confirmDialog (msg) {
-      return new Promise((resolve, reject) => {
-        let confirmed = window.confirm(msg)
-
-        return confirmed ? resolve('confirmed') : reject('not_confirmed')
-      })
     },
   }
 }

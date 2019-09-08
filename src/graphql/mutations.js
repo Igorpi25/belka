@@ -19,11 +19,37 @@ export const createProject = `mutation CreateProject($input: CreateProjectInput!
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
+      version
     }
     createdAt
     updatedAt
+    version
   }
 }
 `;
@@ -45,11 +71,37 @@ export const updateProject = `mutation UpdateProject($input: UpdateProjectInput!
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
+      version
     }
     createdAt
     updatedAt
+    version
   }
 }
 `;
@@ -71,11 +123,37 @@ export const deleteProject = `mutation DeleteProject($input: DeleteProjectInput!
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
+      version
     }
     createdAt
     updatedAt
+    version
   }
 }
 `;
@@ -94,13 +172,42 @@ export const createSpec = `mutation CreateSpec($input: CreateSpecInput!) {
         contractor
         purchaseDate
         deliveryDate
+        spec {
+          id
+          owner
+          team
+          waybills {
+            nextToken
+          }
+          version
+        }
         waybillSpecId
+        products {
+          items {
+            id
+            owner
+            team
+            article
+            name
+            quantity
+            unit
+            link
+            status
+            productWaybillId
+            createdAt
+            updatedAt
+            version
+          }
+          nextToken
+        }
         status
         createdAt
         updatedAt
+        version
       }
       nextToken
     }
+    version
   }
 }
 `;
@@ -119,8 +226,33 @@ export const createWaybill = `mutation CreateWaybill($input: CreateWaybillInput!
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
+      version
     }
     waybillSpecId
     products {
@@ -132,17 +264,66 @@ export const createWaybill = `mutation CreateWaybill($input: CreateWaybillInput!
         name
         quantity
         unit
+        costs {
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+        }
+        store {
+          net
+          gross
+          size {
+            w
+            l
+            h
+          }
+          inStock
+          dimension
+          cargoPlaceNumber
+        }
+        info {
+          images
+          description
+        }
         link
         status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         productWaybillId
         createdAt
         updatedAt
+        version
       }
       nextToken
     }
     status
     createdAt
     updatedAt
+    version
   }
 }
 `;
@@ -161,8 +342,33 @@ export const updateWaybill = `mutation UpdateWaybill($input: UpdateWaybillInput!
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
+      version
     }
     waybillSpecId
     products {
@@ -174,17 +380,66 @@ export const updateWaybill = `mutation UpdateWaybill($input: UpdateWaybillInput!
         name
         quantity
         unit
+        costs {
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+        }
+        store {
+          net
+          gross
+          size {
+            w
+            l
+            h
+          }
+          inStock
+          dimension
+          cargoPlaceNumber
+        }
+        info {
+          images
+          description
+        }
         link
         status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         productWaybillId
         createdAt
         updatedAt
+        version
       }
       nextToken
     }
     status
     createdAt
     updatedAt
+    version
   }
 }
 `;
@@ -203,8 +458,33 @@ export const deleteWaybill = `mutation DeleteWaybill($input: DeleteWaybillInput!
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
+      version
     }
     waybillSpecId
     products {
@@ -216,17 +496,66 @@ export const deleteWaybill = `mutation DeleteWaybill($input: DeleteWaybillInput!
         name
         quantity
         unit
+        costs {
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+        }
+        store {
+          net
+          gross
+          size {
+            w
+            l
+            h
+          }
+          inStock
+          dimension
+          cargoPlaceNumber
+        }
+        info {
+          images
+          description
+        }
         link
         status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         productWaybillId
         createdAt
         updatedAt
+        version
       }
       nextToken
     }
     status
     createdAt
     updatedAt
+    version
   }
 }
 `;
@@ -244,6 +573,7 @@ export const createProduct = `mutation CreateProduct($input: CreateProductInput!
       clientPrice
       price
       amount
+      total
     }
     store {
       net
@@ -276,18 +606,87 @@ export const createProduct = `mutation CreateProduct($input: CreateProductInput!
         id
         owner
         team
+        waybills {
+          items {
+            id
+            owner
+            team
+            number
+            description
+            contractor
+            purchaseDate
+            deliveryDate
+            waybillSpecId
+            status
+            createdAt
+            updatedAt
+            version
+          }
+          nextToken
+        }
+        version
       }
       waybillSpecId
       products {
+        items {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          costs {
+            purchasePrice
+            clientPrice
+            price
+            amount
+            total
+          }
+          store {
+            net
+            gross
+            inStock
+            dimension
+            cargoPlaceNumber
+          }
+          info {
+            images
+            description
+          }
+          link
+          status
+          waybill {
+            id
+            owner
+            team
+            number
+            description
+            contractor
+            purchaseDate
+            deliveryDate
+            waybillSpecId
+            status
+            createdAt
+            updatedAt
+            version
+          }
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
       status
       createdAt
       updatedAt
+      version
     }
     productWaybillId
     createdAt
     updatedAt
+    version
   }
 }
 `;
@@ -305,6 +704,7 @@ export const updateProduct = `mutation UpdateProduct($input: UpdateProductInput!
       clientPrice
       price
       amount
+      total
     }
     store {
       net
@@ -337,18 +737,87 @@ export const updateProduct = `mutation UpdateProduct($input: UpdateProductInput!
         id
         owner
         team
+        waybills {
+          items {
+            id
+            owner
+            team
+            number
+            description
+            contractor
+            purchaseDate
+            deliveryDate
+            waybillSpecId
+            status
+            createdAt
+            updatedAt
+            version
+          }
+          nextToken
+        }
+        version
       }
       waybillSpecId
       products {
+        items {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          costs {
+            purchasePrice
+            clientPrice
+            price
+            amount
+            total
+          }
+          store {
+            net
+            gross
+            inStock
+            dimension
+            cargoPlaceNumber
+          }
+          info {
+            images
+            description
+          }
+          link
+          status
+          waybill {
+            id
+            owner
+            team
+            number
+            description
+            contractor
+            purchaseDate
+            deliveryDate
+            waybillSpecId
+            status
+            createdAt
+            updatedAt
+            version
+          }
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
       status
       createdAt
       updatedAt
+      version
     }
     productWaybillId
     createdAt
     updatedAt
+    version
   }
 }
 `;
@@ -366,6 +835,7 @@ export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!
       clientPrice
       price
       amount
+      total
     }
     store {
       net
@@ -398,18 +868,87 @@ export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!
         id
         owner
         team
+        waybills {
+          items {
+            id
+            owner
+            team
+            number
+            description
+            contractor
+            purchaseDate
+            deliveryDate
+            waybillSpecId
+            status
+            createdAt
+            updatedAt
+            version
+          }
+          nextToken
+        }
+        version
       }
       waybillSpecId
       products {
+        items {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          costs {
+            purchasePrice
+            clientPrice
+            price
+            amount
+            total
+          }
+          store {
+            net
+            gross
+            inStock
+            dimension
+            cargoPlaceNumber
+          }
+          info {
+            images
+            description
+          }
+          link
+          status
+          waybill {
+            id
+            owner
+            team
+            number
+            description
+            contractor
+            purchaseDate
+            deliveryDate
+            waybillSpecId
+            status
+            createdAt
+            updatedAt
+            version
+          }
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
       status
       createdAt
       updatedAt
+      version
     }
     productWaybillId
     createdAt
     updatedAt
+    version
   }
 }
 `;

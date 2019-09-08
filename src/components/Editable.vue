@@ -1,10 +1,23 @@
 <template>
   <div>
-    <div
+    <input
+      v-if="type === 'number'"
       ref="editable"
       :id="id"
       :placeholder="placeholder"
-      :class="{ 'editable--focused': isFocused }"
+      :class="['editable', { 'editable--focused': isFocused, 'editable--outlined': outlined }]"
+      type="number"
+      v-on="listeners"
+      @keydown="onKeyDown"
+      @focus="onFocus"
+      @blur="onBlur"
+    />
+    <div
+      v-else
+      ref="editable"
+      :id="id"
+      :placeholder="placeholder"
+      :class="['editable', { 'editable--focused': isFocused, 'editable--outlined': outlined }]"
       contenteditable
       spellcheck
       v-on="listeners"
@@ -35,6 +48,18 @@ export default {
       type: [String, Number],
       default: ''
     },
+    version: {
+      type: Number,
+      required: true
+    },
+    type: {
+      type: String,
+      default: 'text'
+    },
+    outlined: {
+      type: Boolean,
+      default: false
+    },
     placeholder: {
       type: String,
       default: ''
@@ -51,10 +76,6 @@ export default {
       type: String,
       default: 'table'
     },
-    colIndex: {
-      type: Number,
-      default: 0
-    },
     // if arrowMove is not 'table'
     siblingItemSelector: {
       type: String,
@@ -66,7 +87,10 @@ export default {
     return {
       id: uuid(),
       lazyValue: this.value,
-      isFocused: false
+      pendingVersion: 0,
+      hasQueque: false,
+      isFocused: false,
+      isBooted: false,
     }
   },
 
@@ -86,21 +110,47 @@ export default {
 
   watch: {
     value (val) {
-      if (val !== this.internalValue) {
-        this.setValue(val, true)
+      if (this.isFocused && this.pendingVersion && this.hasQueque && val !== this.internalValue) {
+        this.$emit('input', this.internalValue)
+        this.pendingVersion = this.version
+      } else {
+        this.setValue(val, this.isFocused)
+        this.pendingVersion = 0
       }
+      this.hasQueque = false
     },
   },
 
   mounted () {
     this.setValue(this.value, false)
+    this.isBooted = true
   },
 
   methods: {
-    input: debounce(function (e) {
-      const text = e.target.innerText || null
-      this.internalValue = text
-      this.$emit('input', text)
+    // input: debounce(function (e) {
+    //   const val = this.type === 'number'
+    //     ? e.target.value : e.target.innerText
+    //   const value = val || null
+    //   this.internalValue = value
+    //   this.$emit('input', value)
+    //   this.pendingVersion = this.version
+    // }, DEBOUNCE),
+
+    input (e) {
+      const val = this.type === 'number'
+        ? e.target.value : e.target.innerText
+      const value = val || null
+      this.internalValue = value
+      this.debounceInput(value)
+    },
+
+    debounceInput: debounce(function (val) {
+      if (this.pendingVersion) {
+        this.hasQueque = true
+      } else {
+        this.$emit('input', val)
+        this.pendingVersion = this.version
+      }
     }, DEBOUNCE),
 
     onFocus () {
@@ -115,7 +165,7 @@ export default {
       if (!this.arrowMove) return
       const position = getCaretPosition(this.$refs.editable)
       if (e.key === 'ArrowLeft' || e.key === 'Left') { // 'Left' IE/Edge specific value
-        if (!this.siblingItemSelector) return
+        if (this.arrowMoveMode !== 'table' && !this.siblingItemSelector) return
         if (this.isPositionStart(position)) {
           e.preventDefault()
           this.focusPrevious(null, true)
@@ -125,7 +175,7 @@ export default {
         e.preventDefault()
         this.focusPreviousRow(position)
       } else if (e.key === 'ArrowRight' || e.key === 'Right') { // 'Right' IE/Edge specific value
-        if (!this.siblingItemSelector) return
+        if (this.arrowMoveMode !== 'table' && !this.siblingItemSelector) return
         if (this.isPositionEnd(position)) {
           e.preventDefault()
           this.focusNext()
@@ -141,7 +191,11 @@ export default {
       const position = setPosition
         ? getCaretPosition(this.$refs.editable)
         : 0
-      this.$refs.editable.innerText = value
+      if (this.type === 'number') {
+        this.$refs.editable.value = value
+      } else {
+        this.$refs.editable.innerText = value
+      }
       if (setPosition) {
         setCaretPosition(this.$refs.editable, position)
       }
@@ -153,7 +207,10 @@ export default {
       if (siblingRow) {
         const nextRow = siblingRow.nextElementSibling
         if (nextRow) {
-          console.log('nextRow', nextRow, nextRow.cells, position)
+          const currentTD = active.closest('td')
+          const cell = nextRow.cells[currentTD.cellIndex]
+          const target = cell.querySelector('.editable')
+          this.setFocus(target, position)
         }
       }
     },
@@ -164,7 +221,10 @@ export default {
       if (siblingRow) {
         const previousRow = siblingRow.previousElementSibling
         if (previousRow) {
-          console.log('previousRow', previousRow, previousRow.cells, position)
+          const currentTD = active.closest('td')
+          const cell = previousRow.cells[currentTD.cellIndex]
+          const target = cell.querySelector('.editable')
+          this.setFocus(target, position)
         }
       }
     },
@@ -185,12 +245,14 @@ export default {
 
     getSibling (previous) {
       const active = document.activeElement
-      const sibling = active.closest(this.siblingItemSelector)
+      const selector = this.arrowMoveMode === 'table'
+        ? 'td' : this.siblingItemSelector
+      const sibling = active.closest(selector)
       if (sibling) {
         const target = previous
           ? sibling.previousElementSibling
           : sibling.nextElementSibling
-        return target && target.querySelector('div[contenteditable=true]')
+        return target && target.querySelector('.editable')
       }
       return null
     },
@@ -235,16 +297,25 @@ div[contenteditable=true]:empty::before {
   line-height: 1.5;
   min-height: 1.5em;
 }
-div[contenteditable=true] {
+
+.editable {
   outline: none;
-  padding: 0 2px;
+  padding: 4px 8px;
   line-height: 1.5;
   min-height: 1.5em;
   color: #1565C0;
-}
-div[contenteditable=true].editable--focused {
-  background-color: #f5f5f5;
+  width: 100%;
   border-radius: 4px;
+}
+
+.editable--focused {
+  background-color: #f5f5f5;
   color: #000000;
+}
+.editable--outlined {
+  border: 1px solid #E0E0E0;
+}
+.editable--outlined.editable--focused {
+  border: 1px solid #1E88E5;
 }
 </style>

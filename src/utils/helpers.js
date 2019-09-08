@@ -1,4 +1,33 @@
 /**
+ * Сообщения
+ * @returns {Array,Object,string} error
+ */
+export const errorMessage = (error) => {
+  if (error.errors && isArray(error.errors)) {
+    const errorsMessages = error.errors.reduce((acc, curr) => {
+      let err = `${curr.message}`
+      if (curr.locations) err += `, locations: ${JSON.stringify(curr.locations)}`
+      if (curr.path) err += `, path: ${JSON.stringify(curr.path)}`
+      return [...acc, err]
+    }, [])
+    return errorsMessages
+  } else {
+    return error.message || error
+  }
+}
+
+/**
+ * Подтверждение
+ * @returns {string} сообщение
+ */
+export const confirmDialog = (msg) => {
+  return new Promise((resolve, reject) => {
+    const confirmed = window.confirm(msg)
+    return confirmed ? resolve('confirmed') : reject('not_confirmed')
+  })
+}
+
+/**
  * Генерация уникального идентификатора
  * @returns {string} uuid
  */
@@ -96,6 +125,9 @@ export function setCaretPosition (target, position) {
   if (!target) return
   const d = getCaretData(target, position)
   if (!d.node) return
+  // DOMException: Failed to execute 'setStart' on 'Range': The offset OFFSET is larger than the node's length
+  const text = d.node.textContent || d.node.innerText
+  if (d.position > text.length) return
   const sel = window.getSelection()
   const range = document.createRange()
   range.setStart(d.node, d.position)
@@ -182,4 +214,40 @@ export function copyToClipboard (text) {
       document.getSelection().addRange(selected)
     }
   })
+}
+
+/**
+ * Проверка на строку
+ * @param {any} value
+ * @returns {boolean}
+ */
+export function isString (value) {
+  return typeof value === 'string' || value instanceof String
+}
+
+/**
+ * Проверка на число
+ * @param {any} value
+ * @returns {boolean}
+ */
+export function isNumber (value) {
+  return typeof value === 'number' && isFinite(value)
+}
+
+/**
+ * Проверка на массив
+ * @param {any} value
+ * @returns {boolean}
+ */
+export function isArray (value) {
+  return value && typeof value === 'object' && value.constructor === Array
+}
+
+/**
+ * Проверка на объект
+ * @param {any} value
+ * @returns {boolean}
+ */
+export function isObject (value) {
+  return value && typeof value === 'object' && value.constructor === Object
 }

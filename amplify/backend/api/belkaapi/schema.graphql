@@ -1,5 +1,6 @@
 type Project
   @model(queries: { list: "listProjects" }, mutations: { create: "createProject", update: "updateProject", delete: "deleteProject" }, subscriptions: { level: OFF })
+  @versioned
   @auth(rules: [
     { allow: owner },
     { allow: owner, ownerField: "team" },
@@ -34,6 +35,7 @@ enum ProjectStatus {
 
 type Spec
   @model(queries: { get: "getSpec" }, mutations: { create: "createSpec" }, subscriptions: null)
+  @versioned
   @auth(rules: [
     { allow: owner },
     { allow: owner, ownerField: "team" },
@@ -47,6 +49,7 @@ type Spec
 
 type Waybill
   @model(queries: { get: "getWaybill" }, mutations: { create: "createWaybill", update: "updateWaybill", delete: "deleteWaybill" }, subscriptions: { level: OFF })
+  @versioned
   @auth(rules: [
     { allow: owner },
     { allow: owner, ownerField: "team" },
@@ -79,6 +82,7 @@ enum WaybillStatus {
 
 type Product
   @model(queries: null, mutations: { create: "createProduct", update: "updateProduct", delete: "deleteProduct" }, subscriptions: { level: OFF })
+  @versioned
   @auth(rules: [
     { allow: owner },
     { allow: owner, ownerField: "team" },
@@ -117,6 +121,7 @@ type ProductCosts {
   clientPrice: Float
   price: Float
   amount: Float
+  total: Float
 }
 
 type ProductStore {

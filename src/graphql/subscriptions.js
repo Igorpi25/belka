@@ -19,11 +19,37 @@ export const onCreateProject = `subscription OnCreateProject($owner: ID!) {
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
+      version
     }
     createdAt
     updatedAt
+    version
   }
 }
 `;
@@ -45,11 +71,37 @@ export const onUpdateProject = `subscription OnUpdateProject($owner: ID!) {
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
+      version
     }
     createdAt
     updatedAt
+    version
   }
 }
 `;
@@ -71,11 +123,37 @@ export const onDeleteProject = `subscription OnDeleteProject($owner: ID!) {
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
+      version
     }
     createdAt
     updatedAt
+    version
   }
 }
 `;
@@ -94,8 +172,33 @@ export const onCreateWaybill = `subscription OnCreateWaybill($owner: ID!, $waybi
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
+      version
     }
     waybillSpecId
     products {
@@ -107,17 +210,66 @@ export const onCreateWaybill = `subscription OnCreateWaybill($owner: ID!, $waybi
         name
         quantity
         unit
+        costs {
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+        }
+        store {
+          net
+          gross
+          size {
+            w
+            l
+            h
+          }
+          inStock
+          dimension
+          cargoPlaceNumber
+        }
+        info {
+          images
+          description
+        }
         link
         status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         productWaybillId
         createdAt
         updatedAt
+        version
       }
       nextToken
     }
     status
     createdAt
     updatedAt
+    version
   }
 }
 `;
@@ -136,8 +288,33 @@ export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: ID!, $waybi
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
+      version
     }
     waybillSpecId
     products {
@@ -149,17 +326,66 @@ export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: ID!, $waybi
         name
         quantity
         unit
+        costs {
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+        }
+        store {
+          net
+          gross
+          size {
+            w
+            l
+            h
+          }
+          inStock
+          dimension
+          cargoPlaceNumber
+        }
+        info {
+          images
+          description
+        }
         link
         status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         productWaybillId
         createdAt
         updatedAt
+        version
       }
       nextToken
     }
     status
     createdAt
     updatedAt
+    version
   }
 }
 `;
@@ -178,8 +404,33 @@ export const onDeleteWaybill = `subscription OnDeleteWaybill($owner: ID!, $waybi
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
+      version
     }
     waybillSpecId
     products {
@@ -191,17 +442,66 @@ export const onDeleteWaybill = `subscription OnDeleteWaybill($owner: ID!, $waybi
         name
         quantity
         unit
+        costs {
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+        }
+        store {
+          net
+          gross
+          size {
+            w
+            l
+            h
+          }
+          inStock
+          dimension
+          cargoPlaceNumber
+        }
+        info {
+          images
+          description
+        }
         link
         status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          spec {
+            id
+            owner
+            team
+            version
+          }
+          waybillSpecId
+          products {
+            nextToken
+          }
+          status
+          createdAt
+          updatedAt
+          version
+        }
         productWaybillId
         createdAt
         updatedAt
+        version
       }
       nextToken
     }
     status
     createdAt
     updatedAt
+    version
   }
 }
 `;
@@ -219,6 +519,7 @@ export const onCreateProduct = `subscription OnCreateProduct($owner: ID!, $produ
       clientPrice
       price
       amount
+      total
     }
     store {
       net
@@ -251,18 +552,87 @@ export const onCreateProduct = `subscription OnCreateProduct($owner: ID!, $produ
         id
         owner
         team
+        waybills {
+          items {
+            id
+            owner
+            team
+            number
+            description
+            contractor
+            purchaseDate
+            deliveryDate
+            waybillSpecId
+            status
+            createdAt
+            updatedAt
+            version
+          }
+          nextToken
+        }
+        version
       }
       waybillSpecId
       products {
+        items {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          costs {
+            purchasePrice
+            clientPrice
+            price
+            amount
+            total
+          }
+          store {
+            net
+            gross
+            inStock
+            dimension
+            cargoPlaceNumber
+          }
+          info {
+            images
+            description
+          }
+          link
+          status
+          waybill {
+            id
+            owner
+            team
+            number
+            description
+            contractor
+            purchaseDate
+            deliveryDate
+            waybillSpecId
+            status
+            createdAt
+            updatedAt
+            version
+          }
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
       status
       createdAt
       updatedAt
+      version
     }
     productWaybillId
     createdAt
     updatedAt
+    version
   }
 }
 `;
@@ -280,6 +650,7 @@ export const onUpdateProduct = `subscription OnUpdateProduct($owner: ID!, $produ
       clientPrice
       price
       amount
+      total
     }
     store {
       net
@@ -312,18 +683,87 @@ export const onUpdateProduct = `subscription OnUpdateProduct($owner: ID!, $produ
         id
         owner
         team
+        waybills {
+          items {
+            id
+            owner
+            team
+            number
+            description
+            contractor
+            purchaseDate
+            deliveryDate
+            waybillSpecId
+            status
+            createdAt
+            updatedAt
+            version
+          }
+          nextToken
+        }
+        version
       }
       waybillSpecId
       products {
+        items {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          costs {
+            purchasePrice
+            clientPrice
+            price
+            amount
+            total
+          }
+          store {
+            net
+            gross
+            inStock
+            dimension
+            cargoPlaceNumber
+          }
+          info {
+            images
+            description
+          }
+          link
+          status
+          waybill {
+            id
+            owner
+            team
+            number
+            description
+            contractor
+            purchaseDate
+            deliveryDate
+            waybillSpecId
+            status
+            createdAt
+            updatedAt
+            version
+          }
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
       status
       createdAt
       updatedAt
+      version
     }
     productWaybillId
     createdAt
     updatedAt
+    version
   }
 }
 `;
@@ -341,6 +781,7 @@ export const onDeleteProduct = `subscription OnDeleteProduct($owner: ID!, $produ
       clientPrice
       price
       amount
+      total
     }
     store {
       net
@@ -373,18 +814,87 @@ export const onDeleteProduct = `subscription OnDeleteProduct($owner: ID!, $produ
         id
         owner
         team
+        waybills {
+          items {
+            id
+            owner
+            team
+            number
+            description
+            contractor
+            purchaseDate
+            deliveryDate
+            waybillSpecId
+            status
+            createdAt
+            updatedAt
+            version
+          }
+          nextToken
+        }
+        version
       }
       waybillSpecId
       products {
+        items {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          costs {
+            purchasePrice
+            clientPrice
+            price
+            amount
+            total
+          }
+          store {
+            net
+            gross
+            inStock
+            dimension
+            cargoPlaceNumber
+          }
+          info {
+            images
+            description
+          }
+          link
+          status
+          waybill {
+            id
+            owner
+            team
+            number
+            description
+            contractor
+            purchaseDate
+            deliveryDate
+            waybillSpecId
+            status
+            createdAt
+            updatedAt
+            version
+          }
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
       status
       createdAt
       updatedAt
+      version
     }
     productWaybillId
     createdAt
     updatedAt
+    version
   }
 }
 `;

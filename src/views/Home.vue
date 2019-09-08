@@ -17,10 +17,7 @@
         <div v-if="loading">Загрузка...</div>
 
         <div v-else-if="errors.length > 0">
-          <ErrorMessages
-            :items="errors"
-            @close="i => errors.splice(i, 1)"
-          />
+          <ErrorMessages :items.sync="errors" />
         </div>
 
         <v-row v-else-if="items">
@@ -30,6 +27,7 @@
             cols="12"
             sm="12"
             md="6"
+            xl="4"
           >
             <ProjectItem :item="item" />
           </v-col>
@@ -49,8 +47,10 @@ import { onCreateProject, onUpdateProject, onDeleteProject } from '@/graphql/sub
 import ProjectItem from '@/components/ProjectItem.vue'
 import ErrorMessages from '@/components/ErrorMessages.vue'
 
+import { errorMessage } from '@/utils/helpers'
+
 export default {
-  name: 'Project',
+  name: 'Home',
   components: {
     ProjectItem,
     ErrorMessages,
@@ -157,18 +157,19 @@ export default {
         this.loading = true
         const response = await this.$Amplify.API.graphql(this.listProjectsQuery)
         if (response && response.errors && response.errors.length > 0) {
-          this.items = null
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
+          throw response
         }
         this.items = response.data.listProjects.items || []
       } catch (error) {
+        this.items = null
+        this.errors = error.errors || []
+        const message = errorMessage(error)
         // eslint-disable-next-line
-        console.log('Error: ', error)
+        console.log('Error: ', message)
         // Analytics.record({
         //   name: 'ListProjectError',
         //   attributes: {
-        //     error: e.message
+        //     error: message
         //   }
         // })
       } finally {
@@ -183,18 +184,18 @@ export default {
           })
         )
         if (response && response.errors && response.errors.length > 0) {
-          this.items = null
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
+          throw response
         }
         return response.data.createSpec.id
       } catch (error) {
+        this.errors = error.errors || []
+        const message = errorMessage(error)
         // eslint-disable-next-line
-        console.log('Error: ', error)
+        console.log('Error: ', message)
         // Analytics.record({
         //   name: 'CreateSpecError',
         //   attributes: {
-        //     error: e.message
+        //     error: message
         //   }
         // })
       }
@@ -213,17 +214,17 @@ export default {
           this.$Amplify.graphqlOperation(createProject, { input })
         )
         if (response && response.errors && response.errors.length > 0) {
-          this.items = null
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
+          throw response
         }
       } catch (error) {
+        this.errors = error.errors || []
+        const message = errorMessage(error)
         // eslint-disable-next-line
-        console.log('Error: ', error)
+        console.log('Error: ', message)
         // Analytics.record({
         //   name: 'CreateProjectError',
         //   attributes: {
-        //     error: e.message
+        //     error: message
         //   }
         // })
       } finally {

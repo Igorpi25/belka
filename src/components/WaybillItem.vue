@@ -3,10 +3,7 @@
     <div v-if="loading">Загрузка...</div>
 
     <div v-else-if="errors.length > 0">
-      <ErrorMessages
-        :items="errors"
-        @close="i => errors.splice(i, 1)"
-      />
+      <ErrorMessages :items.sync="errors" />
     </div>
 
     <div v-else-if="items">
@@ -18,85 +15,84 @@
         <template v-slot:body="{ items, headers }">
           <tbody>
             <tr v-for="(item, index) in items" :key="index">
-              <td>{{ index + 1 }}</td>
+              <td class="grey--text">{{ index + 1 }}</td>
               <td></td>
               <td>
                 <Editable
                   :value="item.name"
+                  :version="item.version"
                   :placeholder="headers[2].text"
-                  @input="updateProduct({ id: item.id, name: $event })"
+                  arrow-move
+                  @input="updateProduct({ id: item.id, name: $event, expectedVersion: item.version })"
                 />
               </td>
               <td>
                 <Editable
                   :value="item.article"
+                  :version="item.version"
                   :placeholder="headers[3].text"
-                  @input="updateProduct({ id: item.id, article: $event })"
+                  arrow-move
+                  @input="updateProduct({ id: item.id, article: $event, expectedVersion: item.version })"
                 />
               </td>
               <td>
                 <Editable
                   :value="item.quantity"
+                  :version="item.version"
                   :placeholder="headers[4].text"
-                  @input="updateProduct({ id: item.id, quantity: $event })"
+                  type="number"
+                  arrow-move
+                  @input="updateProduct({ id: item.id, quantity: $event, expectedVersion: item.version })"
                 />
               </td>
               <td>
                 <!-- SET DEFAULT VALUE ON CREATE -->
-                <!-- <Editable
+                <Editable
                   :value="item.costs && item.costs.purchasePrice"
-                  @input="updateProduct({ id: item.id, costs: { purchasePrice: $event } })"
-                /> -->
+                  :version="item.version"
+                  type="number"
+                  arrow-move
+                  @input="updateProduct({ id: item.id, costs: { purchasePrice: $event }, expectedVersion: item.version })"
+                />
               </td>
               <td>
                 {{ item.costs && item.costs.amount }}
               </td>
               <td>
                  <!-- SET DEFAULT VALUE ON CREATE -->
-                <!-- <Editable
+                <Editable
                   :value="item.costs && item.costs.clientPrice"
-                  @input="updateProduct({ id: item.id, costs: { clientPrice: $event } })"
-                /> -->
+                  :version="item.version"
+                  type="number"
+                  arrow-move
+                  @input="updateProduct({ id: item.id, costs: { clientPrice: $event }, expectedVersion: item.version })"
+                />
               </td>
               <td>
-                {{ item.costs && item.costs.amount }}
+                {{ item.costs && item.costs.total }}
               </td>
               <td>{{ item.status }}</td>
               <td>
-                <v-slide-x-reverse-transition
-                    mode="out-in"
+                <v-scale-transition mode="out-in">
+                  <v-progress-circular
+                    v-if="deleteLoading === item.id"
+                    :width="2"
+                    :size="16"
+                    indeterminate
+                    color="primary"
+                  ></v-progress-circular>
+                  <v-icon
+                    v-else
+                    small
+                    @click="deleteProduct({ id: item.id, expectedVersion: item.version })"
                   >
-                    <v-progress-circular
-                      v-if="deleteLoading === item.id"
-                      :width="2"
-                      :size="16"
-                      indeterminate
-                      color="primary"
-                    ></v-progress-circular>
-                    <v-icon
-                      v-else
-                      small
-                      @click="deleteProduct(item.id)"
-                    >
-                      {{ icons.mdiDelete }}
-                    </v-icon>
-                  </v-slide-x-reverse-transition>
+                    {{ icons.mdiDelete }}
+                  </v-icon>
+                </v-scale-transition>
               </td>
             </tr>
           </tbody>
         </template>
-        <!-- <template v-slot:item.name="{ item, header }">
-          
-        </template>
-        <template v-slot:item.createdAt="{ item }">
-          {{ item.createdAt | localDate }}
-        </template>
-        <template v-slot:item.updatedAt="{ item }">
-          {{ item.updatedAt | localDate }}
-        </template>
-        <template v-slot:item.action="{ item }">
-          
-        </template> -->
       </v-data-table>
       <v-btn
         :ripple="false"
@@ -125,8 +121,10 @@ import { onCreateProduct, onUpdateProduct, onDeleteProduct } from '@/graphql/sub
 import ErrorMessages from '@/components/ErrorMessages.vue'
 import Editable from '@/components/Editable.vue'
 
+import { errorMessage, confirmDialog } from '@/utils/helpers'
+
 export default {
-  name: 'Waybill',
+  name: 'WaybillItem',
   components: {
     ErrorMessages,
     Editable,
@@ -251,17 +249,19 @@ export default {
         this.loading = true
         const response = await this.$Amplify.API.graphql(this.getWaybillQuery)
         if (response && response.errors && response.errors.length > 0) {
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
+          throw response
         }
         this.items = response.data.getWaybill.products.items || []
       } catch (error) {
+        this.items = null
+        this.errors = error.errors || []
+        const message = errorMessage(error)
         // eslint-disable-next-line
-        console.log('Error: ', error)
+        console.log('Error: ', message)
         // Analytics.record({
         //   name: 'GetWaybillError',
         //   attributes: {
-        //     error: e.message
+        //     error: message
         //   }
         // })
       } finally {
@@ -280,20 +280,21 @@ export default {
           this.$Amplify.graphqlOperation(createProduct, { input })
         )
         if (response && response.errors && response.errors.length > 0) {
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
+          throw response
         }
         // const newItem = response.data.createProduct
         // // TODO create subscrubtion on every waybill?
         // this.data.getWaybill.products.items.push(newItem)
         // return response.data.createProduct
       } catch (error) {
+        this.errors = error.errors || []
+        const message = errorMessage(error)
         // eslint-disable-next-line
-        console.log('Error: ', error)
+        console.log('Error: ', message)
         // Analytics.record({
         //   name: 'CreateProductError',
         //   attributes: {
-        //     error: e.message
+        //     error: message
         //   }
         // })
       } finally {
@@ -309,43 +310,42 @@ export default {
           })
         )
         if (response && response.errors && response.errors.length > 0) {
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
+          throw response
         }
         // const updatedItem = response.data.updateProduct
         // const index = this.data.getWaybill.products.items
         //   .findIndex(el => el.id === updatedItem.id)
         // this.data.getWaybill.products.items.splice(index, 1, updatedItem)
       } catch (error) {
+        this.errors = error.errors || []
+        const message = errorMessage(error)
         // eslint-disable-next-line
-        console.log('Error: ', error)
+        console.log('Error: ', message)
         // Analytics.record({
         //   name: 'UpdateProductError',
         //   attributes: {
-        //     error: e.message
+        //     error: message
         //   }
         // })
       } finally {
         this.updateLoading = null
       }
     },
-    async deleteProduct (id) {
+    async deleteProduct (input) {
       try {
         const msg = 'Вы действительно хотите удалить товар?'
-        const confirm = await this.confirmDialog(msg)
+        const confirm = await confirmDialog(msg)
         if (confirm === 'not_confirmed') {
           return
         }
-        this.deleteLoading = id
-        const input = { id }
+        this.deleteLoading = input.id
         const response = await this.$Amplify.API.graphql(
           this.$Amplify.graphqlOperation(deleteProduct, {
             input
           })
         )
         if (response && response.errors && response.errors.length > 0) {
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
+          throw response
         }
         // const updatedItem = response.data.updateProduct
         // const index = this.data.getWaybill.products.items
@@ -353,24 +353,19 @@ export default {
         // this.data.getWaybill.products.items.splice(index, 1, updatedItem)
       } catch (error) {
         if (error === 'not_confirmed') return
+        this.errors = error.errors || []
+        const message = errorMessage(error)
         // eslint-disable-next-line
-        console.log('Error: ', error)
+        console.log('Error: ', message)
         // Analytics.record({
         //   name: 'DeleteProductError',
         //   attributes: {
-        //     error: e.message
+        //     error: message
         //   }
         // })
       } finally {
         this.deleteLoading = null
       }
-    },
-    confirmDialog (msg) {
-      return new Promise((resolve, reject) => {
-        let confirmed = window.confirm(msg)
-
-        return confirmed ? resolve('confirmed') : reject('not_confirmed')
-      })
     },
   }
 }
