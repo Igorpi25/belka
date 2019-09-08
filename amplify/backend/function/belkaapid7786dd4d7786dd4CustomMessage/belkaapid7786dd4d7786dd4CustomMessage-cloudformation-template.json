@@ -119,7 +119,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "belkaapi-develop-20190831235720-deployment",
-					"S3Key": "amplify-builds/belkaapid7786dd4d7786dd4CustomMessage-7548716d336936377945-build.zip"
+					"S3Key": "amplify-builds/belkaapid7786dd4d7786dd4CustomMessage-6a46474f62692b477734-build.zip"
 				}
 			}
 		},

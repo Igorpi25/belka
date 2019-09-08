@@ -1,5 +1,5 @@
 type Project
-  @model(queries: { list: "listProjects" }, mutations: { create: "createProject", update: "updateProject" }, subscriptions: null)
+  @model(queries: { list: "listProjects" }, mutations: { create: "createProject", update: "updateProject", delete: "deleteProject" }, subscriptions: { level: OFF })
   @auth(rules: [
     { allow: owner },
     { allow: owner, ownerField: "team" },
@@ -46,7 +46,7 @@ type Spec
 }
 
 type Waybill
-  @model(queries: { get: "getWaybill" }, mutations: { create: "createWaybill", update: "updateWaybill" }, subscriptions: null)
+  @model(queries: { get: "getWaybill" }, mutations: { create: "createWaybill", update: "updateWaybill", delete: "deleteWaybill" }, subscriptions: { level: OFF })
   @auth(rules: [
     { allow: owner },
     { allow: owner, ownerField: "team" },
@@ -61,6 +61,7 @@ type Waybill
   purchaseDate: String
   deliveryDate: String
   spec: Spec @connection(name: "SpecWaybills")
+  waybillSpecId: ID
   products: [Product!] @connection(name: "WaybillProducts")
   status: WaybillStatus
   createdAt: String
@@ -77,7 +78,7 @@ enum WaybillStatus {
 }
 
 type Product
-  @model(queries: null, mutations: { create: "createProduct", update: "updateProduct" }, subscriptions: null)
+  @model(queries: null, mutations: { create: "createProduct", update: "updateProduct", delete: "deleteProduct" }, subscriptions: { level: OFF })
   @auth(rules: [
     { allow: owner },
     { allow: owner, ownerField: "team" },
@@ -97,6 +98,7 @@ type Product
   link: String
   status: ProductStatus
   waybill: Waybill @connection(name: "WaybillProducts")
+  productWaybillId: ID
   createdAt: String
 	updatedAt: String
 }
@@ -139,10 +141,13 @@ type ProductInfo {
 }
 
 type Subscription {
-  onCreateProject(owner: String!): Project @aws_subscribe(mutations: ["createProject"])
-  onUpdateProject(owner: String!, id: ID!): Project @aws_subscribe(mutations: ["updateProject"])
-  onCreateWaybill(owner: String!, waybillSpecId: ID!): Waybill @aws_subscribe(mutations: ["createWaybill"])
-  onUpdateWaybill(owner: String!, id: ID!): Waybill @aws_subscribe(mutations: ["updateWaybill"])
-  onCreateProduct(owner: String!, productWaybillId: ID!): Product @aws_subscribe(mutations: ["createProduct"])
-  onUpdateProduct(owner: String!, id: ID!): Product @aws_subscribe(mutations: ["updateProduct"])
+  onCreateProject(owner: ID!): Project @aws_subscribe(mutations: ["createProject"])
+  onUpdateProject(owner: ID!): Project @aws_subscribe(mutations: ["updateProject"])
+  onDeleteProject(owner: ID!): Project @aws_subscribe(mutations: ["deleteProject"])
+  onCreateWaybill(owner: ID!, waybillSpecId: ID!): Waybill @aws_subscribe(mutations: ["createWaybill"])
+  onUpdateWaybill(owner: ID!, waybillSpecId: ID!): Waybill @aws_subscribe(mutations: ["updateWaybill"])
+  onDeleteWaybill(owner: ID!, waybillSpecId: ID!): Waybill @aws_subscribe(mutations: ["deleteWaybill"])
+  onCreateProduct(owner: ID!, productWaybillId: ID!): Product @aws_subscribe(mutations: ["createProduct"])
+  onUpdateProduct(owner: ID!, productWaybillId: ID!): Product @aws_subscribe(mutations: ["updateProduct"])
+  onDeleteProduct(owner: ID!, productWaybillId: ID!): Product @aws_subscribe(mutations: ["deleteProduct"])
 }

@@ -33,7 +33,7 @@
 				"ApiId": {
 					"Ref": "AppSyncApiId"
 				},
-				"DataSourceName": "ProjectTable",
+				"DataSourceName": "NONE",
 				"FieldName": "onCreateProject",
 				"TypeName": "Subscription",
 				"RequestMappingTemplateS3Location": {
@@ -92,7 +92,7 @@
 				"ApiId": {
 					"Ref": "AppSyncApiId"
 				},
-				"DataSourceName": "ProjectTable",
+				"DataSourceName": "NONE",
 				"FieldName": "onUpdateProject",
 				"TypeName": "Subscription",
 				"RequestMappingTemplateS3Location": {
@@ -145,13 +145,72 @@
 				}
 			}
 		},
+		"SubscriptiononDeleteProjectResolver": {
+			"Type": "AWS::AppSync::Resolver",
+			"Properties": {
+				"ApiId": {
+					"Ref": "AppSyncApiId"
+				},
+				"DataSourceName": "NONE",
+				"FieldName": "onDeleteProject",
+				"TypeName": "Subscription",
+				"RequestMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Subscription",
+										"onDeleteProject",
+										"req",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				},
+				"ResponseMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Subscription",
+										"onDeleteProject",
+										"res",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				}
+			}
+		},
 		"SubscriptiononCreateWaybillResolver": {
 			"Type": "AWS::AppSync::Resolver",
 			"Properties": {
 				"ApiId": {
 					"Ref": "AppSyncApiId"
 				},
-				"DataSourceName": "WaybillTable",
+				"DataSourceName": "NONE",
 				"FieldName": "onCreateWaybill",
 				"TypeName": "Subscription",
 				"RequestMappingTemplateS3Location": {
@@ -210,7 +269,7 @@
 				"ApiId": {
 					"Ref": "AppSyncApiId"
 				},
-				"DataSourceName": "WaybillTable",
+				"DataSourceName": "NONE",
 				"FieldName": "onUpdateWaybill",
 				"TypeName": "Subscription",
 				"RequestMappingTemplateS3Location": {
@@ -263,13 +322,72 @@
 				}
 			}
 		},
+		"SubscriptiononDeleteWaybillResolver": {
+			"Type": "AWS::AppSync::Resolver",
+			"Properties": {
+				"ApiId": {
+					"Ref": "AppSyncApiId"
+				},
+				"DataSourceName": "NONE",
+				"FieldName": "onDeleteWaybill",
+				"TypeName": "Subscription",
+				"RequestMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Subscription",
+										"onDeleteWaybill",
+										"req",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				},
+				"ResponseMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Subscription",
+										"onDeleteWaybill",
+										"res",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				}
+			}
+		},
 		"SubscriptiononCreateProductResolver": {
 			"Type": "AWS::AppSync::Resolver",
 			"Properties": {
 				"ApiId": {
 					"Ref": "AppSyncApiId"
 				},
-				"DataSourceName": "ProductTable",
+				"DataSourceName": "NONE",
 				"FieldName": "onCreateProduct",
 				"TypeName": "Subscription",
 				"RequestMappingTemplateS3Location": {
@@ -328,7 +446,7 @@
 				"ApiId": {
 					"Ref": "AppSyncApiId"
 				},
-				"DataSourceName": "ProductTable",
+				"DataSourceName": "NONE",
 				"FieldName": "onUpdateProduct",
 				"TypeName": "Subscription",
 				"RequestMappingTemplateS3Location": {
@@ -380,20 +498,65 @@
 					]
 				}
 			}
-		}
-	},
-	"Conditions": {
-		"HasEnvironmentParameter": {
-			"Fn::Not": [
-				{
-					"Fn::Equals": [
+		},
+		"SubscriptiononDeleteProductResolver": {
+			"Type": "AWS::AppSync::Resolver",
+			"Properties": {
+				"ApiId": {
+					"Ref": "AppSyncApiId"
+				},
+				"DataSourceName": "NONE",
+				"FieldName": "onDeleteProduct",
+				"TypeName": "Subscription",
+				"RequestMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
 						{
-							"Ref": "env"
-						},
-						"NONE"
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Subscription",
+										"onDeleteProduct",
+										"req",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				},
+				"ResponseMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Subscription",
+										"onDeleteProduct",
+										"res",
+										"vtl"
+									]
+								]
+							}
+						}
 					]
 				}
-			]
+			}
 		}
 	}
 }

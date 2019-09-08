@@ -1,0 +1,362 @@
+<template>
+  <v-container>
+    <v-toolbar flat color="transparent">
+      <h1>Накладные</h1>
+      <div class="flex-grow-1"></div>
+    </v-toolbar>
+
+    <v-layout wrap>
+      <v-flex xs12>
+        <div v-if="loading">Загрузка...</div>
+
+        <div v-else-if="errors.length > 0">
+          <ErrorMessages
+            :items="errors"
+            @close="i => errors.splice(i, 1)"
+          />
+        </div>
+
+        <div v-else-if="items">
+          <v-data-table
+            :headers="headers"
+            :items="items"
+            :single-expand="false"
+            :expanded.sync="expanded"
+            hide-default-header
+            item-key="id"
+            show-expand
+            class="elevation-1 v-data-table--custom-expand"
+          >
+            <template v-slot:item.number="{ item }">
+              <Editable
+                :value="item.number"
+                placeholder="Номер"
+                arrow-move
+                @input="updateWaybill({ id: item.id, number: $event })"
+              />
+            </template>
+            <template v-slot:item.purchaseDate="{ item }">
+              <Editable
+                :value="item.purchaseDate"
+                placeholder="Дата закупки"
+                arrow-move
+                @input="updateWaybill({ id: item.id, purchaseDate: $event })"
+              />
+            </template>
+            <template v-slot:item.contractor="{ item }">
+              <Editable
+                :value="item.contractor"
+                placeholder="Поставщик"
+                arrow-move
+                @input="updateWaybill({ id: item.id, contractor: $event })"
+              />
+            </template>
+            <template v-slot:item.deliveryDate="{ item }">
+              <Editable
+                :value="item.deliveryDate"
+                placeholder="Дата отправки"
+                arrow-move
+                @input="updateWaybill({ id: item.id, deliveryDate: $event })"
+              />
+            </template>
+            <template v-slot:item.createdAt="{ item }">
+              {{ item.createdAt | localDate }}
+            </template>
+            <template v-slot:item.updatedAt="{ item }">
+              {{ item.updatedAt | localDate }}
+            </template>
+            <template v-slot:expanded-item="{ item, headers }">
+              <td :colspan="headers.length">
+                <WaybillItem :id="item.id" />
+              </td>
+            </template>
+            <template v-slot:item.action="{ item }">
+              <v-slide-x-reverse-transition
+                mode="out-in"
+              >
+                <v-progress-circular
+                  v-if="deleteLoading === item.id"
+                  :width="2"
+                  :size="16"
+                  indeterminate
+                  color="primary"
+                ></v-progress-circular>
+                <v-icon
+                  v-else
+                  small
+                  @click="deleteWaybill(item.id)"
+                >
+                  {{ icons.mdiDelete }}
+                </v-icon>
+              </v-slide-x-reverse-transition>
+            </template>
+          </v-data-table>
+          <v-btn
+            :ripple="false"
+            outlined
+            rounded
+            color="primary"
+            class="mt-2"
+            @click="createWaybill"
+          >
+            <v-icon left>mdi-plus</v-icon>
+            Создать накладную
+          </v-btn>
+        </div>
+      </v-flex>
+    </v-layout>
+
+  </v-container>
+</template>
+
+<script>
+import { mdiDelete } from '@mdi/js'
+
+import { getSpec } from '@/graphql/queries'
+import { createWaybill, updateWaybill, deleteWaybill } from '@/graphql/mutations'
+import { onCreateWaybill, onUpdateWaybill, onDeleteWaybill } from '@/graphql/subscriptions'
+
+import WaybillItem from '@/components/WaybillItem.vue'
+import Editable from '@/components/Editable.vue'
+
+export default {
+  name: 'Project',
+  components: {
+    WaybillItem,
+    Editable,
+  },
+  data: () => ({
+    icons: {
+      mdiDelete
+    },
+    loading: false,
+    createLoading: null,
+    updateLoading: null,
+    deleteLoading: null,
+    expanded: [],
+    items: [],
+    errors: [],
+    headers: [
+      { text: 'Number', value: 'number', width: 140 },
+      { text: 'Purchase Date', value: 'purchaseDate', width: 130 },
+      { text: 'Contractor', value: 'contractor' },
+      { text: 'Delivery Date', value: 'deliveryDate', width: 130 },
+      { text: 'Status', value: 'status', width: 100 },
+      { text: '', value: 'action', sortable: false, width: 48 },
+    ],
+  }),
+  computed: {
+    owner () {
+      return this.$store.getters.username
+    },
+    specId () {
+      return this.$route.params.specId
+    },
+    getSpecQuery () {
+      return this.$Amplify.graphqlOperation(getSpec, {
+        id: this.specId
+      })
+    },
+    createWaybillSubscription () {
+      return this.$Amplify.graphqlOperation(onCreateWaybill, {
+        owner: this.owner,
+        waybillSpecId: this.specId
+      })
+    },
+    updateWaybillSubscription () {
+      return this.$Amplify.graphqlOperation(onUpdateWaybill, {
+        owner: this.owner,
+        waybillSpecId: this.specId
+      })
+    },
+    deleteWaybillSubscription () {
+      return this.$Amplify.graphqlOperation(onDeleteWaybill, {
+        owner: this.owner,
+        waybillSpecId: this.specId
+      })
+    },
+  },
+  created () {
+    this.getSpec()
+    this.createSubscription = this.$Amplify.API.graphql(this.createWaybillSubscription)
+      .subscribe({
+        next: ({ value: { data } }) => {
+          this.onCreateWaybill(data)
+        }
+      })
+    this.updateSubscription = this.$Amplify.API.graphql(this.updateWaybillSubscription)
+      .subscribe({
+        next: ({ value: { data } }) => {
+          this.onUpdateWaybill(data)
+        }
+      })
+    this.deleteSubscription = this.$Amplify.API.graphql(this.deleteWaybillSubscription)
+      .subscribe({
+        next: ({ value: { data } }) => {
+          this.onDeleteWaybill(data)
+        }
+      })
+  },
+  beforeDestroy () {
+    if (this.createSubscription) {
+      this.createSubscription.unsubscribe()
+    }
+    if (this.updateSubscription) {
+      this.updateSubscription.unsubscribe()
+    }
+    if (this.deleteSubscription) {
+      this.deleteSubscription.unsubscribe()
+    }
+  },
+  methods: {
+    onCreateWaybill (newData) {
+      // eslint-disable-next-line
+      console.log('New waybill from subscription...', newData)
+      const newItem = newData.onCreateWaybill
+      this.items.push(newItem)
+    },
+    onUpdateWaybill (newData) {
+      // eslint-disable-next-line
+      console.log('Update waybill from subscription...', newData)
+      const newItem = newData.onUpdateWaybill
+      const index = this.items.findIndex(el => el.id === newItem.id)
+      if (index !== -1) {
+        this.items.splice(index, 1, newItem)
+      }
+    },
+    onDeleteWaybill (newData) {
+      // eslint-disable-next-line
+      console.log('Delete waybill from subscription...', newData)
+      const newItem = newData.onDeleteWaybill
+      const index = this.items.findIndex(el => el.id === newItem.id)
+      if (index !== -1) {
+        this.items.splice(index, 1)
+      }
+    },
+    async getSpec () {
+      try {
+        this.loading = true
+        const response = await this.$Amplify.API.graphql(this.getSpecQuery)
+        if (response && response.errors && response.errors.length > 0) {
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
+        }
+        this.items = response.data.getSpec.waybills.items || []
+      } catch (error) {
+        // eslint-disable-next-line
+        console.log('Error: ', error)
+        // Analytics.record({
+        //   name: 'GetSpecError',
+        //   attributes: {
+        //     error: e.message
+        //   }
+        // })
+      } finally {
+        this.loading = false
+      }
+    },
+    async createWaybill () {
+      try {
+        this.createLoading = true
+        const waybillSpecId = this.specId
+        const input = {
+          status: 'CREATED',
+          owner: this.owner,
+          waybillSpecId
+        }
+        const response = await this.$Amplify.API.graphql(
+          this.$Amplify.graphqlOperation(createWaybill, { input })
+        )
+        if (response && response.errors && response.errors.length > 0) {
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
+        }
+      } catch (error) {
+        // eslint-disable-next-line
+        console.log('Error: ', error)
+        // Analytics.record({
+        //   name: 'CreateWaybillError',
+        //   attributes: {
+        //     error: e.message
+        //   }
+        // })
+      } finally {
+        this.createLoading = false
+      }
+    },
+    async updateWaybill (input) {
+      try {
+        this.updateLoading = input.id
+        const response = await this.$Amplify.API.graphql(
+          this.$Amplify.graphqlOperation(updateWaybill, { input })
+        )
+        if (response && response.errors && response.errors.length > 0) {
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
+        }
+      } catch (error) {
+        // eslint-disable-next-line
+        console.log('Error: ', error)
+        // Analytics.record({
+        //   name: 'UpdateWaybillError',
+        //   attributes: {
+        //     error: e.message
+        //   }
+        // })
+      } finally {
+        this.updateLoading = null
+      }
+    },
+    async deleteWaybill (id) {
+      try {
+        const msg = 'Вы действительно хотите удалить накладную?'
+        const confirm = await this.confirmDialog(msg)
+        if (confirm === 'not_confirmed') {
+          return
+        }
+        this.deleteLoading = id
+        const input = { id }
+        const response = await this.$Amplify.API.graphql(
+          this.$Amplify.graphqlOperation(deleteWaybill, { input })
+        )
+        if (response && response.errors && response.errors.length > 0) {
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
+        }
+      } catch (error) {
+        if (error === 'not_confirmed') return
+        // eslint-disable-next-line
+        console.log('Error: ', error)
+        // Analytics.record({
+        //   name: 'DeleteWaybillError',
+        //   attributes: {
+        //     error: e.message
+        //   }
+        // })
+      } finally {
+        this.deleteLoading = null
+      }
+    },
+    confirmDialog (msg) {
+      return new Promise((resolve, reject) => {
+        let confirmed = window.confirm(msg)
+
+        return confirmed ? resolve('confirmed') : reject('not_confirmed')
+      })
+    },
+  }
+}
+</script>
+
+<style>
+.v-data-table.v-data-table--custom-expand .expanded.expanded__content {
+  box-shadow: none;
+}
+.v-data-table.v-data-table--custom-expand .expanded.expanded__content:hover {
+  background: transparent;
+}
+.v-data-table.v-data-table--custom-expand .expanded.expanded__content td {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+</style>

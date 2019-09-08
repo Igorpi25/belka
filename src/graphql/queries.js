@@ -46,6 +46,7 @@ export const getSpec = `query GetSpec($id: ID!) {
         contractor
         purchaseDate
         deliveryDate
+        waybillSpecId
         status
         createdAt
         updatedAt
@@ -73,6 +74,7 @@ export const getWaybill = `query GetWaybill($id: ID!) {
         nextToken
       }
     }
+    waybillSpecId
     products {
       items {
         id
@@ -84,6 +86,7 @@ export const getWaybill = `query GetWaybill($id: ID!) {
         unit
         link
         status
+        productWaybillId
         createdAt
         updatedAt
       }

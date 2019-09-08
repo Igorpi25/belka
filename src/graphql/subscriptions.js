@@ -1,7 +1,7 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateProject = `subscription OnCreateProject($owner: String!) {
+export const onCreateProject = `subscription OnCreateProject($owner: ID!) {
   onCreateProject(owner: $owner) {
     id
     owner
@@ -27,8 +27,8 @@ export const onCreateProject = `subscription OnCreateProject($owner: String!) {
   }
 }
 `;
-export const onUpdateProject = `subscription OnUpdateProject($owner: String!, $id: ID!) {
-  onUpdateProject(owner: $owner, id: $id) {
+export const onUpdateProject = `subscription OnUpdateProject($owner: ID!) {
+  onUpdateProject(owner: $owner) {
     id
     owner
     team
@@ -53,7 +53,33 @@ export const onUpdateProject = `subscription OnUpdateProject($owner: String!, $i
   }
 }
 `;
-export const onCreateWaybill = `subscription OnCreateWaybill($owner: String!, $waybillSpecId: ID!) {
+export const onDeleteProject = `subscription OnDeleteProject($owner: ID!) {
+  onDeleteProject(owner: $owner) {
+    id
+    owner
+    team
+    managers
+    accauntants
+    warehousemans
+    freelancers
+    name
+    description
+    client
+    status
+    spec {
+      id
+      owner
+      team
+      waybills {
+        nextToken
+      }
+    }
+    createdAt
+    updatedAt
+  }
+}
+`;
+export const onCreateWaybill = `subscription OnCreateWaybill($owner: ID!, $waybillSpecId: ID!) {
   onCreateWaybill(owner: $owner, waybillSpecId: $waybillSpecId) {
     id
     owner
@@ -71,6 +97,7 @@ export const onCreateWaybill = `subscription OnCreateWaybill($owner: String!, $w
         nextToken
       }
     }
+    waybillSpecId
     products {
       items {
         id
@@ -82,6 +109,7 @@ export const onCreateWaybill = `subscription OnCreateWaybill($owner: String!, $w
         unit
         link
         status
+        productWaybillId
         createdAt
         updatedAt
       }
@@ -93,8 +121,8 @@ export const onCreateWaybill = `subscription OnCreateWaybill($owner: String!, $w
   }
 }
 `;
-export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: String!, $id: ID!) {
-  onUpdateWaybill(owner: $owner, id: $id) {
+export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: ID!, $waybillSpecId: ID!) {
+  onUpdateWaybill(owner: $owner, waybillSpecId: $waybillSpecId) {
     id
     owner
     team
@@ -111,6 +139,7 @@ export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: String!, $i
         nextToken
       }
     }
+    waybillSpecId
     products {
       items {
         id
@@ -122,6 +151,7 @@ export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: String!, $i
         unit
         link
         status
+        productWaybillId
         createdAt
         updatedAt
       }
@@ -133,7 +163,49 @@ export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: String!, $i
   }
 }
 `;
-export const onCreateProduct = `subscription OnCreateProduct($owner: String!, $productWaybillId: ID!) {
+export const onDeleteWaybill = `subscription OnDeleteWaybill($owner: ID!, $waybillSpecId: ID!) {
+  onDeleteWaybill(owner: $owner, waybillSpecId: $waybillSpecId) {
+    id
+    owner
+    team
+    number
+    description
+    contractor
+    purchaseDate
+    deliveryDate
+    spec {
+      id
+      owner
+      team
+      waybills {
+        nextToken
+      }
+    }
+    waybillSpecId
+    products {
+      items {
+        id
+        owner
+        team
+        article
+        name
+        quantity
+        unit
+        link
+        status
+        productWaybillId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    status
+    createdAt
+    updatedAt
+  }
+}
+`;
+export const onCreateProduct = `subscription OnCreateProduct($owner: ID!, $productWaybillId: ID!) {
   onCreateProduct(owner: $owner, productWaybillId: $productWaybillId) {
     id
     owner
@@ -180,6 +252,7 @@ export const onCreateProduct = `subscription OnCreateProduct($owner: String!, $p
         owner
         team
       }
+      waybillSpecId
       products {
         nextToken
       }
@@ -187,13 +260,14 @@ export const onCreateProduct = `subscription OnCreateProduct($owner: String!, $p
       createdAt
       updatedAt
     }
+    productWaybillId
     createdAt
     updatedAt
   }
 }
 `;
-export const onUpdateProduct = `subscription OnUpdateProduct($owner: String!, $id: ID!) {
-  onUpdateProduct(owner: $owner, id: $id) {
+export const onUpdateProduct = `subscription OnUpdateProduct($owner: ID!, $productWaybillId: ID!) {
+  onUpdateProduct(owner: $owner, productWaybillId: $productWaybillId) {
     id
     owner
     team
@@ -239,6 +313,7 @@ export const onUpdateProduct = `subscription OnUpdateProduct($owner: String!, $i
         owner
         team
       }
+      waybillSpecId
       products {
         nextToken
       }
@@ -246,6 +321,68 @@ export const onUpdateProduct = `subscription OnUpdateProduct($owner: String!, $i
       createdAt
       updatedAt
     }
+    productWaybillId
+    createdAt
+    updatedAt
+  }
+}
+`;
+export const onDeleteProduct = `subscription OnDeleteProduct($owner: ID!, $productWaybillId: ID!) {
+  onDeleteProduct(owner: $owner, productWaybillId: $productWaybillId) {
+    id
+    owner
+    team
+    article
+    name
+    quantity
+    unit
+    costs {
+      purchasePrice
+      clientPrice
+      price
+      amount
+    }
+    store {
+      net
+      gross
+      size {
+        w
+        l
+        h
+      }
+      inStock
+      dimension
+      cargoPlaceNumber
+    }
+    info {
+      images
+      description
+    }
+    link
+    status
+    waybill {
+      id
+      owner
+      team
+      number
+      description
+      contractor
+      purchaseDate
+      deliveryDate
+      spec {
+        id
+        owner
+        team
+      }
+      waybillSpecId
+      products {
+        nextToken
+      }
+      status
+      createdAt
+      updatedAt
+    }
+    productWaybillId
     createdAt
     updatedAt
   }

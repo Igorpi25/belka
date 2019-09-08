@@ -17,9 +17,9 @@ const router = new Router({
     },
     {
       path: '/specs/:specId',
-      name: 'specs',
+      name: 'spec',
       meta: { requiresAuth: true },
-      component: () => import('@/views/Specs.vue')
+      component: () => import('@/views/Spec.vue')
     },
     {
       path: '/signin',
