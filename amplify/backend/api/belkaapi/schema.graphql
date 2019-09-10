@@ -26,10 +26,8 @@ type Project
 }
 
 enum ProjectStatus {
-  CREATED
   IN_PROGRESS
   COMPLETED
-  DELETED
   ARCHIVED
 }
 
@@ -71,12 +69,9 @@ type Waybill
 }
 
 enum WaybillStatus {
-  CREATED
   IN_PRODUCTION
   IN_PROCESSING
   IN_STOCK
-  DELETED
-  ARCHIVED
 }
 
 type Product
@@ -107,12 +102,9 @@ type Product
 }
 
 enum ProductStatus {
-  CREATED
   IN_PRODUCTION
   IN_PROCESSING
   IN_STOCK
-  DELETED
-  ARCHIVED
 }
 
 type ProductCost

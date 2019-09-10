@@ -275,7 +275,6 @@ export default {
         this.createLoading = true
         const waybillSpecId = this.specId
         const input = {
-          status: 'CREATED',
           owner: this.owner,
           waybillSpecId
         }

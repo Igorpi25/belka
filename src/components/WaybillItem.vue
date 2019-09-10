@@ -275,7 +275,6 @@ export default {
       try {
         this.createLoading = true
         const input = {
-          status: 'CREATED',
           owner: this.owner,
           productWaybillId: this.id
         }

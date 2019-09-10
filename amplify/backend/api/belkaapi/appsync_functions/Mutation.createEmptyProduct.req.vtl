@@ -22,6 +22,8 @@ $util.qr($input.put("productLinkId", $ctx.stash.productLinkId))
 $util.qr($input.put("productWaybillId", $ctx.stash.waybillId))
 
 ## [Start] Prepare DynamoDB PutItem Request. **
+$util.qr($input.put("status", "IN_PRODUCTION"))
+$util.qr($input.put("systemState", "CREATED"))
 $util.qr($input.put("createdAt", $util.time.nowISO8601()))
 $util.qr($input.put("updatedAt", $util.time.nowISO8601()))
 $util.qr($input.put("__typename", "Product"))

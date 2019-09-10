@@ -18,6 +18,8 @@ $util.qr($input.put("version", 1))
 $util.qr($input.put("waybillSpecId", $ctx.stash.specId))
 
 ## [Start] Prepare DynamoDB PutItem Request. **
+$util.qr($input.put("status", "IN_PRODUCTION"))
+$util.qr($input.put("systemState", "CREATED"))
 $util.qr($input.put("createdAt", $util.time.nowISO8601()))
 $util.qr($input.put("updatedAt", $util.time.nowISO8601()))
 $util.qr($input.put("__typename", "Waybill"))

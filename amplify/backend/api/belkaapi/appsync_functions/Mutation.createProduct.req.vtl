@@ -9,6 +9,8 @@ $util.qr($ctx.stash.input.put("productInfoId", $ctx.stash.productInfoId))
 $util.qr($ctx.stash.input.put("productLinkId", $ctx.stash.productLinkId))
 
 ## [Start] Prepare DynamoDB PutItem Request. **
+$util.qr($context.stash.input.put("status", $util.defaultIfNullOrBlank($ctx.stash.input.status, "IN_PRODUCTION")))
+$util.qr($context.stash.input.put("systemState", "CREATED"))
 $util.qr($context.stash.input.put("createdAt", $util.defaultIfNull($ctx.stash.input.createdAt, $util.time.nowISO8601())))
 $util.qr($context.stash.input.put("updatedAt", $util.defaultIfNull($ctx.stash.input.updatedAt, $util.time.nowISO8601())))
 $util.qr($context.stash.input.put("__typename", "Product"))
