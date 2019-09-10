@@ -1,5 +1,5 @@
 type Project
-  @model(queries: { list: "listProjects" }, mutations: { create: "createProject", update: "updateProject", delete: "deleteProject" }, subscriptions: { level: OFF })
+  @model(queries: { list: "listProjects" }, mutations: { create: "createProject", update: "updateProject", delete: "deleteProject" }, subscriptions: { level: ON })
   @versioned
   @auth(rules: [
     { allow: owner },
@@ -81,7 +81,7 @@ enum WaybillStatus {
 }
 
 type Product
-  @model(queries: null, mutations: { create: "createProduct", update: "updateProduct", delete: "deleteProduct" }, subscriptions: { level: OFF })
+  @model(queries: null, mutations: { update: "updateProduct", delete: "deleteProduct" }, subscriptions: { level: OFF })
   @versioned
   @auth(rules: [
     { allow: owner },
@@ -96,7 +96,7 @@ type Product
   quantity: Int
   # TODO add connection with type ProductUnit, array in project
   unit: String
-  costs: ProductCost @connection(name: "ProductCost")
+  cost: ProductCost @connection(name: "ProductCost")
   store: ProductStore @connection(name: "ProductStore")
   info: ProductInfo @connection(name: "ProductInfo")
   link: ProductLink @connection(name: "ProductLink")
@@ -117,7 +117,7 @@ enum ProductStatus {
 }
 
 type ProductCost
-  @model(queries: null, mutations: { create: "createProductCost", update: "updateProductCost" }, subscriptions: { level: OFF })
+  @model(queries: null, mutations: { update: "updateProductCost" }, subscriptions: { level: OFF })
   @versioned
   @auth(rules: [
     { allow: owner },
@@ -137,7 +137,7 @@ type ProductCost
 }
 
 type ProductStore
-  @model(queries: null, mutations: { create: "createProductStore", update: "updateProductStore" }, subscriptions: { level: OFF })
+  @model(queries: null, mutations: { update: "updateProductStore" }, subscriptions: { level: OFF })
   @versioned
   @auth(rules: [
     { allow: owner },
@@ -161,7 +161,7 @@ type ProductStore
 }
 
 type ProductInfo
-  @model(queries: null, mutations: { create: "createProductInfo", update: "updateProductInfo" }, subscriptions: { level: OFF })
+  @model(queries: null, mutations: { update: "updateProductInfo" }, subscriptions: { level: OFF })
   @versioned
   @auth(rules: [
     { allow: owner },
@@ -178,7 +178,7 @@ type ProductInfo
 }
 
 type ProductLink
-  @model(queries: null, mutations: { create: "createProductLink", update: "updateProductLink" }, subscriptions: { level: OFF })
+  @model(queries: null, mutations: { update: "updateProductLink" }, subscriptions: { level: OFF })
   @versioned
   @auth(rules: [
     { allow: owner },
@@ -194,9 +194,6 @@ type ProductLink
 }
 
 type Subscription {
-  onCreateProject(owner: ID!): Project @aws_subscribe(mutations: ["createProject"])
-  onUpdateProject(owner: ID!): Project @aws_subscribe(mutations: ["updateProject"])
-  onDeleteProject(owner: ID!): Project @aws_subscribe(mutations: ["deleteProject"])
   onCreateWaybill(owner: ID!, waybillSpecId: ID!): Waybill @aws_subscribe(mutations: ["createWaybill"])
   onUpdateWaybill(owner: ID!, waybillSpecId: ID!): Waybill @aws_subscribe(mutations: ["updateWaybill"])
   onDeleteWaybill(owner: ID!, waybillSpecId: ID!): Waybill @aws_subscribe(mutations: ["deleteWaybill"])
@@ -207,4 +204,26 @@ type Subscription {
   onUpdateProductStore(owner: ID!, productId: ID!): ProductStore @aws_subscribe(mutations: ["updateProductStore"])
   onUpdateProductInfo(owner: ID!, productId: ID!): ProductInfo @aws_subscribe(mutations: ["updateProductInfo"])
   onUpdateProductLink(owner: ID!, productId: ID!): ProductLink @aws_subscribe(mutations: ["updateProductLink"])
+}
+
+type Mutation {
+  createProduct(input: CreateProductInput!): Product
+}
+
+input CreateProductInput {
+  id: ID
+  owner: String
+  team: [String!]
+  article: String
+  name: String
+  quantity: Int
+  unit: String
+  status: ProductStatus
+  productWaybillId: ID
+  createdAt: String
+  updatedAt: String
+  productCostId: ID
+  productStoreId: ID
+  productInfoId: ID
+  productLinkId: ID
 }

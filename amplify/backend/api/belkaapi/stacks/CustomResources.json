@@ -27,182 +27,9 @@
 		}
 	},
 	"Resources": {
-		"SubscriptiononCreateProjectResolver": {
-			"Type": "AWS::AppSync::Resolver",
-			"Properties": {
-				"ApiId": {
-					"Ref": "AppSyncApiId"
-				},
-				"DataSourceName": "NONE",
-				"FieldName": "onCreateProject",
-				"TypeName": "Subscription",
-				"RequestMappingTemplateS3Location": {
-					"Fn::Sub": [
-						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
-						{
-							"S3DeploymentBucket": {
-								"Ref": "S3DeploymentBucket"
-							},
-							"S3DeploymentRootKey": {
-								"Ref": "S3DeploymentRootKey"
-							},
-							"ResolverFileName": {
-								"Fn::Join": [
-									".",
-									[
-										"Subscription",
-										"onCreateProject",
-										"req",
-										"vtl"
-									]
-								]
-							}
-						}
-					]
-				},
-				"ResponseMappingTemplateS3Location": {
-					"Fn::Sub": [
-						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
-						{
-							"S3DeploymentBucket": {
-								"Ref": "S3DeploymentBucket"
-							},
-							"S3DeploymentRootKey": {
-								"Ref": "S3DeploymentRootKey"
-							},
-							"ResolverFileName": {
-								"Fn::Join": [
-									".",
-									[
-										"Subscription",
-										"onCreateProject",
-										"res",
-										"vtl"
-									]
-								]
-							}
-						}
-					]
-				}
-			}
-		},
-		"SubscriptiononUpdateProjectResolver": {
-			"Type": "AWS::AppSync::Resolver",
-			"Properties": {
-				"ApiId": {
-					"Ref": "AppSyncApiId"
-				},
-				"DataSourceName": "NONE",
-				"FieldName": "onUpdateProject",
-				"TypeName": "Subscription",
-				"RequestMappingTemplateS3Location": {
-					"Fn::Sub": [
-						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
-						{
-							"S3DeploymentBucket": {
-								"Ref": "S3DeploymentBucket"
-							},
-							"S3DeploymentRootKey": {
-								"Ref": "S3DeploymentRootKey"
-							},
-							"ResolverFileName": {
-								"Fn::Join": [
-									".",
-									[
-										"Subscription",
-										"onUpdateProject",
-										"req",
-										"vtl"
-									]
-								]
-							}
-						}
-					]
-				},
-				"ResponseMappingTemplateS3Location": {
-					"Fn::Sub": [
-						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
-						{
-							"S3DeploymentBucket": {
-								"Ref": "S3DeploymentBucket"
-							},
-							"S3DeploymentRootKey": {
-								"Ref": "S3DeploymentRootKey"
-							},
-							"ResolverFileName": {
-								"Fn::Join": [
-									".",
-									[
-										"Subscription",
-										"onUpdateProject",
-										"res",
-										"vtl"
-									]
-								]
-							}
-						}
-					]
-				}
-			}
-		},
-		"SubscriptiononDeleteProjectResolver": {
-			"Type": "AWS::AppSync::Resolver",
-			"Properties": {
-				"ApiId": {
-					"Ref": "AppSyncApiId"
-				},
-				"DataSourceName": "NONE",
-				"FieldName": "onDeleteProject",
-				"TypeName": "Subscription",
-				"RequestMappingTemplateS3Location": {
-					"Fn::Sub": [
-						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
-						{
-							"S3DeploymentBucket": {
-								"Ref": "S3DeploymentBucket"
-							},
-							"S3DeploymentRootKey": {
-								"Ref": "S3DeploymentRootKey"
-							},
-							"ResolverFileName": {
-								"Fn::Join": [
-									".",
-									[
-										"Subscription",
-										"onDeleteProject",
-										"req",
-										"vtl"
-									]
-								]
-							}
-						}
-					]
-				},
-				"ResponseMappingTemplateS3Location": {
-					"Fn::Sub": [
-						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
-						{
-							"S3DeploymentBucket": {
-								"Ref": "S3DeploymentBucket"
-							},
-							"S3DeploymentRootKey": {
-								"Ref": "S3DeploymentRootKey"
-							},
-							"ResolverFileName": {
-								"Fn::Join": [
-									".",
-									[
-										"Subscription",
-										"onDeleteProject",
-										"res",
-										"vtl"
-									]
-								]
-							}
-						}
-					]
-				}
-			}
+		"EmptyResource": {
+			"Type": "Custom::EmptyResource",
+			"Condition": "AlwaysFalse"
 		},
 		"SubscriptiononCreateWaybillResolver": {
 			"Type": "AWS::AppSync::Resolver",
@@ -793,6 +620,32 @@
 					]
 				}
 			}
+		}
+	},
+	"Conditions": {
+		"HasEnvironmentParameter": {
+			"Fn::Not": [
+				{
+					"Fn::Equals": [
+						{
+							"Ref": "env"
+						},
+						"NONE"
+					]
+				}
+			]
+		},
+		"AlwaysFalse": {
+			"Fn::Equals": [
+				"true",
+				"false"
+			]
+		}
+	},
+	"Outputs": {
+		"EmptyOutput": {
+			"Description": "An empty output. You may delete this if you have at least one resource above.",
+			"Value": ""
 		}
 	}
 }

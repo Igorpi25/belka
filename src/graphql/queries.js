@@ -116,7 +116,7 @@ export const getWaybill = `query GetWaybill($id: ID!) {
         name
         quantity
         unit
-        costs {
+        cost {
           id
           owner
           team

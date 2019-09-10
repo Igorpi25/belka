@@ -1,0 +1,7 @@
+#if($ctx.error)
+    $util.error($ctx.error.message, $ctx.error.type)
+#end
+
+$util.qr($ctx.stash.input.put("productLinkId", $ctx.result.id))
+
+$util.toJson(null)

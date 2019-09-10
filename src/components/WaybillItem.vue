@@ -118,11 +118,7 @@ import { getWaybill } from '@/graphql/queries'
 import {
   createProduct,
   updateProduct,
-  deleteProduct,
-  createProductCost,
-  createProductStore,
-  createProductInfo,
-  createProductLink
+  deleteProduct
 } from '@/graphql/mutations'
 import { onCreateProduct, onUpdateProduct, onDeleteProduct } from '@/graphql/subscriptions'
 
@@ -275,86 +271,13 @@ export default {
         this.loading = false
       }
     },
-    async createProductCost (input) {
-      try {
-        const response = await this.$Amplify.API.graphql(
-          this.$Amplify.graphqlOperation(createProductCost, {
-            input
-          })
-        )
-        if (response && response.errors && response.errors.length > 0) {
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
-        }
-        return response.data.createProductCost.id
-      } catch (error) {
-        throw error
-      }
-    },
-    async createProductStore (input) {
-      try {
-        const response = await this.$Amplify.API.graphql(
-          this.$Amplify.graphqlOperation(createProductStore, {
-            input
-          })
-        )
-        if (response && response.errors && response.errors.length > 0) {
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
-        }
-        return response.data.createProductStore.id
-      } catch (error) {
-        throw error
-      }
-    },
-    async createProductInfo (input) {
-      try {
-        const response = await this.$Amplify.API.graphql(
-          this.$Amplify.graphqlOperation(createProductInfo, {
-            input
-          })
-        )
-        if (response && response.errors && response.errors.length > 0) {
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
-        }
-        return response.data.createProductInfo.id
-      } catch (error) {
-        throw error
-      }
-    },
-    async createProductLink (input) {
-      try {
-        const response = await this.$Amplify.API.graphql(
-          this.$Amplify.graphqlOperation(createProductLink, {
-            input
-          })
-        )
-        if (response && response.errors && response.errors.length > 0) {
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
-        }
-        return response.data.createProductLink.id
-      } catch (error) {
-        throw error
-      }
-    },
     async createProduct () {
       try {
         this.createLoading = true
-        const owner = this.owner
-        const productCostsId = await this.createProductCost({ owner })
-        const productStoreId = await this.createProductStore({ owner })
-        const productInfoId = await this.createProductInfo({ owner })
-        const productLinkId = await this.createProductLink({ owner })
         const input = {
           status: 'CREATED',
-          owner,
-          productWaybillId: this.id,
-          productCostsId,
-          productStoreId,
-          productInfoId,
-          productLinkId
+          owner: this.owner,
+          productWaybillId: this.id
         }
         const response = await this.$Amplify.API.graphql(
           this.$Amplify.graphqlOperation(createProduct, { input })

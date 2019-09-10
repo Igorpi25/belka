@@ -1,135 +1,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateProject = `subscription OnCreateProject($owner: ID!) {
-  onCreateProject(owner: $owner) {
-    id
-    owner
-    team
-    managers
-    accauntants
-    warehousemans
-    freelancers
-    name
-    description
-    client
-    status
-    spec {
-      id
-      owner
-      team
-      waybills {
-        items {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          createdAt
-          updatedAt
-          version
-        }
-        nextToken
-      }
-      version
-    }
-    createdAt
-    updatedAt
-    version
-  }
-}
-`;
-export const onUpdateProject = `subscription OnUpdateProject($owner: ID!) {
-  onUpdateProject(owner: $owner) {
-    id
-    owner
-    team
-    managers
-    accauntants
-    warehousemans
-    freelancers
-    name
-    description
-    client
-    status
-    spec {
-      id
-      owner
-      team
-      waybills {
-        items {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          createdAt
-          updatedAt
-          version
-        }
-        nextToken
-      }
-      version
-    }
-    createdAt
-    updatedAt
-    version
-  }
-}
-`;
-export const onDeleteProject = `subscription OnDeleteProject($owner: ID!) {
-  onDeleteProject(owner: $owner) {
-    id
-    owner
-    team
-    managers
-    accauntants
-    warehousemans
-    freelancers
-    name
-    description
-    client
-    status
-    spec {
-      id
-      owner
-      team
-      waybills {
-        items {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          createdAt
-          updatedAt
-          version
-        }
-        nextToken
-      }
-      version
-    }
-    createdAt
-    updatedAt
-    version
-  }
-}
-`;
 export const onCreateWaybill = `subscription OnCreateWaybill($owner: ID!, $waybillSpecId: ID!) {
   onCreateWaybill(owner: $owner, waybillSpecId: $waybillSpecId) {
     id
@@ -174,7 +45,7 @@ export const onCreateWaybill = `subscription OnCreateWaybill($owner: ID!, $waybi
         name
         quantity
         unit
-        costs {
+        cost {
           id
           owner
           team
@@ -292,7 +163,7 @@ export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: ID!, $waybi
         name
         quantity
         unit
-        costs {
+        cost {
           id
           owner
           team
@@ -410,7 +281,7 @@ export const onDeleteWaybill = `subscription OnDeleteWaybill($owner: ID!, $waybi
         name
         quantity
         unit
-        costs {
+        cost {
           id
           owner
           team
@@ -493,7 +364,7 @@ export const onCreateProduct = `subscription OnCreateProduct($owner: ID!, $produ
     name
     quantity
     unit
-    costs {
+    cost {
       id
       owner
       team
@@ -510,7 +381,7 @@ export const onCreateProduct = `subscription OnCreateProduct($owner: ID!, $produ
         name
         quantity
         unit
-        costs {
+        cost {
           id
           owner
           team
@@ -598,7 +469,7 @@ export const onCreateProduct = `subscription OnCreateProduct($owner: ID!, $produ
         name
         quantity
         unit
-        costs {
+        cost {
           id
           owner
           team
@@ -680,7 +551,7 @@ export const onCreateProduct = `subscription OnCreateProduct($owner: ID!, $produ
         name
         quantity
         unit
-        costs {
+        cost {
           id
           owner
           team
@@ -761,7 +632,7 @@ export const onCreateProduct = `subscription OnCreateProduct($owner: ID!, $produ
         name
         quantity
         unit
-        costs {
+        cost {
           id
           owner
           team
@@ -887,7 +758,7 @@ export const onUpdateProduct = `subscription OnUpdateProduct($owner: ID!, $produ
     name
     quantity
     unit
-    costs {
+    cost {
       id
       owner
       team
@@ -904,7 +775,7 @@ export const onUpdateProduct = `subscription OnUpdateProduct($owner: ID!, $produ
         name
         quantity
         unit
-        costs {
+        cost {
           id
           owner
           team
@@ -992,7 +863,7 @@ export const onUpdateProduct = `subscription OnUpdateProduct($owner: ID!, $produ
         name
         quantity
         unit
-        costs {
+        cost {
           id
           owner
           team
@@ -1074,7 +945,7 @@ export const onUpdateProduct = `subscription OnUpdateProduct($owner: ID!, $produ
         name
         quantity
         unit
-        costs {
+        cost {
           id
           owner
           team
@@ -1155,7 +1026,7 @@ export const onUpdateProduct = `subscription OnUpdateProduct($owner: ID!, $produ
         name
         quantity
         unit
-        costs {
+        cost {
           id
           owner
           team
@@ -1281,7 +1152,7 @@ export const onDeleteProduct = `subscription OnDeleteProduct($owner: ID!, $produ
     name
     quantity
     unit
-    costs {
+    cost {
       id
       owner
       team
@@ -1298,7 +1169,7 @@ export const onDeleteProduct = `subscription OnDeleteProduct($owner: ID!, $produ
         name
         quantity
         unit
-        costs {
+        cost {
           id
           owner
           team
@@ -1386,7 +1257,7 @@ export const onDeleteProduct = `subscription OnDeleteProduct($owner: ID!, $produ
         name
         quantity
         unit
-        costs {
+        cost {
           id
           owner
           team
@@ -1468,7 +1339,7 @@ export const onDeleteProduct = `subscription OnDeleteProduct($owner: ID!, $produ
         name
         quantity
         unit
-        costs {
+        cost {
           id
           owner
           team
@@ -1549,7 +1420,7 @@ export const onDeleteProduct = `subscription OnDeleteProduct($owner: ID!, $produ
         name
         quantity
         unit
-        costs {
+        cost {
           id
           owner
           team
@@ -1684,7 +1555,7 @@ export const onUpdateProductCost = `subscription OnUpdateProductCost($owner: ID!
       name
       quantity
       unit
-      costs {
+      cost {
         id
         owner
         team
@@ -1840,7 +1711,7 @@ export const onUpdateProductStore = `subscription OnUpdateProductStore($owner: I
       name
       quantity
       unit
-      costs {
+      cost {
         id
         owner
         team
@@ -1990,7 +1861,7 @@ export const onUpdateProductInfo = `subscription OnUpdateProductInfo($owner: ID!
       name
       quantity
       unit
-      costs {
+      cost {
         id
         owner
         team
@@ -2139,7 +2010,7 @@ export const onUpdateProductLink = `subscription OnUpdateProductLink($owner: ID!
       name
       quantity
       unit
-      costs {
+      cost {
         id
         owner
         team
@@ -2270,6 +2141,135 @@ export const onUpdateProductLink = `subscription OnUpdateProductLink($owner: ID!
       version
     }
     productId
+    version
+  }
+}
+`;
+export const onCreateProject = `subscription OnCreateProject($owner: String!) {
+  onCreateProject(owner: $owner) {
+    id
+    owner
+    team
+    managers
+    accauntants
+    warehousemans
+    freelancers
+    name
+    description
+    client
+    status
+    spec {
+      id
+      owner
+      team
+      waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          createdAt
+          updatedAt
+          version
+        }
+        nextToken
+      }
+      version
+    }
+    createdAt
+    updatedAt
+    version
+  }
+}
+`;
+export const onUpdateProject = `subscription OnUpdateProject($owner: String!) {
+  onUpdateProject(owner: $owner) {
+    id
+    owner
+    team
+    managers
+    accauntants
+    warehousemans
+    freelancers
+    name
+    description
+    client
+    status
+    spec {
+      id
+      owner
+      team
+      waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          createdAt
+          updatedAt
+          version
+        }
+        nextToken
+      }
+      version
+    }
+    createdAt
+    updatedAt
+    version
+  }
+}
+`;
+export const onDeleteProject = `subscription OnDeleteProject($owner: String!) {
+  onDeleteProject(owner: $owner) {
+    id
+    owner
+    team
+    managers
+    accauntants
+    warehousemans
+    freelancers
+    name
+    description
+    client
+    status
+    spec {
+      id
+      owner
+      team
+      waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          createdAt
+          updatedAt
+          version
+        }
+        nextToken
+      }
+      version
+    }
+    createdAt
+    updatedAt
     version
   }
 }
