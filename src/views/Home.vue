@@ -41,7 +41,7 @@
 
 <script>
 import { listProjects } from '@/graphql/queries'
-import { createProject, createSpec } from '@/graphql/mutations'
+import { createProject } from '@/graphql/mutations'
 import { onCreateProject, onUpdateProject, onDeleteProject } from '@/graphql/subscriptions'
 
 import ProjectItem from '@/components/ProjectItem.vue'
@@ -172,31 +172,11 @@ export default {
         this.loading = false
       }
     },
-    async createSpec (input) {
-      try {
-        const response = await this.$Amplify.API.graphql(
-          this.$Amplify.graphqlOperation(createSpec, {
-            input
-          })
-        )
-        if (response && response.errors && response.errors.length > 0) {
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
-        }
-        return response.data.createSpec.id
-      } catch (error) {
-        throw error
-      }
-    },
     async createProject () {
       try {
         this.createLoading = true
-        const owner = this.owner
-        const projectSpecId = await this.createSpec({ owner })
         const input = {
-          owner,
-          status: 'CREATED',
-          projectSpecId
+          owner: this.owner
         }
         const response = await this.$Amplify.API.graphql(
           this.$Amplify.graphqlOperation(createProject, { input })

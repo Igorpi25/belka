@@ -225,7 +225,7 @@ input CreateProjectInput {
   status: ProjectStatus
   createdAt: String
   updatedAt: String
-  projectSpecId: ID!
+  projectSpecId: ID
 }
 
 input CreateProductInput {
