@@ -1,0 +1,31 @@
+#set( $input = {} )
+
+## Authorization rule: { allow: owner, ownerField: "owner", identityClaim: "cognito:username" } **
+#if( $ctx.stash.input.containsKey("owner") )
+  $util.qr($input.put("owner", $ctx.stash.input.owner))
+#end
+
+## Authorization rule: { allow: owner, ownerField: "team", identityClaim: "cognito:username" } **
+#if( $ctx.stash.input.containsKey("team") )
+  $util.qr($input.put("team", $ctx.stash.input.team))
+#end
+
+## [Start] Prepare DynamoDB PutItem Request. **
+$util.qr($input.put("createdAt", $util.time.nowISO8601()))
+$util.qr($input.put("updatedAt", $util.time.nowISO8601()))
+$util.qr($input.put("__typename", "Spec"))
+{
+  "version": "2018-05-29",
+  "operation": "PutItem",
+  "key": #if( $modelObjectKey ) $util.toJson($modelObjectKey) #else {
+  "id":   $util.dynamodb.toDynamoDBJson($util.autoId())
+} #end,
+  "attributeValues": $util.dynamodb.toMapValuesJson($input),
+  "condition": {
+      "expression": "attribute_not_exists(#id)",
+      "expressionNames": {
+          "#id": "id"
+    }
+  }
+}
+## [End] Prepare DynamoDB PutItem Request. **

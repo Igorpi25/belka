@@ -1,5 +1,5 @@
 type Project
-  @model(queries: { list: "listProjects" }, mutations: { create: "createProject", update: "updateProject", delete: "deleteProject" }, subscriptions: { level: ON })
+  @model(queries: { list: "listProjects" }, mutations: { update: "updateProject", delete: "deleteProject" }, subscriptions: { level: ON })
   @versioned
   @auth(rules: [
     { allow: owner },
@@ -34,8 +34,7 @@ enum ProjectStatus {
 }
 
 type Spec
-  @model(queries: { get: "getSpec" }, mutations: { create: "createSpec" }, subscriptions: null)
-  @versioned
+  @model(queries: { get: "getSpec" }, mutations: null, subscriptions: null)
   @auth(rules: [
     { allow: owner },
     { allow: owner, ownerField: "team" },
@@ -204,10 +203,29 @@ type Subscription {
   onUpdateProductStore(owner: ID!, productId: ID!): ProductStore @aws_subscribe(mutations: ["updateProductStore"])
   onUpdateProductInfo(owner: ID!, productId: ID!): ProductInfo @aws_subscribe(mutations: ["updateProductInfo"])
   onUpdateProductLink(owner: ID!, productId: ID!): ProductLink @aws_subscribe(mutations: ["updateProductLink"])
+  onCreateProject(owner: ID!): Project @aws_subscribe(mutations: ["createProject"])
 }
 
 type Mutation {
+  createProject(input: CreateProjectInput!): Project
   createProduct(input: CreateProductInput!): Product
+}
+
+input CreateProjectInput {
+  id: ID
+  owner: String
+  team: [String!]
+  managers: [String!]
+  accauntants: [String!]
+  warehousemans: [String!]
+  freelancers: [String!]
+  name: String
+  description: String
+  client: String
+  status: ProjectStatus
+  createdAt: String
+  updatedAt: String
+  projectSpecId: ID!
 }
 
 input CreateProductInput {

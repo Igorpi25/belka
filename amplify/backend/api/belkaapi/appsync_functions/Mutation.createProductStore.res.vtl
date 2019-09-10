@@ -2,6 +2,6 @@
     $util.error($ctx.error.message, $ctx.error.type)
 #end
 
-$util.qr($ctx.stash.input.put("productStoreId", $ctx.result.id))
+$util.qr($ctx.stash.put("productStoreId", $ctx.result.id))
 
 $util.toJson(null)

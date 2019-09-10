@@ -33,7 +33,6 @@ export const onCreateWaybill = `subscription OnCreateWaybill($owner: ID!, $waybi
         }
         nextToken
       }
-      version
     }
     waybillSpecId
     products {
@@ -151,7 +150,6 @@ export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: ID!, $waybi
         }
         nextToken
       }
-      version
     }
     waybillSpecId
     products {
@@ -269,7 +267,6 @@ export const onDeleteWaybill = `subscription OnDeleteWaybill($owner: ID!, $waybi
         }
         nextToken
       }
-      version
     }
     waybillSpecId
     products {
@@ -717,7 +714,6 @@ export const onCreateProduct = `subscription OnCreateProduct($owner: ID!, $produ
         waybills {
           nextToken
         }
-        version
       }
       waybillSpecId
       products {
@@ -1111,7 +1107,6 @@ export const onUpdateProduct = `subscription OnUpdateProduct($owner: ID!, $produ
         waybills {
           nextToken
         }
-        version
       }
       waybillSpecId
       products {
@@ -1505,7 +1500,6 @@ export const onDeleteProduct = `subscription OnDeleteProduct($owner: ID!, $produ
         waybills {
           nextToken
         }
-        version
       }
       waybillSpecId
       products {
@@ -1669,7 +1663,6 @@ export const onUpdateProductCost = `subscription OnUpdateProductCost($owner: ID!
           id
           owner
           team
-          version
         }
         waybillSpecId
         products {
@@ -1825,7 +1818,6 @@ export const onUpdateProductStore = `subscription OnUpdateProductStore($owner: I
           id
           owner
           team
-          version
         }
         waybillSpecId
         products {
@@ -1975,7 +1967,6 @@ export const onUpdateProductInfo = `subscription OnUpdateProductInfo($owner: ID!
           id
           owner
           team
-          version
         }
         waybillSpecId
         products {
@@ -2124,7 +2115,6 @@ export const onUpdateProductLink = `subscription OnUpdateProductLink($owner: ID!
           id
           owner
           team
-          version
         }
         waybillSpecId
         products {
@@ -2180,7 +2170,6 @@ export const onCreateProject = `subscription OnCreateProject($owner: String!) {
         }
         nextToken
       }
-      version
     }
     createdAt
     updatedAt
@@ -2223,7 +2212,6 @@ export const onUpdateProject = `subscription OnUpdateProject($owner: String!) {
         }
         nextToken
       }
-      version
     }
     createdAt
     updatedAt
@@ -2266,7 +2254,6 @@ export const onDeleteProject = `subscription OnDeleteProject($owner: String!) {
         }
         nextToken
       }
-      version
     }
     createdAt
     updatedAt

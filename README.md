@@ -16,6 +16,12 @@
 В сгенерированных amplify функциях меняется версия с "version": `"2017-02-28"`, на `"version": "2018-05-29"`.
 Для создания продукта создается pipline, который создает `ProductCost`, `ProductStore`, `ProductInfo`, `ProductLink`.
 
+### Resolver для создания проекта
+1. Создается Spec
+2. Создается Waybill (нужна ссылка на созданный Spec)
+3. Создается Product (нужна ссылка на созданный Waybill)
+4. Создается Project (нужна ссылка на созданный Spec)
+
 # Frontend
 
 ## Project setup

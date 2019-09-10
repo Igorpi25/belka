@@ -26,7 +26,6 @@ export const listProjects = `query ListProjects(
         waybills {
           nextToken
         }
-        version
       }
       createdAt
       updatedAt
@@ -55,7 +54,6 @@ export const getSpec = `query GetSpec($id: ID!) {
           id
           owner
           team
-          version
         }
         waybillSpecId
         products {
@@ -68,7 +66,6 @@ export const getSpec = `query GetSpec($id: ID!) {
       }
       nextToken
     }
-    version
   }
 }
 `;
@@ -104,7 +101,6 @@ export const getWaybill = `query GetWaybill($id: ID!) {
         }
         nextToken
       }
-      version
     }
     waybillSpecId
     products {

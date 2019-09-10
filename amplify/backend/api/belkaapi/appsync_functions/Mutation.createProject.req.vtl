@@ -2,16 +2,13 @@
 $util.qr($ctx.stash.input.put("version", 1))
 ## [End] Setting "version" to 1. **
 
-## Connections
-$util.qr($ctx.stash.input.put("productCostId", $ctx.stash.productCostId))
-$util.qr($ctx.stash.input.put("productStoreId", $ctx.stash.productStoreId))
-$util.qr($ctx.stash.input.put("productInfoId", $ctx.stash.productInfoId))
-$util.qr($ctx.stash.input.put("productLinkId", $ctx.stash.productLinkId))
+## Set Spec id
+$util.qr($ctx.stash.input.put("projectSpecId", $ctx.stash.specId))
 
 ## [Start] Prepare DynamoDB PutItem Request. **
 $util.qr($context.stash.input.put("createdAt", $util.defaultIfNull($ctx.stash.input.createdAt, $util.time.nowISO8601())))
 $util.qr($context.stash.input.put("updatedAt", $util.defaultIfNull($ctx.stash.input.updatedAt, $util.time.nowISO8601())))
-$util.qr($context.stash.input.put("__typename", "Product"))
+$util.qr($context.stash.input.put("__typename", "Project"))
 {
   "version": "2018-05-29",
   "operation": "PutItem",

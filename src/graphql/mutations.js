@@ -1,6 +1,48 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createProject = `mutation CreateProject($input: CreateProjectInput!) {
+  createProject(input: $input) {
+    id
+    owner
+    team
+    managers
+    accauntants
+    warehousemans
+    freelancers
+    name
+    description
+    client
+    status
+    spec {
+      id
+      owner
+      team
+      waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          createdAt
+          updatedAt
+          version
+        }
+        nextToken
+      }
+    }
+    createdAt
+    updatedAt
+    version
+  }
+}
+`;
 export const createProduct = `mutation CreateProduct($input: CreateProductInput!) {
   createProduct(input: $input) {
     id
@@ -363,7 +405,6 @@ export const createProduct = `mutation CreateProduct($input: CreateProductInput!
         waybills {
           nextToken
         }
-        version
       }
       waybillSpecId
       products {
@@ -389,49 +430,6 @@ export const createProduct = `mutation CreateProduct($input: CreateProductInput!
       version
     }
     productWaybillId
-    createdAt
-    updatedAt
-    version
-  }
-}
-`;
-export const createProject = `mutation CreateProject($input: CreateProjectInput!) {
-  createProject(input: $input) {
-    id
-    owner
-    team
-    managers
-    accauntants
-    warehousemans
-    freelancers
-    name
-    description
-    client
-    status
-    spec {
-      id
-      owner
-      team
-      waybills {
-        items {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          createdAt
-          updatedAt
-          version
-        }
-        nextToken
-      }
-      version
-    }
     createdAt
     updatedAt
     version
@@ -473,7 +471,6 @@ export const updateProject = `mutation UpdateProject($input: UpdateProjectInput!
         }
         nextToken
       }
-      version
     }
     createdAt
     updatedAt
@@ -516,46 +513,9 @@ export const deleteProject = `mutation DeleteProject($input: DeleteProjectInput!
         }
         nextToken
       }
-      version
     }
     createdAt
     updatedAt
-    version
-  }
-}
-`;
-export const createSpec = `mutation CreateSpec($input: CreateSpecInput!) {
-  createSpec(input: $input) {
-    id
-    owner
-    team
-    waybills {
-      items {
-        id
-        owner
-        team
-        number
-        description
-        contractor
-        purchaseDate
-        deliveryDate
-        spec {
-          id
-          owner
-          team
-          version
-        }
-        waybillSpecId
-        products {
-          nextToken
-        }
-        status
-        createdAt
-        updatedAt
-        version
-      }
-      nextToken
-    }
     version
   }
 }
@@ -592,7 +552,6 @@ export const createWaybill = `mutation CreateWaybill($input: CreateWaybillInput!
         }
         nextToken
       }
-      version
     }
     waybillSpecId
     products {
@@ -710,7 +669,6 @@ export const updateWaybill = `mutation UpdateWaybill($input: UpdateWaybillInput!
         }
         nextToken
       }
-      version
     }
     waybillSpecId
     products {
@@ -828,7 +786,6 @@ export const deleteWaybill = `mutation DeleteWaybill($input: DeleteWaybillInput!
         }
         nextToken
       }
-      version
     }
     waybillSpecId
     products {
@@ -1276,7 +1233,6 @@ export const updateProduct = `mutation UpdateProduct($input: UpdateProductInput!
         waybills {
           nextToken
         }
-        version
       }
       waybillSpecId
       products {
@@ -1670,7 +1626,6 @@ export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!
         waybills {
           nextToken
         }
-        version
       }
       waybillSpecId
       products {
@@ -1834,7 +1789,6 @@ export const updateProductCost = `mutation UpdateProductCost($input: UpdateProdu
           id
           owner
           team
-          version
         }
         waybillSpecId
         products {
@@ -1990,7 +1944,6 @@ export const updateProductStore = `mutation UpdateProductStore($input: UpdatePro
           id
           owner
           team
-          version
         }
         waybillSpecId
         products {
@@ -2140,7 +2093,6 @@ export const updateProductInfo = `mutation UpdateProductInfo($input: UpdateProdu
           id
           owner
           team
-          version
         }
         waybillSpecId
         products {
@@ -2289,7 +2241,6 @@ export const updateProductLink = `mutation UpdateProductLink($input: UpdateProdu
           id
           owner
           team
-          version
         }
         waybillSpecId
         products {
