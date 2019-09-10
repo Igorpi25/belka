@@ -1,6 +1,7 @@
 /**
  * Сообщения
  * @returns {Array,Object,string} error
+ * @returns {string} error message
  */
 export const errorMessage = (error) => {
   if (error.errors && isArray(error.errors)) {
@@ -18,7 +19,8 @@ export const errorMessage = (error) => {
 
 /**
  * Подтверждение
- * @returns {string} сообщение
+ * @param {string} msg тект сообщение
+ * @returns {Promise} результат
  */
 export const confirmDialog = (msg) => {
   return new Promise((resolve, reject) => {

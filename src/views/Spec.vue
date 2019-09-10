@@ -131,7 +131,7 @@ import { onCreateWaybill, onUpdateWaybill, onDeleteWaybill } from '@/graphql/sub
 import WaybillItem from '@/components/WaybillItem.vue'
 import Editable from '@/components/Editable.vue'
 
-import { errorMessage, confirmDialog } from '@/utils/helpers'
+import { confirmDialog } from '@/utils/helpers'
 
 export default {
   name: 'Spec',
@@ -191,6 +191,7 @@ export default {
     },
   },
   created () {
+    this.logger = new this.$Amplify.Logger('Spec')
     this.getSpec()
     this.createSubscription = this.$Amplify.API.graphql(this.createWaybillSubscription)
       .subscribe({
@@ -224,14 +225,15 @@ export default {
   },
   methods: {
     onCreateWaybill (newData) {
-      // eslint-disable-next-line
-      console.log('New waybill from subscription...', newData)
+      this.logger.info('New waybill from subscription...', newData)
       const newItem = newData.onCreateWaybill
       this.items.push(newItem)
     },
-    onUpdateWaybill (newData) {
-      // eslint-disable-next-line
-      console.log('Update waybill from subscription...', newData)
+    onUpdateWaybill (newData, onError = false) {
+      const msg = onError
+        ? 'Update waybill from update error data...'
+        : 'Update waybill from subscription...'
+      this.logger.info(msg, newData)
       const newItem = newData.onUpdateWaybill
       const index = this.items.findIndex(el => el.id === newItem.id)
       if (index !== -1) {
@@ -239,8 +241,7 @@ export default {
       }
     },
     onDeleteWaybill (newData) {
-      // eslint-disable-next-line
-      console.log('Delete waybill from subscription...', newData)
+      this.logger.info('Delete waybill from subscription...', newData)
       const newItem = newData.onDeleteWaybill
       const index = this.items.findIndex(el => el.id === newItem.id)
       if (index !== -1) {
@@ -252,19 +253,17 @@ export default {
         this.loading = true
         const response = await this.$Amplify.API.graphql(this.getSpecQuery)
         if (response && response.errors && response.errors.length > 0) {
-          throw response
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
         }
         this.items = response.data.getSpec.waybills.items || []
       } catch (error) {
         this.items = null
-        this.errors = error.errors || []
-        const message = errorMessage(error)
-        // eslint-disable-next-line
-        console.log('Error: ', message)
-        // Analytics.record({
+        this.logger.warn('Error: ', error)
+        // this.$Amplify.Analytics.record({
         //   name: 'GetSpecError',
         //   attributes: {
-        //     error: message
+        //     error: error.message
         //   }
         // })
       } finally {
@@ -284,17 +283,15 @@ export default {
           this.$Amplify.graphqlOperation(createWaybill, { input })
         )
         if (response && response.errors && response.errors.length > 0) {
-          throw response
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
         }
       } catch (error) {
-        this.errors = error.errors || []
-        const message = errorMessage(error)
-        // eslint-disable-next-line
-        console.log('Error: ', message)
-        // Analytics.record({
+        this.logger.warn('Error: ', error)
+        // this.$Amplify.Analytics.record({
         //   name: 'CreateWaybillError',
         //   attributes: {
-        //     error: message
+        //     error: error.message
         //   }
         // })
       } finally {
@@ -308,17 +305,22 @@ export default {
           this.$Amplify.graphqlOperation(updateWaybill, { input })
         )
         if (response && response.errors && response.errors.length > 0) {
-          throw response
+          // exclude version check condition
+          this.errors = response.errors.reduce((acc, curr) => {
+            if (curr.errorType === 'DynamoDB:ConditionalCheckFailedException') {
+              this.onUpdateWaybill({ onUpdateWaybill: curr.data }, true)
+            } else {
+              return [...acc, curr]
+            }
+          }, [])
+          throw new Error(response.errors.join('\n'))
         }
       } catch (error) {
-        this.errors = error.errors || []
-        const message = errorMessage(error)
-        // eslint-disable-next-line
-        console.log('Error: ', message)
-        // Analytics.record({
+        this.logger.warn('Error: ', error)
+        // this.$Amplify.Analytics.record({
         //   name: 'UpdateWaybillError',
         //   attributes: {
-        //     error: message
+        //     error: error.message
         //   }
         // })
       } finally {
@@ -337,18 +339,16 @@ export default {
           this.$Amplify.graphqlOperation(deleteWaybill, { input })
         )
         if (response && response.errors && response.errors.length > 0) {
-          throw response
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
         }
       } catch (error) {
         if (error === 'not_confirmed') return
-        this.errors = error.errors || []
-        const message = errorMessage(error)
-        // eslint-disable-next-line
-        console.log('Error: ', message)
-        // Analytics.record({
+        this.logger.warn('Error: ', error)
+        // this.$Amplify.Analytics.record({
         //   name: 'DeleteWaybillError',
         //   attributes: {
-        //     error: message
+        //     error: error.message
         //   }
         // })
       } finally {

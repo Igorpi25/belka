@@ -557,6 +557,242 @@
 					]
 				}
 			}
+		},
+		"SubscriptiononUpdateProductCostResolver": {
+			"Type": "AWS::AppSync::Resolver",
+			"Properties": {
+				"ApiId": {
+					"Ref": "AppSyncApiId"
+				},
+				"DataSourceName": "NONE",
+				"FieldName": "onUpdateProductCost",
+				"TypeName": "Subscription",
+				"RequestMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Subscription",
+										"onUpdateProductCost",
+										"req",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				},
+				"ResponseMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Subscription",
+										"onUpdateProductCost",
+										"res",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				}
+			}
+		},
+		"SubscriptiononUpdateProductStoreResolver": {
+			"Type": "AWS::AppSync::Resolver",
+			"Properties": {
+				"ApiId": {
+					"Ref": "AppSyncApiId"
+				},
+				"DataSourceName": "NONE",
+				"FieldName": "onUpdateProductStore",
+				"TypeName": "Subscription",
+				"RequestMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Subscription",
+										"onUpdateProductStore",
+										"req",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				},
+				"ResponseMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Subscription",
+										"onUpdateProductStore",
+										"res",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				}
+			}
+		},
+		"SubscriptiononUpdateProductInfoResolver": {
+			"Type": "AWS::AppSync::Resolver",
+			"Properties": {
+				"ApiId": {
+					"Ref": "AppSyncApiId"
+				},
+				"DataSourceName": "NONE",
+				"FieldName": "onUpdateProductInfo",
+				"TypeName": "Subscription",
+				"RequestMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Subscription",
+										"onUpdateProductInfo",
+										"req",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				},
+				"ResponseMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Subscription",
+										"onUpdateProductInfo",
+										"res",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				}
+			}
+		},
+		"SubscriptiononUpdateProductLinkResolver": {
+			"Type": "AWS::AppSync::Resolver",
+			"Properties": {
+				"ApiId": {
+					"Ref": "AppSyncApiId"
+				},
+				"DataSourceName": "NONE",
+				"FieldName": "onUpdateProductLink",
+				"TypeName": "Subscription",
+				"RequestMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Subscription",
+										"onUpdateProductLink",
+										"req",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				},
+				"ResponseMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Subscription",
+										"onUpdateProductLink",
+										"res",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				}
+			}
 		}
 	}
 }

@@ -96,10 +96,10 @@ type Product
   quantity: Int
   # TODO add connection with type ProductUnit, array in project
   unit: String
-  costs: ProductCosts
-  store: ProductStore
-  info: ProductInfo
-  link: String
+  costs: ProductCost @connection(name: "ProductCost")
+  store: ProductStore @connection(name: "ProductStore")
+  info: ProductInfo @connection(name: "ProductInfo")
+  link: ProductLink @connection(name: "ProductLink")
   status: ProductStatus
   waybill: Waybill @connection(name: "WaybillProducts")
   productWaybillId: ID
@@ -116,33 +116,81 @@ enum ProductStatus {
   ARCHIVED
 }
 
-type ProductCosts {
+type ProductCost
+  @model(queries: null, mutations: { create: "createProductCost", update: "updateProductCost" }, subscriptions: { level: OFF })
+  @versioned
+  @auth(rules: [
+    { allow: owner },
+    { allow: owner, ownerField: "team" },
+  ])
+{
+  id: ID!
+  owner: String
+  team: [String!]
   purchasePrice: Float
   clientPrice: Float
   price: Float
   amount: Float
   total: Float
+  product: Product @connection(name: "ProductCost", keyField: "productId")
+  productId: ID
 }
 
-type ProductStore {
+type ProductStore
+  @model(queries: null, mutations: { create: "createProductStore", update: "updateProductStore" }, subscriptions: { level: OFF })
+  @versioned
+  @auth(rules: [
+    { allow: owner },
+    { allow: owner, ownerField: "team" },
+  ])
+{
+  id: ID!
+  owner: String
+  team: [String!]
   net: Float
   gross: Float
-  size: ProductSize
+  width: Float
+  height: Float
+  length: Float
   inStock: Boolean
   dimension: Float
   # TODO add connection with type CargoPlace, @model
   cargoPlaceNumber: Int
+  product: Product @connection(name: "ProductStore", keyField: "productId")
+  productId: ID
 }
 
-type ProductSize {
-  w: Float
-  l: Float
-  h: Float
-}
-
-type ProductInfo {
+type ProductInfo
+  @model(queries: null, mutations: { create: "createProductInfo", update: "updateProductInfo" }, subscriptions: { level: OFF })
+  @versioned
+  @auth(rules: [
+    { allow: owner },
+    { allow: owner, ownerField: "team" },
+  ])
+{
+  id: ID!
+  owner: String
+  team: [String!]
   images: [String]
   description: String
+  product: Product @connection(name: "ProductInfo", keyField: "productId")
+  productId: ID
+}
+
+type ProductLink
+  @model(queries: null, mutations: { create: "createProductLink", update: "updateProductLink" }, subscriptions: { level: OFF })
+  @versioned
+  @auth(rules: [
+    { allow: owner },
+    { allow: owner, ownerField: "team" },
+  ])
+{
+  id: ID!
+  owner: String
+  team: [String!]
+  url: String
+  product: Product @connection(name: "ProductLink", keyField: "productId")
+  productId: ID
 }
 
 type Subscription {
@@ -155,4 +203,8 @@ type Subscription {
   onCreateProduct(owner: ID!, productWaybillId: ID!): Product @aws_subscribe(mutations: ["createProduct"])
   onUpdateProduct(owner: ID!, productWaybillId: ID!): Product @aws_subscribe(mutations: ["updateProduct"])
   onDeleteProduct(owner: ID!, productWaybillId: ID!): Product @aws_subscribe(mutations: ["deleteProduct"])
+  onUpdateProductCost(owner: ID!, productId: ID!): ProductCost @aws_subscribe(mutations: ["updateProductCost"])
+  onUpdateProductStore(owner: ID!, productId: ID!): ProductStore @aws_subscribe(mutations: ["updateProductStore"])
+  onUpdateProductInfo(owner: ID!, productId: ID!): ProductInfo @aws_subscribe(mutations: ["updateProductInfo"])
+  onUpdateProductLink(owner: ID!, productId: ID!): ProductLink @aws_subscribe(mutations: ["updateProductLink"])
 }

@@ -108,11 +108,11 @@ export default {
     },
   },
   created () {
+    this.logger = new this.$Amplify.Logger('App')
     this.$Amplify.Hub.listen('auth', (data) => {
       switch (data.payload.event) {
         case 'signIn':
-          // eslint-disable-next-line
-          console.log('Sign In From Hub', data.payload.data)
+          this.logger.info('Sign In From Hub', data.payload.data)
           this.$Amplify.Auth.currentAuthenticatedUser()
             .then(user => {
               this.$store.commit('setUser', user)
@@ -122,8 +122,7 @@ export default {
           // this.setState({authState: 'signedIn', authData: data.payload.data})
           break
         case 'signIn_failure':
-          // eslint-disable-next-line
-          console.log('Sign In fail From Hub', data.payload.data)
+          this.logger.info('Sign In fail From Hub', data.payload.data)
           // this.setState({authState: 'signIn', authData: null, authError: data.payload.data})
           break
         default:

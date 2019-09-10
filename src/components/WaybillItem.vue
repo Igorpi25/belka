@@ -115,13 +115,21 @@
 import { mdiDelete } from '@mdi/js'
 
 import { getWaybill } from '@/graphql/queries'
-import { createProduct, updateProduct, deleteProduct } from '@/graphql/mutations'
+import {
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  createProductCost,
+  createProductStore,
+  createProductInfo,
+  createProductLink
+} from '@/graphql/mutations'
 import { onCreateProduct, onUpdateProduct, onDeleteProduct } from '@/graphql/subscriptions'
 
 import ErrorMessages from '@/components/ErrorMessages.vue'
 import Editable from '@/components/Editable.vue'
 
-import { errorMessage, confirmDialog } from '@/utils/helpers'
+import { confirmDialog } from '@/utils/helpers'
 
 export default {
   name: 'WaybillItem',
@@ -188,6 +196,7 @@ export default {
     },
   },
   created () {
+    this.logger = new this.$Amplify.Logger('WaybillItem')
     this.getWaybill()
     this.createSubscription = this.$Amplify.API.graphql(this.createProductSubscription)
       .subscribe({
@@ -221,14 +230,15 @@ export default {
   },
   methods: {
     onCreateProduct (newData) {
-      // eslint-disable-next-line
-      console.log('New product from subscription...', newData)
+      this.logger.info('New product from subscription...', newData)
       const newItem = newData.onCreateProduct
       this.items.push(newItem)
     },
-    onUpdateProduct (newData) {
-      // eslint-disable-next-line
-      console.log('Update product from subscription...', newData)
+    onUpdateProduct (newData, onError = false) {
+      const msg = onError
+        ? 'Update product from update error data...'
+        : 'Update product from subscription...'
+      this.logger.info(msg, newData)
       const newItem = newData.onUpdateProduct
       const index = this.items.findIndex(el => el.id === newItem.id)
       if (index !== -1) {
@@ -236,8 +246,7 @@ export default {
       }
     },
     onDeleteProduct (newData) {
-      // eslint-disable-next-line
-      console.log('Delete product from subscription...', newData)
+      this.logger.info('Delete product from subscription...', newData)
       const newItem = newData.onDeleteProduct
       const index = this.items.findIndex(el => el.id === newItem.id)
       if (index !== -1) {
@@ -249,52 +258,117 @@ export default {
         this.loading = true
         const response = await this.$Amplify.API.graphql(this.getWaybillQuery)
         if (response && response.errors && response.errors.length > 0) {
-          throw response
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
         }
         this.items = response.data.getWaybill.products.items || []
       } catch (error) {
         this.items = null
-        this.errors = error.errors || []
-        const message = errorMessage(error)
-        // eslint-disable-next-line
-        console.log('Error: ', message)
-        // Analytics.record({
+        this.logger.warn('Error: ', error)
+        // this.$Amplify.Analytics.record({
         //   name: 'GetWaybillError',
         //   attributes: {
-        //     error: message
+        //     error: error.message
         //   }
         // })
       } finally {
         this.loading = false
       }
     },
+    async createProductCost (input) {
+      try {
+        const response = await this.$Amplify.API.graphql(
+          this.$Amplify.graphqlOperation(createProductCost, {
+            input
+          })
+        )
+        if (response && response.errors && response.errors.length > 0) {
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
+        }
+        return response.data.createProductCost.id
+      } catch (error) {
+        throw error
+      }
+    },
+    async createProductStore (input) {
+      try {
+        const response = await this.$Amplify.API.graphql(
+          this.$Amplify.graphqlOperation(createProductStore, {
+            input
+          })
+        )
+        if (response && response.errors && response.errors.length > 0) {
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
+        }
+        return response.data.createProductStore.id
+      } catch (error) {
+        throw error
+      }
+    },
+    async createProductInfo (input) {
+      try {
+        const response = await this.$Amplify.API.graphql(
+          this.$Amplify.graphqlOperation(createProductInfo, {
+            input
+          })
+        )
+        if (response && response.errors && response.errors.length > 0) {
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
+        }
+        return response.data.createProductInfo.id
+      } catch (error) {
+        throw error
+      }
+    },
+    async createProductLink (input) {
+      try {
+        const response = await this.$Amplify.API.graphql(
+          this.$Amplify.graphqlOperation(createProductLink, {
+            input
+          })
+        )
+        if (response && response.errors && response.errors.length > 0) {
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
+        }
+        return response.data.createProductLink.id
+      } catch (error) {
+        throw error
+      }
+    },
     async createProduct () {
       try {
         this.createLoading = true
+        const owner = this.owner
+        const productCostsId = await this.createProductCost({ owner })
+        const productStoreId = await this.createProductStore({ owner })
+        const productInfoId = await this.createProductInfo({ owner })
+        const productLinkId = await this.createProductLink({ owner })
         const input = {
           status: 'CREATED',
-          owner: this.owner,
-          productWaybillId: this.id
+          owner,
+          productWaybillId: this.id,
+          productCostsId,
+          productStoreId,
+          productInfoId,
+          productLinkId
         }
         const response = await this.$Amplify.API.graphql(
           this.$Amplify.graphqlOperation(createProduct, { input })
         )
         if (response && response.errors && response.errors.length > 0) {
-          throw response
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
         }
-        // const newItem = response.data.createProduct
-        // // TODO create subscrubtion on every waybill?
-        // this.data.getWaybill.products.items.push(newItem)
-        // return response.data.createProduct
       } catch (error) {
-        this.errors = error.errors || []
-        const message = errorMessage(error)
-        // eslint-disable-next-line
-        console.log('Error: ', message)
-        // Analytics.record({
+        this.logger.warn('Error: ', error)
+        // this.$Amplify.Analytics.record({
         //   name: 'CreateProductError',
         //   attributes: {
-        //     error: message
+        //     error: error.message
         //   }
         // })
       } finally {
@@ -310,21 +384,22 @@ export default {
           })
         )
         if (response && response.errors && response.errors.length > 0) {
-          throw response
+          // exclude version check condition
+          this.errors = response.errors.reduce((acc, curr) => {
+            if (curr.errorType === 'DynamoDB:ConditionalCheckFailedException') {
+              this.onUpdateProduct({ onUpdateProduct: curr.data }, true)
+            } else {
+              return [...acc, curr]
+            }
+          }, [])
+          throw new Error(response.errors.join('\n'))
         }
-        // const updatedItem = response.data.updateProduct
-        // const index = this.data.getWaybill.products.items
-        //   .findIndex(el => el.id === updatedItem.id)
-        // this.data.getWaybill.products.items.splice(index, 1, updatedItem)
       } catch (error) {
-        this.errors = error.errors || []
-        const message = errorMessage(error)
-        // eslint-disable-next-line
-        console.log('Error: ', message)
-        // Analytics.record({
+        this.logger.warn('Error: ', error)
+        // this.$Amplify.Analytics.record({
         //   name: 'UpdateProductError',
         //   attributes: {
-        //     error: message
+        //     error: error.message
         //   }
         // })
       } finally {
@@ -345,22 +420,16 @@ export default {
           })
         )
         if (response && response.errors && response.errors.length > 0) {
-          throw response
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
         }
-        // const updatedItem = response.data.updateProduct
-        // const index = this.data.getWaybill.products.items
-        //   .findIndex(el => el.id === updatedItem.id)
-        // this.data.getWaybill.products.items.splice(index, 1, updatedItem)
       } catch (error) {
         if (error === 'not_confirmed') return
-        this.errors = error.errors || []
-        const message = errorMessage(error)
-        // eslint-disable-next-line
-        console.log('Error: ', message)
-        // Analytics.record({
+        this.logger.warn('Error: ', error)
+        // this.$Amplify.Analytics.record({
         //   name: 'DeleteProductError',
         //   attributes: {
-        //     error: message
+        //     error: error.message
         //   }
         // })
       } finally {

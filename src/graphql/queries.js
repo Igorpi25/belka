@@ -24,21 +24,6 @@ export const listProjects = `query ListProjects(
         owner
         team
         waybills {
-          items {
-            id
-            owner
-            team
-            number
-            description
-            contractor
-            purchaseDate
-            deliveryDate
-            waybillSpecId
-            status
-            createdAt
-            updatedAt
-            version
-          }
           nextToken
         }
         version
@@ -70,28 +55,10 @@ export const getSpec = `query GetSpec($id: ID!) {
           id
           owner
           team
-          waybills {
-            nextToken
-          }
           version
         }
         waybillSpecId
         products {
-          items {
-            id
-            owner
-            team
-            article
-            name
-            quantity
-            unit
-            link
-            status
-            productWaybillId
-            createdAt
-            updatedAt
-            version
-          }
           nextToken
         }
         status
@@ -129,16 +96,7 @@ export const getWaybill = `query GetWaybill($id: ID!) {
           contractor
           purchaseDate
           deliveryDate
-          spec {
-            id
-            owner
-            team
-            version
-          }
           waybillSpecId
-          products {
-            nextToken
-          }
           status
           createdAt
           updatedAt
@@ -159,29 +117,49 @@ export const getWaybill = `query GetWaybill($id: ID!) {
         quantity
         unit
         costs {
+          id
+          owner
+          team
           purchasePrice
           clientPrice
           price
           amount
           total
+          productId
+          version
         }
         store {
+          id
+          owner
+          team
           net
           gross
-          size {
-            w
-            l
-            h
-          }
+          width
+          height
+          length
           inStock
           dimension
           cargoPlaceNumber
+          productId
+          version
         }
         info {
+          id
+          owner
+          team
           images
           description
+          productId
+          version
         }
-        link
+        link {
+          id
+          owner
+          team
+          url
+          productId
+          version
+        }
         status
         waybill {
           id
@@ -192,16 +170,7 @@ export const getWaybill = `query GetWaybill($id: ID!) {
           contractor
           purchaseDate
           deliveryDate
-          spec {
-            id
-            owner
-            team
-            version
-          }
           waybillSpecId
-          products {
-            nextToken
-          }
           status
           createdAt
           updatedAt

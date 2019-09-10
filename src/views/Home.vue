@@ -29,7 +29,7 @@
             md="6"
             xl="4"
           >
-            <ProjectItem :item="item" />
+            <ProjectItem :item="item" @updateFromError="onUpdateProject" />
           </v-col>
         </v-row>
 
@@ -46,8 +46,6 @@ import { onCreateProject, onUpdateProject, onDeleteProject } from '@/graphql/sub
 
 import ProjectItem from '@/components/ProjectItem.vue'
 import ErrorMessages from '@/components/ErrorMessages.vue'
-
-import { errorMessage } from '@/utils/helpers'
 
 export default {
   name: 'Home',
@@ -96,6 +94,7 @@ export default {
     },
   },
   created () {
+    this.logger = new this.$Amplify.Logger('Project')
     this.listProjects()
     this.createSubscription = this.$Amplify.API.graphql(this.createProjectSubscription)
       .subscribe({
@@ -129,14 +128,15 @@ export default {
   },
   methods: {
     onCreateProject (newData) {
-      // eslint-disable-next-line
-      console.log('New project from subscription...', newData)
+      this.logger.info('New project from subscription...', newData)
       const newItem = newData.onCreateProject
       this.items.push(newItem)
     },
-    onUpdateProject (newData) {
-      // eslint-disable-next-line
-      console.log('Update project from subscription...', newData)
+    onUpdateProject (newData, onError = false) {
+      const msg = onError
+        ? 'Update project from update error data...'
+        : 'Update project from subscription...'
+      this.logger.info(msg, newData)
       const newItem = newData.onUpdateProject
       const index = this.items.findIndex(el => el.id === newItem.id)
       if (index !== -1) {
@@ -144,8 +144,7 @@ export default {
       }
     },
     onDeleteProject (newData) {
-      // eslint-disable-next-line
-      console.log('Delete project from subscription...', newData)
+      this.logger.info('Delete project from subscription...', newData)
       const newItem = newData.onDeleteProject
       const index = this.items.findIndex(el => el.id === newItem.id)
       if (index !== -1) {
@@ -157,19 +156,16 @@ export default {
         this.loading = true
         const response = await this.$Amplify.API.graphql(this.listProjectsQuery)
         if (response && response.errors && response.errors.length > 0) {
-          throw response
+          throw new Error(response.errors.join('\n'))
         }
         this.items = response.data.listProjects.items || []
       } catch (error) {
         this.items = null
-        this.errors = error.errors || []
-        const message = errorMessage(error)
-        // eslint-disable-next-line
-        console.log('Error: ', message)
-        // Analytics.record({
+        this.logger.warn('Error: ', error)
+        // this.$Amplify.Analytics.record({
         //   name: 'ListProjectError',
         //   attributes: {
-        //     error: message
+        //     error: error.message
         //   }
         // })
       } finally {
@@ -184,20 +180,12 @@ export default {
           })
         )
         if (response && response.errors && response.errors.length > 0) {
-          throw response
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
         }
         return response.data.createSpec.id
       } catch (error) {
-        this.errors = error.errors || []
-        const message = errorMessage(error)
-        // eslint-disable-next-line
-        console.log('Error: ', message)
-        // Analytics.record({
-        //   name: 'CreateSpecError',
-        //   attributes: {
-        //     error: message
-        //   }
-        // })
+        throw error
       }
     },
     async createProject () {
@@ -214,17 +202,15 @@ export default {
           this.$Amplify.graphqlOperation(createProject, { input })
         )
         if (response && response.errors && response.errors.length > 0) {
-          throw response
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
         }
       } catch (error) {
-        this.errors = error.errors || []
-        const message = errorMessage(error)
-        // eslint-disable-next-line
-        console.log('Error: ', message)
-        // Analytics.record({
+        this.logger.warn('Error: ', error)
+        // this.$Amplify.Analytics.record({
         //   name: 'CreateProjectError',
         //   attributes: {
-        //     error: message
+        //     error: error.message
         //   }
         // })
       } finally {

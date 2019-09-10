@@ -38,7 +38,13 @@ import {
 } from '@/utils/helpers'
 
 // this undefined on debounce, if use arrow function, this on function undefined
-const DEBOUNCE = 300
+const DEBOUNCE = 70
+
+const STATUSES = {
+  NONE: 'NONE', // call update method on this status
+  WAITING: 'WAITING', // status after update method called
+  WAITING_EDIT: 'WAITING_EDIT' // status after value update on WAITING status, to call update method on VERSION update
+}
 
 export default {
   name: 'Editable',
@@ -86,11 +92,9 @@ export default {
   data () {
     return {
       id: uuid(),
+      status: STATUSES.NONE,
       lazyValue: this.value,
-      pendingVersion: 0,
-      hasQueque: false,
       isFocused: false,
-      isBooted: false,
     }
   },
 
@@ -110,33 +114,27 @@ export default {
 
   watch: {
     value (val) {
-      if (this.isFocused && this.pendingVersion && this.hasQueque && val !== this.internalValue) {
-        this.$emit('input', this.internalValue)
-        this.pendingVersion = this.version
-      } else {
+      if (this.status === STATUSES.NONE) {
         this.setValue(val, this.isFocused)
-        this.pendingVersion = 0
+      } else if (this.status === STATUSES.WAITING) {
+        this.status = STATUSES.NONE
+        this.setValue(val, this.isFocused)
+      } else if (this.status === STATUSES.WAITING_EDIT) {
+        this.status = STATUSES.WAITING
+        this.$emit('input', this.internalValue)
       }
-      this.hasQueque = false
     },
   },
 
   mounted () {
     this.setValue(this.value, false)
-    this.isBooted = true
   },
 
   methods: {
-    // input: debounce(function (e) {
-    //   const val = this.type === 'number'
-    //     ? e.target.value : e.target.innerText
-    //   const value = val || null
-    //   this.internalValue = value
-    //   this.$emit('input', value)
-    //   this.pendingVersion = this.version
-    // }, DEBOUNCE),
-
     input (e) {
+      if (this.status === STATUSES.WAITING) {
+        this.status = STATUSES.WAITING_EDIT
+      }
       const val = this.type === 'number'
         ? e.target.value : e.target.innerText
       const value = val || null
@@ -145,11 +143,9 @@ export default {
     },
 
     debounceInput: debounce(function (val) {
-      if (this.pendingVersion) {
-        this.hasQueque = true
-      } else {
+      if (this.status === STATUSES.NONE) {
         this.$emit('input', val)
-        this.pendingVersion = this.version
+        this.status = STATUSES.WAITING
       }
     }, DEBOUNCE),
 

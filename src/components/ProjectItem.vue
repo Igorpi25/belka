@@ -88,7 +88,7 @@ import { updateProject, deleteProject } from '@/graphql/mutations'
 import ErrorMessages from '@/components/ErrorMessages.vue'
 import Editable from '@/components/Editable.vue'
 
-import { errorMessage, confirmDialog } from '@/utils/helpers'
+import { confirmDialog } from '@/utils/helpers'
 
 export default {
   name: 'ProjectItem',
@@ -113,6 +113,9 @@ export default {
       return this.$store.getters.username
     },
   },
+  created () {
+    this.logger = new this.$Amplify.Logger('ProjectItem')
+  },
   methods: {
     async updateProject (value) {
       try {
@@ -124,17 +127,22 @@ export default {
           this.$Amplify.graphqlOperation(updateProject, { input })
         )
         if (response && response.errors && response.errors.length > 0) {
-          throw response
+          // exclude version check condition
+          this.errors = response.errors.reduce((acc, curr) => {
+            if (curr.errorType === 'DynamoDB:ConditionalCheckFailedException') {
+              this.$emit('updateFromError', { onUpdateProject: curr.data }, true)
+            } else {
+              return [...acc, curr]
+            }
+          }, [])
+          throw new Error(response.errors.join('\n'))
         }
       } catch (error) {
-        this.errors = error.errors || []
-        const message = errorMessage(error)
-        // eslint-disable-next-line
-        console.log('Error: ', message)
-        // Analytics.record({
+        this.logger.warn('Error: ', error)
+        // this.$Amplify.Analytics.record({
         //   name: 'UpdateProjectError',
         //   attributes: {
-        //     error: message
+        //     error: error.message
         //   }
         // })
       }
@@ -154,18 +162,16 @@ export default {
           this.$Amplify.graphqlOperation(deleteProject, { input })
         )
         if (response && response.errors && response.errors.length > 0) {
-          throw response
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
         }
       } catch (error) {
         if (error === 'not_confirmed') return
-        this.errors = error.errors || []
-        const message = errorMessage(error)
-        // eslint-disable-next-line
-        console.log('Error: ', message)
-        // Analytics.record({
+        this.logger.warn('Error: ', error)
+        // this.$Amplify.Analytics.record({
         //   name: 'DeleteProjectError',
         //   attributes: {
-        //     error: message
+        //     error: error.message
         //   }
         // })
       }

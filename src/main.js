@@ -28,6 +28,9 @@ Vue.component('amplify-connect', components.Connect)
 
 Amplify.configure(awsconfig)
 
+// log level for Logger
+window.LOG_LEVEL = process.env.NODE_ENV === 'production' ? 'WARN' : 'INFO'
+
 const localDate = (dateString, format) => {
   if (!dateString) return ''
   const d = new Date(dateString)

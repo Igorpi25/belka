@@ -28,16 +28,7 @@ export const onCreateProject = `subscription OnCreateProject($owner: ID!) {
           contractor
           purchaseDate
           deliveryDate
-          spec {
-            id
-            owner
-            team
-            version
-          }
           waybillSpecId
-          products {
-            nextToken
-          }
           status
           createdAt
           updatedAt
@@ -80,16 +71,7 @@ export const onUpdateProject = `subscription OnUpdateProject($owner: ID!) {
           contractor
           purchaseDate
           deliveryDate
-          spec {
-            id
-            owner
-            team
-            version
-          }
           waybillSpecId
-          products {
-            nextToken
-          }
           status
           createdAt
           updatedAt
@@ -132,16 +114,7 @@ export const onDeleteProject = `subscription OnDeleteProject($owner: ID!) {
           contractor
           purchaseDate
           deliveryDate
-          spec {
-            id
-            owner
-            team
-            version
-          }
           waybillSpecId
-          products {
-            nextToken
-          }
           status
           createdAt
           updatedAt
@@ -181,16 +154,7 @@ export const onCreateWaybill = `subscription OnCreateWaybill($owner: ID!, $waybi
           contractor
           purchaseDate
           deliveryDate
-          spec {
-            id
-            owner
-            team
-            version
-          }
           waybillSpecId
-          products {
-            nextToken
-          }
           status
           createdAt
           updatedAt
@@ -211,29 +175,49 @@ export const onCreateWaybill = `subscription OnCreateWaybill($owner: ID!, $waybi
         quantity
         unit
         costs {
+          id
+          owner
+          team
           purchasePrice
           clientPrice
           price
           amount
           total
+          productId
+          version
         }
         store {
+          id
+          owner
+          team
           net
           gross
-          size {
-            w
-            l
-            h
-          }
+          width
+          height
+          length
           inStock
           dimension
           cargoPlaceNumber
+          productId
+          version
         }
         info {
+          id
+          owner
+          team
           images
           description
+          productId
+          version
         }
-        link
+        link {
+          id
+          owner
+          team
+          url
+          productId
+          version
+        }
         status
         waybill {
           id
@@ -244,16 +228,7 @@ export const onCreateWaybill = `subscription OnCreateWaybill($owner: ID!, $waybi
           contractor
           purchaseDate
           deliveryDate
-          spec {
-            id
-            owner
-            team
-            version
-          }
           waybillSpecId
-          products {
-            nextToken
-          }
           status
           createdAt
           updatedAt
@@ -297,16 +272,7 @@ export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: ID!, $waybi
           contractor
           purchaseDate
           deliveryDate
-          spec {
-            id
-            owner
-            team
-            version
-          }
           waybillSpecId
-          products {
-            nextToken
-          }
           status
           createdAt
           updatedAt
@@ -327,29 +293,49 @@ export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: ID!, $waybi
         quantity
         unit
         costs {
+          id
+          owner
+          team
           purchasePrice
           clientPrice
           price
           amount
           total
+          productId
+          version
         }
         store {
+          id
+          owner
+          team
           net
           gross
-          size {
-            w
-            l
-            h
-          }
+          width
+          height
+          length
           inStock
           dimension
           cargoPlaceNumber
+          productId
+          version
         }
         info {
+          id
+          owner
+          team
           images
           description
+          productId
+          version
         }
-        link
+        link {
+          id
+          owner
+          team
+          url
+          productId
+          version
+        }
         status
         waybill {
           id
@@ -360,16 +346,7 @@ export const onUpdateWaybill = `subscription OnUpdateWaybill($owner: ID!, $waybi
           contractor
           purchaseDate
           deliveryDate
-          spec {
-            id
-            owner
-            team
-            version
-          }
           waybillSpecId
-          products {
-            nextToken
-          }
           status
           createdAt
           updatedAt
@@ -413,16 +390,7 @@ export const onDeleteWaybill = `subscription OnDeleteWaybill($owner: ID!, $waybi
           contractor
           purchaseDate
           deliveryDate
-          spec {
-            id
-            owner
-            team
-            version
-          }
           waybillSpecId
-          products {
-            nextToken
-          }
           status
           createdAt
           updatedAt
@@ -443,29 +411,49 @@ export const onDeleteWaybill = `subscription OnDeleteWaybill($owner: ID!, $waybi
         quantity
         unit
         costs {
+          id
+          owner
+          team
           purchasePrice
           clientPrice
           price
           amount
           total
+          productId
+          version
         }
         store {
+          id
+          owner
+          team
           net
           gross
-          size {
-            w
-            l
-            h
-          }
+          width
+          height
+          length
           inStock
           dimension
           cargoPlaceNumber
+          productId
+          version
         }
         info {
+          id
+          owner
+          team
           images
           description
+          productId
+          version
         }
-        link
+        link {
+          id
+          owner
+          team
+          url
+          productId
+          version
+        }
         status
         waybill {
           id
@@ -476,16 +464,7 @@ export const onDeleteWaybill = `subscription OnDeleteWaybill($owner: ID!, $waybi
           contractor
           purchaseDate
           deliveryDate
-          spec {
-            id
-            owner
-            team
-            version
-          }
           waybillSpecId
-          products {
-            nextToken
-          }
           status
           createdAt
           updatedAt
@@ -515,29 +494,341 @@ export const onCreateProduct = `subscription OnCreateProduct($owner: ID!, $produ
     quantity
     unit
     costs {
+      id
+      owner
+      team
       purchasePrice
       clientPrice
       price
       amount
       total
+      product {
+        id
+        owner
+        team
+        article
+        name
+        quantity
+        unit
+        costs {
+          id
+          owner
+          team
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+          productId
+          version
+        }
+        store {
+          id
+          owner
+          team
+          net
+          gross
+          width
+          height
+          length
+          inStock
+          dimension
+          cargoPlaceNumber
+          productId
+          version
+        }
+        info {
+          id
+          owner
+          team
+          images
+          description
+          productId
+          version
+        }
+        link {
+          id
+          owner
+          team
+          url
+          productId
+          version
+        }
+        status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          createdAt
+          updatedAt
+          version
+        }
+        productWaybillId
+        createdAt
+        updatedAt
+        version
+      }
+      productId
+      version
     }
     store {
+      id
+      owner
+      team
       net
       gross
-      size {
-        w
-        l
-        h
-      }
+      width
+      height
+      length
       inStock
       dimension
       cargoPlaceNumber
+      product {
+        id
+        owner
+        team
+        article
+        name
+        quantity
+        unit
+        costs {
+          id
+          owner
+          team
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+          productId
+          version
+        }
+        store {
+          id
+          owner
+          team
+          net
+          gross
+          width
+          height
+          length
+          inStock
+          dimension
+          cargoPlaceNumber
+          productId
+          version
+        }
+        info {
+          id
+          owner
+          team
+          images
+          description
+          productId
+          version
+        }
+        link {
+          id
+          owner
+          team
+          url
+          productId
+          version
+        }
+        status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          createdAt
+          updatedAt
+          version
+        }
+        productWaybillId
+        createdAt
+        updatedAt
+        version
+      }
+      productId
+      version
     }
     info {
+      id
+      owner
+      team
       images
       description
+      product {
+        id
+        owner
+        team
+        article
+        name
+        quantity
+        unit
+        costs {
+          id
+          owner
+          team
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+          productId
+          version
+        }
+        store {
+          id
+          owner
+          team
+          net
+          gross
+          width
+          height
+          length
+          inStock
+          dimension
+          cargoPlaceNumber
+          productId
+          version
+        }
+        info {
+          id
+          owner
+          team
+          images
+          description
+          productId
+          version
+        }
+        link {
+          id
+          owner
+          team
+          url
+          productId
+          version
+        }
+        status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          createdAt
+          updatedAt
+          version
+        }
+        productWaybillId
+        createdAt
+        updatedAt
+        version
+      }
+      productId
+      version
     }
-    link
+    link {
+      id
+      owner
+      team
+      url
+      product {
+        id
+        owner
+        team
+        article
+        name
+        quantity
+        unit
+        costs {
+          id
+          owner
+          team
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+          productId
+          version
+        }
+        store {
+          id
+          owner
+          team
+          net
+          gross
+          width
+          height
+          length
+          inStock
+          dimension
+          cargoPlaceNumber
+          productId
+          version
+        }
+        info {
+          id
+          owner
+          team
+          images
+          description
+          productId
+          version
+        }
+        link {
+          id
+          owner
+          team
+          url
+          productId
+          version
+        }
+        status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          createdAt
+          updatedAt
+          version
+        }
+        productWaybillId
+        createdAt
+        updatedAt
+        version
+      }
+      productId
+      version
+    }
     status
     waybill {
       id
@@ -553,21 +844,6 @@ export const onCreateProduct = `subscription OnCreateProduct($owner: ID!, $produ
         owner
         team
         waybills {
-          items {
-            id
-            owner
-            team
-            number
-            description
-            contractor
-            purchaseDate
-            deliveryDate
-            waybillSpecId
-            status
-            createdAt
-            updatedAt
-            version
-          }
           nextToken
         }
         version
@@ -582,41 +858,7 @@ export const onCreateProduct = `subscription OnCreateProduct($owner: ID!, $produ
           name
           quantity
           unit
-          costs {
-            purchasePrice
-            clientPrice
-            price
-            amount
-            total
-          }
-          store {
-            net
-            gross
-            inStock
-            dimension
-            cargoPlaceNumber
-          }
-          info {
-            images
-            description
-          }
-          link
           status
-          waybill {
-            id
-            owner
-            team
-            number
-            description
-            contractor
-            purchaseDate
-            deliveryDate
-            waybillSpecId
-            status
-            createdAt
-            updatedAt
-            version
-          }
           productWaybillId
           createdAt
           updatedAt
@@ -646,29 +888,341 @@ export const onUpdateProduct = `subscription OnUpdateProduct($owner: ID!, $produ
     quantity
     unit
     costs {
+      id
+      owner
+      team
       purchasePrice
       clientPrice
       price
       amount
       total
+      product {
+        id
+        owner
+        team
+        article
+        name
+        quantity
+        unit
+        costs {
+          id
+          owner
+          team
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+          productId
+          version
+        }
+        store {
+          id
+          owner
+          team
+          net
+          gross
+          width
+          height
+          length
+          inStock
+          dimension
+          cargoPlaceNumber
+          productId
+          version
+        }
+        info {
+          id
+          owner
+          team
+          images
+          description
+          productId
+          version
+        }
+        link {
+          id
+          owner
+          team
+          url
+          productId
+          version
+        }
+        status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          createdAt
+          updatedAt
+          version
+        }
+        productWaybillId
+        createdAt
+        updatedAt
+        version
+      }
+      productId
+      version
     }
     store {
+      id
+      owner
+      team
       net
       gross
-      size {
-        w
-        l
-        h
-      }
+      width
+      height
+      length
       inStock
       dimension
       cargoPlaceNumber
+      product {
+        id
+        owner
+        team
+        article
+        name
+        quantity
+        unit
+        costs {
+          id
+          owner
+          team
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+          productId
+          version
+        }
+        store {
+          id
+          owner
+          team
+          net
+          gross
+          width
+          height
+          length
+          inStock
+          dimension
+          cargoPlaceNumber
+          productId
+          version
+        }
+        info {
+          id
+          owner
+          team
+          images
+          description
+          productId
+          version
+        }
+        link {
+          id
+          owner
+          team
+          url
+          productId
+          version
+        }
+        status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          createdAt
+          updatedAt
+          version
+        }
+        productWaybillId
+        createdAt
+        updatedAt
+        version
+      }
+      productId
+      version
     }
     info {
+      id
+      owner
+      team
       images
       description
+      product {
+        id
+        owner
+        team
+        article
+        name
+        quantity
+        unit
+        costs {
+          id
+          owner
+          team
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+          productId
+          version
+        }
+        store {
+          id
+          owner
+          team
+          net
+          gross
+          width
+          height
+          length
+          inStock
+          dimension
+          cargoPlaceNumber
+          productId
+          version
+        }
+        info {
+          id
+          owner
+          team
+          images
+          description
+          productId
+          version
+        }
+        link {
+          id
+          owner
+          team
+          url
+          productId
+          version
+        }
+        status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          createdAt
+          updatedAt
+          version
+        }
+        productWaybillId
+        createdAt
+        updatedAt
+        version
+      }
+      productId
+      version
     }
-    link
+    link {
+      id
+      owner
+      team
+      url
+      product {
+        id
+        owner
+        team
+        article
+        name
+        quantity
+        unit
+        costs {
+          id
+          owner
+          team
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+          productId
+          version
+        }
+        store {
+          id
+          owner
+          team
+          net
+          gross
+          width
+          height
+          length
+          inStock
+          dimension
+          cargoPlaceNumber
+          productId
+          version
+        }
+        info {
+          id
+          owner
+          team
+          images
+          description
+          productId
+          version
+        }
+        link {
+          id
+          owner
+          team
+          url
+          productId
+          version
+        }
+        status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          createdAt
+          updatedAt
+          version
+        }
+        productWaybillId
+        createdAt
+        updatedAt
+        version
+      }
+      productId
+      version
+    }
     status
     waybill {
       id
@@ -684,21 +1238,6 @@ export const onUpdateProduct = `subscription OnUpdateProduct($owner: ID!, $produ
         owner
         team
         waybills {
-          items {
-            id
-            owner
-            team
-            number
-            description
-            contractor
-            purchaseDate
-            deliveryDate
-            waybillSpecId
-            status
-            createdAt
-            updatedAt
-            version
-          }
           nextToken
         }
         version
@@ -713,41 +1252,7 @@ export const onUpdateProduct = `subscription OnUpdateProduct($owner: ID!, $produ
           name
           quantity
           unit
-          costs {
-            purchasePrice
-            clientPrice
-            price
-            amount
-            total
-          }
-          store {
-            net
-            gross
-            inStock
-            dimension
-            cargoPlaceNumber
-          }
-          info {
-            images
-            description
-          }
-          link
           status
-          waybill {
-            id
-            owner
-            team
-            number
-            description
-            contractor
-            purchaseDate
-            deliveryDate
-            waybillSpecId
-            status
-            createdAt
-            updatedAt
-            version
-          }
           productWaybillId
           createdAt
           updatedAt
@@ -777,29 +1282,341 @@ export const onDeleteProduct = `subscription OnDeleteProduct($owner: ID!, $produ
     quantity
     unit
     costs {
+      id
+      owner
+      team
       purchasePrice
       clientPrice
       price
       amount
       total
+      product {
+        id
+        owner
+        team
+        article
+        name
+        quantity
+        unit
+        costs {
+          id
+          owner
+          team
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+          productId
+          version
+        }
+        store {
+          id
+          owner
+          team
+          net
+          gross
+          width
+          height
+          length
+          inStock
+          dimension
+          cargoPlaceNumber
+          productId
+          version
+        }
+        info {
+          id
+          owner
+          team
+          images
+          description
+          productId
+          version
+        }
+        link {
+          id
+          owner
+          team
+          url
+          productId
+          version
+        }
+        status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          createdAt
+          updatedAt
+          version
+        }
+        productWaybillId
+        createdAt
+        updatedAt
+        version
+      }
+      productId
+      version
     }
     store {
+      id
+      owner
+      team
       net
       gross
-      size {
-        w
-        l
-        h
-      }
+      width
+      height
+      length
       inStock
       dimension
       cargoPlaceNumber
+      product {
+        id
+        owner
+        team
+        article
+        name
+        quantity
+        unit
+        costs {
+          id
+          owner
+          team
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+          productId
+          version
+        }
+        store {
+          id
+          owner
+          team
+          net
+          gross
+          width
+          height
+          length
+          inStock
+          dimension
+          cargoPlaceNumber
+          productId
+          version
+        }
+        info {
+          id
+          owner
+          team
+          images
+          description
+          productId
+          version
+        }
+        link {
+          id
+          owner
+          team
+          url
+          productId
+          version
+        }
+        status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          createdAt
+          updatedAt
+          version
+        }
+        productWaybillId
+        createdAt
+        updatedAt
+        version
+      }
+      productId
+      version
     }
     info {
+      id
+      owner
+      team
       images
       description
+      product {
+        id
+        owner
+        team
+        article
+        name
+        quantity
+        unit
+        costs {
+          id
+          owner
+          team
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+          productId
+          version
+        }
+        store {
+          id
+          owner
+          team
+          net
+          gross
+          width
+          height
+          length
+          inStock
+          dimension
+          cargoPlaceNumber
+          productId
+          version
+        }
+        info {
+          id
+          owner
+          team
+          images
+          description
+          productId
+          version
+        }
+        link {
+          id
+          owner
+          team
+          url
+          productId
+          version
+        }
+        status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          createdAt
+          updatedAt
+          version
+        }
+        productWaybillId
+        createdAt
+        updatedAt
+        version
+      }
+      productId
+      version
     }
-    link
+    link {
+      id
+      owner
+      team
+      url
+      product {
+        id
+        owner
+        team
+        article
+        name
+        quantity
+        unit
+        costs {
+          id
+          owner
+          team
+          purchasePrice
+          clientPrice
+          price
+          amount
+          total
+          productId
+          version
+        }
+        store {
+          id
+          owner
+          team
+          net
+          gross
+          width
+          height
+          length
+          inStock
+          dimension
+          cargoPlaceNumber
+          productId
+          version
+        }
+        info {
+          id
+          owner
+          team
+          images
+          description
+          productId
+          version
+        }
+        link {
+          id
+          owner
+          team
+          url
+          productId
+          version
+        }
+        status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          createdAt
+          updatedAt
+          version
+        }
+        productWaybillId
+        createdAt
+        updatedAt
+        version
+      }
+      productId
+      version
+    }
     status
     waybill {
       id
@@ -815,21 +1632,6 @@ export const onDeleteProduct = `subscription OnDeleteProduct($owner: ID!, $produ
         owner
         team
         waybills {
-          items {
-            id
-            owner
-            team
-            number
-            description
-            contractor
-            purchaseDate
-            deliveryDate
-            waybillSpecId
-            status
-            createdAt
-            updatedAt
-            version
-          }
           nextToken
         }
         version
@@ -844,41 +1646,7 @@ export const onDeleteProduct = `subscription OnDeleteProduct($owner: ID!, $produ
           name
           quantity
           unit
-          costs {
-            purchasePrice
-            clientPrice
-            price
-            amount
-            total
-          }
-          store {
-            net
-            gross
-            inStock
-            dimension
-            cargoPlaceNumber
-          }
-          info {
-            images
-            description
-          }
-          link
           status
-          waybill {
-            id
-            owner
-            team
-            number
-            description
-            contractor
-            purchaseDate
-            deliveryDate
-            waybillSpecId
-            status
-            createdAt
-            updatedAt
-            version
-          }
           productWaybillId
           createdAt
           updatedAt
@@ -894,6 +1662,614 @@ export const onDeleteProduct = `subscription OnDeleteProduct($owner: ID!, $produ
     productWaybillId
     createdAt
     updatedAt
+    version
+  }
+}
+`;
+export const onUpdateProductCost = `subscription OnUpdateProductCost($owner: ID!, $productId: ID!) {
+  onUpdateProductCost(owner: $owner, productId: $productId) {
+    id
+    owner
+    team
+    purchasePrice
+    clientPrice
+    price
+    amount
+    total
+    product {
+      id
+      owner
+      team
+      article
+      name
+      quantity
+      unit
+      costs {
+        id
+        owner
+        team
+        purchasePrice
+        clientPrice
+        price
+        amount
+        total
+        product {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
+        productId
+        version
+      }
+      store {
+        id
+        owner
+        team
+        net
+        gross
+        width
+        height
+        length
+        inStock
+        dimension
+        cargoPlaceNumber
+        product {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
+        productId
+        version
+      }
+      info {
+        id
+        owner
+        team
+        images
+        description
+        product {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
+        productId
+        version
+      }
+      link {
+        id
+        owner
+        team
+        url
+        product {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
+        productId
+        version
+      }
+      status
+      waybill {
+        id
+        owner
+        team
+        number
+        description
+        contractor
+        purchaseDate
+        deliveryDate
+        spec {
+          id
+          owner
+          team
+          version
+        }
+        waybillSpecId
+        products {
+          nextToken
+        }
+        status
+        createdAt
+        updatedAt
+        version
+      }
+      productWaybillId
+      createdAt
+      updatedAt
+      version
+    }
+    productId
+    version
+  }
+}
+`;
+export const onUpdateProductStore = `subscription OnUpdateProductStore($owner: ID!, $productId: ID!) {
+  onUpdateProductStore(owner: $owner, productId: $productId) {
+    id
+    owner
+    team
+    net
+    gross
+    width
+    height
+    length
+    inStock
+    dimension
+    cargoPlaceNumber
+    product {
+      id
+      owner
+      team
+      article
+      name
+      quantity
+      unit
+      costs {
+        id
+        owner
+        team
+        purchasePrice
+        clientPrice
+        price
+        amount
+        total
+        product {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
+        productId
+        version
+      }
+      store {
+        id
+        owner
+        team
+        net
+        gross
+        width
+        height
+        length
+        inStock
+        dimension
+        cargoPlaceNumber
+        product {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
+        productId
+        version
+      }
+      info {
+        id
+        owner
+        team
+        images
+        description
+        product {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
+        productId
+        version
+      }
+      link {
+        id
+        owner
+        team
+        url
+        product {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
+        productId
+        version
+      }
+      status
+      waybill {
+        id
+        owner
+        team
+        number
+        description
+        contractor
+        purchaseDate
+        deliveryDate
+        spec {
+          id
+          owner
+          team
+          version
+        }
+        waybillSpecId
+        products {
+          nextToken
+        }
+        status
+        createdAt
+        updatedAt
+        version
+      }
+      productWaybillId
+      createdAt
+      updatedAt
+      version
+    }
+    productId
+    version
+  }
+}
+`;
+export const onUpdateProductInfo = `subscription OnUpdateProductInfo($owner: ID!, $productId: ID!) {
+  onUpdateProductInfo(owner: $owner, productId: $productId) {
+    id
+    owner
+    team
+    images
+    description
+    product {
+      id
+      owner
+      team
+      article
+      name
+      quantity
+      unit
+      costs {
+        id
+        owner
+        team
+        purchasePrice
+        clientPrice
+        price
+        amount
+        total
+        product {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
+        productId
+        version
+      }
+      store {
+        id
+        owner
+        team
+        net
+        gross
+        width
+        height
+        length
+        inStock
+        dimension
+        cargoPlaceNumber
+        product {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
+        productId
+        version
+      }
+      info {
+        id
+        owner
+        team
+        images
+        description
+        product {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
+        productId
+        version
+      }
+      link {
+        id
+        owner
+        team
+        url
+        product {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
+        productId
+        version
+      }
+      status
+      waybill {
+        id
+        owner
+        team
+        number
+        description
+        contractor
+        purchaseDate
+        deliveryDate
+        spec {
+          id
+          owner
+          team
+          version
+        }
+        waybillSpecId
+        products {
+          nextToken
+        }
+        status
+        createdAt
+        updatedAt
+        version
+      }
+      productWaybillId
+      createdAt
+      updatedAt
+      version
+    }
+    productId
+    version
+  }
+}
+`;
+export const onUpdateProductLink = `subscription OnUpdateProductLink($owner: ID!, $productId: ID!) {
+  onUpdateProductLink(owner: $owner, productId: $productId) {
+    id
+    owner
+    team
+    url
+    product {
+      id
+      owner
+      team
+      article
+      name
+      quantity
+      unit
+      costs {
+        id
+        owner
+        team
+        purchasePrice
+        clientPrice
+        price
+        amount
+        total
+        product {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
+        productId
+        version
+      }
+      store {
+        id
+        owner
+        team
+        net
+        gross
+        width
+        height
+        length
+        inStock
+        dimension
+        cargoPlaceNumber
+        product {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
+        productId
+        version
+      }
+      info {
+        id
+        owner
+        team
+        images
+        description
+        product {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
+        productId
+        version
+      }
+      link {
+        id
+        owner
+        team
+        url
+        product {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
+        productId
+        version
+      }
+      status
+      waybill {
+        id
+        owner
+        team
+        number
+        description
+        contractor
+        purchaseDate
+        deliveryDate
+        spec {
+          id
+          owner
+          team
+          version
+        }
+        waybillSpecId
+        products {
+          nextToken
+        }
+        status
+        createdAt
+        updatedAt
+        version
+      }
+      productWaybillId
+      createdAt
+      updatedAt
+      version
+    }
+    productId
     version
   }
 }
