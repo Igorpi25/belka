@@ -152,7 +152,7 @@
 import { mdiDelete, mdiChevronDown } from '@mdi/js'
 
 import { getSpec } from '@/graphql/queries'
-import { createWaybill, updateWaybill, deleteWaybill } from '@/graphql/mutations'
+import { createWaybill, updateWaybill, deleteWaybill, createProduct } from '@/graphql/mutations'
 import { onCreateWaybill, onUpdateWaybill, onDeleteWaybill } from '@/graphql/subscriptions'
 
 import WaybillItem from '@/components/WaybillItem.vue'
@@ -300,6 +300,23 @@ export default {
         this.loading = false
       }
     },
+    async createProduct (productWaybillId) {
+      try {
+        const input = {
+          owner: this.owner,
+          productWaybillId
+        }
+        const response = await this.$Amplify.API.graphql(
+          this.$Amplify.graphqlOperation(createProduct, { input })
+        )
+        if (response && response.errors && response.errors.length > 0) {
+          this.errors = response.errors
+          throw new Error(response.errors.join('\n'))
+        }
+      } catch (error) {
+        throw error
+      }
+    },
     async createWaybill () {
       try {
         this.createLoading = true
@@ -315,6 +332,7 @@ export default {
           this.errors = response.errors
           throw new Error(response.errors.join('\n'))
         }
+        await this.createProduct(response.data.createWaybill.id)
       } catch (error) {
         if (error && error.errors && error.errors.length > 0) {
           this.errors = error.errors
