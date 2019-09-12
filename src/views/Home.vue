@@ -156,11 +156,15 @@ export default {
         this.loading = true
         const response = await this.$Amplify.API.graphql(this.listProjectsQuery)
         if (response && response.errors && response.errors.length > 0) {
+          this.errors = response.errors
           throw new Error(response.errors.join('\n'))
         }
         this.items = response.data.listProjects.items || []
       } catch (error) {
         this.items = null
+        if (error && error.errors && error.errors.length > 0) {
+          this.errors = error.errors
+        }
         this.logger.warn('Error: ', error)
         // this.$Amplify.Analytics.record({
         //   name: 'ListProjectError',
@@ -186,6 +190,9 @@ export default {
           throw new Error(response.errors.join('\n'))
         }
       } catch (error) {
+        if (error && error.errors && error.errors.length > 0) {
+          this.errors = error.errors
+        }
         this.logger.warn('Error: ', error)
         // this.$Amplify.Analytics.record({
         //   name: 'CreateProjectError',

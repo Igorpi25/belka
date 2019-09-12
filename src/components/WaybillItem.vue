@@ -360,6 +360,9 @@ export default {
         this.items = response.data.getWaybill.products.items || []
       } catch (error) {
         this.items = null
+        if (error && error.errors && error.errors.length > 0) {
+          this.errors = error.errors
+        }
         this.logger.warn('Error: ', error)
         // this.$Amplify.Analytics.record({
         //   name: 'GetWaybillError',
@@ -386,6 +389,9 @@ export default {
           throw new Error(response.errors.join('\n'))
         }
       } catch (error) {
+        if (error && error.errors && error.errors.length > 0) {
+          this.errors = error.errors
+        }
         this.logger.warn('Error: ', error)
         // this.$Amplify.Analytics.record({
         //   name: 'CreateProductError',
@@ -417,6 +423,9 @@ export default {
           throw new Error(response.errors.join('\n'))
         }
       } catch (error) {
+        if (error && error.errors && error.errors.length > 0) {
+          this.errors = error.errors
+        }
         this.logger.warn('Error: ', error)
         // this.$Amplify.Analytics.record({
         //   name: 'UpdateProductError',
@@ -447,6 +456,9 @@ export default {
         }
       } catch (error) {
         if (error === 'not_confirmed') return
+        if (error && error.errors && error.errors.length > 0) {
+          this.errors = error.errors
+        }
         this.logger.warn('Error: ', error)
         // this.$Amplify.Analytics.record({
         //   name: 'DeleteProductError',

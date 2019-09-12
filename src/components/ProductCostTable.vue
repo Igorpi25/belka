@@ -155,6 +155,9 @@ export default {
           throw new Error(response.errors.join('\n'))
         }
       } catch (error) {
+        if (error && error.errors && error.errors.length > 0) {
+          this.errors = error.errors
+        }
         this.logger.warn('Error: ', error)
         // this.$Amplify.Analytics.record({
         //   name: 'UpdateProductCostError',
