@@ -121,7 +121,7 @@ export const getWaybill = `query GetWaybill($id: ID!) {
           price
           amount
           total
-          productId
+          waybillId
           version
         }
         store {
@@ -136,7 +136,7 @@ export const getWaybill = `query GetWaybill($id: ID!) {
           inStock
           dimension
           cargoPlaceNumber
-          productId
+          waybillId
           version
         }
         info {
@@ -145,7 +145,7 @@ export const getWaybill = `query GetWaybill($id: ID!) {
           team
           images
           description
-          productId
+          waybillId
           version
         }
         link {
@@ -153,7 +153,7 @@ export const getWaybill = `query GetWaybill($id: ID!) {
           owner
           team
           url
-          productId
+          waybillId
           version
         }
         status

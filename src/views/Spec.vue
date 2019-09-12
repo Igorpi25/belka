@@ -19,11 +19,49 @@
             :items="items"
             :single-expand="false"
             :expanded.sync="expanded"
+            :mobile-breakpoint="0"
             hide-default-header
+            hide-default-footer
             item-key="id"
             show-expand
             class="elevation-1 v-data-table--custom-expand"
           >
+            <template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
+              <div class="d-flex align-center h-full">
+                <v-tooltip right>
+                  <template v-slot:activator="{ on }">
+                    <div
+                      :class="[
+                        'h-full',
+                        item.status === 'IN_PRODUCTION'
+                          ? 'orange' : item.status === 'IN_PROCESSING'
+                            ? 'pink' : item.status === 'IN_STOCK'
+                              ? 'green' : 'grey'
+                      ]"
+                      style="width: 4px;"
+                      v-on="on"
+                    />
+                  </template>
+                  <span>{{ item.status }}</span>
+                </v-tooltip>
+                <div class="d-flex align-center px-2">
+                  <v-icon
+                    :class="[
+                      { 'v-data-table__expand-icon--active': isExpanded },
+                      'v-data-table__expand-icon v-icon--link'
+                    ]"
+                    @click="expand(!isExpanded)"
+                  >
+                    {{ icons.mdiChevronDown }}
+                  </v-icon>
+                </div>
+              </div>
+            </template>
+            <template v-slot:expanded-item="{ item, headers }">
+              <td :colspan="headers.length">
+                <WaybillItem :waybill-id="item.id" />
+              </td>
+            </template>
             <template v-slot:item.number="{ item }">
               <Editable
                 :value="item.number"
@@ -72,17 +110,6 @@
                 @input="updateWaybill({ id: item.id, deliveryDate: $event, expectedVersion: item.version })"
               />
             </template>
-            <template v-slot:item.createdAt="{ item }">
-              {{ item.createdAt | localDate }}
-            </template>
-            <template v-slot:item.updatedAt="{ item }">
-              {{ item.updatedAt | localDate }}
-            </template>
-            <template v-slot:expanded-item="{ item, headers }">
-              <td :colspan="headers.length">
-                <WaybillItem :id="item.id" />
-              </td>
-            </template>
             <template v-slot:item.action="{ item }">
               <v-scale-transition mode="out-in">
                 <v-progress-circular
@@ -108,7 +135,7 @@
             outlined
             rounded
             color="primary"
-            class="mt-2"
+            class="mt-3"
             @click="createWaybill"
           >
             <v-icon left>mdi-plus</v-icon>
@@ -122,7 +149,7 @@
 </template>
 
 <script>
-import { mdiDelete } from '@mdi/js'
+import { mdiDelete, mdiChevronDown } from '@mdi/js'
 
 import { getSpec } from '@/graphql/queries'
 import { createWaybill, updateWaybill, deleteWaybill } from '@/graphql/mutations'
@@ -141,7 +168,8 @@ export default {
   },
   data: () => ({
     icons: {
-      mdiDelete
+      mdiDelete,
+      mdiChevronDown
     },
     loading: false,
     createLoading: null,
@@ -152,10 +180,9 @@ export default {
     errors: [],
     headers: [
       { text: 'Number', value: 'number', width: 140 },
-      { text: 'Purchase Date', value: 'purchaseDate', width: 130 },
+      { text: 'Purchase Date', value: 'purchaseDate', width: 160, class: 'date-cell' },
       { text: 'Contractor', value: 'contractor' },
-      { text: 'Delivery Date', value: 'deliveryDate', width: 130 },
-      { text: 'Status', value: 'status', width: 100 },
+      { text: 'Delivery Date', value: 'deliveryDate', width: 160 },
       { text: '', value: 'action', sortable: false, width: 48 },
     ],
   }),
@@ -365,8 +392,10 @@ export default {
 .v-data-table.v-data-table--custom-expand .expanded.expanded__content:hover {
   background: transparent;
 }
-.v-data-table.v-data-table--custom-expand .expanded.expanded__content td {
-  padding-top: 12px;
-  padding-bottom: 12px;
+.v-data-table--custom-expand > .v-data-table__wrapper > table > tbody > tr:not(.expanded__content) > td:first-child {
+  padding: 0;
+}
+.v-data-table--custom-expand > .v-data-table__wrapper > table > tbody > tr:not(.expanded__content) > td:first-child:not(.v-data-table__mobile-row) {
+  width: 48px;
 }
 </style>

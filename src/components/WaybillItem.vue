@@ -1,106 +1,190 @@
 <template>
   <div>
-    <div v-if="loading">Загрузка...</div>
-
-    <div v-else-if="errors.length > 0">
+    <div v-if="errors.length > 0">
       <ErrorMessages :items.sync="errors" />
     </div>
 
     <div v-else-if="items">
-      <v-data-table
-        :headers="headers"
-        :items="items"
-        hide-default-footer
-      >
-        <template v-slot:body="{ items, headers }">
-          <tbody>
-            <tr v-for="(item, index) in items" :key="index">
-              <td class="grey--text">{{ index + 1 }}</td>
+      <div>
+        <div class="d-flex">
+          <div :style="{ width: productsTableWidth + 'px' }" />
+          <v-tabs
+            v-model="tab"
+            grow
+          >
+            <v-tab>Цены</v-tab>
+            <v-tab>Склад</v-tab>
+            <v-tab>Пояснения</v-tab>
+            <v-tab>Ссылка</v-tab>
+          </v-tabs>
+        </div>
+        <div>
+          <ProductCostTable
+            v-if="tab === 0"
+            :productHeaders="headers"
+            :products="items"
+            :waybill-id="waybillId"
+            :loading="loading"
+          >
+            <template v-slot:product="{ item, index }">
+              <ProductTableCellIndex
+                :item="item"
+                :index="index"
+              />
               <td></td>
-              <td>
-                <Editable
-                  :value="item.name"
-                  :version="item.version"
-                  :placeholder="headers[2].text"
-                  arrow-move
-                  @input="updateProduct({ id: item.id, name: $event, expectedVersion: item.version })"
-                />
-              </td>
-              <td>
-                <Editable
-                  :value="item.article"
-                  :version="item.version"
-                  :placeholder="headers[3].text"
-                  arrow-move
-                  @input="updateProduct({ id: item.id, article: $event, expectedVersion: item.version })"
-                />
-              </td>
-              <td>
-                <Editable
-                  :value="item.quantity"
-                  :version="item.version"
-                  :placeholder="headers[4].text"
-                  type="number"
-                  arrow-move
-                  @input="updateProduct({ id: item.id, quantity: $event, expectedVersion: item.version })"
-                />
-              </td>
-              <td>
-                <!-- SET DEFAULT VALUE ON CREATE -->
-                <Editable
-                  :value="item.costs && item.costs.purchasePrice"
-                  :version="item.version"
-                  type="number"
-                  arrow-move
-                  @input="updateProduct({ id: item.id, costs: { purchasePrice: $event }, expectedVersion: item.version })"
-                />
-              </td>
-              <td>
-                {{ item.costs && item.costs.amount }}
-              </td>
-              <td>
-                 <!-- SET DEFAULT VALUE ON CREATE -->
-                <Editable
-                  :value="item.costs && item.costs.clientPrice"
-                  :version="item.version"
-                  type="number"
-                  arrow-move
-                  @input="updateProduct({ id: item.id, costs: { clientPrice: $event }, expectedVersion: item.version })"
-                />
-              </td>
-              <td>
-                {{ item.costs && item.costs.total }}
-              </td>
-              <td>{{ item.status }}</td>
-              <td>
-                <v-scale-transition mode="out-in">
-                  <v-progress-circular
-                    v-if="deleteLoading === item.id"
-                    :width="2"
-                    :size="16"
-                    indeterminate
-                    color="primary"
-                  ></v-progress-circular>
-                  <v-icon
-                    v-else
-                    small
-                    @click="deleteProduct({ id: item.id, expectedVersion: item.version })"
-                  >
-                    {{ icons.mdiDelete }}
-                  </v-icon>
-                </v-scale-transition>
-              </td>
-            </tr>
-          </tbody>
-        </template>
-      </v-data-table>
+              <ProductTableCellEditable
+                :item="item"
+                update-prop="name"
+                @update="updateProduct"
+              />
+              <ProductTableCellEditable
+                :item="item"
+                update-prop="article"
+                @update="updateProduct"
+              />
+              <!-- SET DEFAULT VALUE ON CREATE -->
+              <ProductTableCellEditable
+                :item="item"
+                update-prop="quantity"
+                type="number"
+                @update="updateProduct"
+              />
+            </template>
+            <template v-slot:action="{ item }">
+              <ProductTableCellAction
+                :item="item"
+                :loading="deleteLoading"
+                @delete="deleteProduct"
+              />
+            </template>
+          </ProductCostTable>
+          <ProductStoreTable
+            v-else-if="tab === 1"
+            :productHeaders="headers"
+            :products="items"
+            :waybill-id="waybillId"
+            :loading="loading"
+          >
+            <template v-slot:product="{ item, index }">
+              <ProductTableCellIndex
+                :item="item"
+                :index="index"
+              />
+              <td></td>
+              <ProductTableCellEditable
+                :item="item"
+                update-prop="name"
+                @update="updateProduct"
+              />
+              <ProductTableCellEditable
+                :item="item"
+                update-prop="article"
+                @update="updateProduct"
+              />
+              <!-- SET DEFAULT VALUE ON CREATE -->
+              <ProductTableCellEditable
+                :item="item"
+                update-prop="quantity"
+                type="number"
+                @update="updateProduct"
+              />
+            </template>
+            <template v-slot:action="{ item }">
+              <ProductTableCellAction
+                :item="item"
+                :loading="deleteLoading"
+                @delete="deleteProduct"
+              />
+            </template>
+          </ProductStoreTable>
+          <ProductInfoTable
+            v-else-if="tab === 2"
+            :productHeaders="headers"
+            :products="items"
+            :waybill-id="waybillId"
+            :loading="loading"
+          >
+            <template v-slot:product="{ item, index }">
+              <ProductTableCellIndex
+                :item="item"
+                :index="index"
+              />
+              <td></td>
+              <ProductTableCellEditable
+                :item="item"
+                update-prop="name"
+                @update="updateProduct"
+              />
+              <ProductTableCellEditable
+                :item="item"
+                update-prop="article"
+                @update="updateProduct"
+              />
+              <!-- SET DEFAULT VALUE ON CREATE -->
+              <ProductTableCellEditable
+                :item="item"
+                update-prop="quantity"
+                type="number"
+                @update="updateProduct"
+              />
+            </template>
+            <template v-slot:action="{ item }">
+              <ProductTableCellAction
+                :item="item"
+                :loading="deleteLoading"
+                @delete="deleteProduct"
+              />
+            </template>
+          </ProductInfoTable>
+          <ProductLinkTable
+            v-else-if="tab === 3"
+            :productHeaders="headers"
+            :items="items"
+            :products="items"
+            :waybill-id="waybillId"
+            :loading="loading"
+          >
+            <template v-slot:product="{ item, index }">
+              <ProductTableCellIndex
+                :item="item"
+                :index="index"
+              />
+              <td></td>
+              <ProductTableCellEditable
+                :item="item"
+                update-prop="name"
+                @update="updateProduct"
+              />
+              <ProductTableCellEditable
+                :item="item"
+                update-prop="article"
+                @update="updateProduct"
+              />
+              <!-- SET DEFAULT VALUE ON CREATE -->
+              <ProductTableCellEditable
+                :item="item"
+                update-prop="quantity"
+                type="number"
+                @update="updateProduct"
+              />
+            </template>
+            <template v-slot:action="{ item }">
+              <ProductTableCellAction
+                :item="item"
+                :loading="deleteLoading"
+                @delete="deleteProduct"
+              />
+            </template>
+          </ProductLinkTable>
+        </div>
+      </div>
       <v-btn
         :ripple="false"
         :loading="createLoading"
         outlined
         rounded
         color="primary"
-        class="mt-2"
+        class="my-2"
         small
         @click="createProduct"
       >
@@ -123,7 +207,14 @@ import {
 import { onCreateProduct, onUpdateProduct, onDeleteProduct } from '@/graphql/subscriptions'
 
 import ErrorMessages from '@/components/ErrorMessages.vue'
-import Editable from '@/components/Editable.vue'
+import ProductCostTable from '@/components/ProductCostTable.vue'
+import ProductStoreTable from '@/components/ProductStoreTable.vue'
+import ProductInfoTable from '@/components/ProductInfoTable.vue'
+import ProductLinkTable from '@/components/ProductLinkTable.vue'
+
+import ProductTableCellIndex from '@/components/ProductTableCellIndex.vue'
+import ProductTableCellEditable from '@/components/ProductTableCellEditable.vue'
+import ProductTableCellAction from '@/components/ProductTableCellAction.vue'
 
 import { confirmDialog } from '@/utils/helpers'
 
@@ -131,15 +222,22 @@ export default {
   name: 'WaybillItem',
   components: {
     ErrorMessages,
-    Editable,
+    ProductCostTable,
+    ProductStoreTable,
+    ProductInfoTable,
+    ProductLinkTable,
+    ProductTableCellIndex,
+    ProductTableCellEditable,
+    ProductTableCellAction,
   },
   props: {
-    id: {
+    waybillId: {
       type: String,
       required: true
     }
   },
   data: () => ({
+    tab: 0,
     icons: {
       mdiDelete
     },
@@ -155,13 +253,8 @@ export default {
       { text: 'Наименование', sortable: false, value: 'name' },
       { text: 'Модель', value: 'article', sortable: false, width: 140 },
       { text: 'Кол-во', value: 'quantity', sortable: false, width: 120 },
-      { text: 'Цена закупки', value: 'purchasePrice', sortable: false, width: 120 },
-      { text: 'Стоимость', value: 'amount', sortable: false, width: 120 },
-      { text: 'Для клиента', value: 'clientPrice', sortable: false, width: 120 },
-      { text: 'Стоимость', value: 'clientAmount', sortable: false, width: 120 },
-      { text: 'Статус', value: 'status', sortable: false, width: 100 },
-      { text: '', value: 'action', sortable: false, width: 48 },
     ],
+    productsTableWidth: 520
   }),
   computed: {
     owner () {
@@ -169,27 +262,32 @@ export default {
     },
     getWaybillQuery () {
       return this.$Amplify.graphqlOperation(getWaybill, {
-        id: this.id
+        id: this.waybillId
       })
     },
     createProductSubscription () {
       return this.$Amplify.graphqlOperation(onCreateProduct, {
         owner: this.owner,
-        productWaybillId: this.id
+        productWaybillId: this.waybillId
       })
     },
     updateProductSubscription () {
       return this.$Amplify.graphqlOperation(onUpdateProduct, {
         owner: this.owner,
-        productWaybillId: this.id
+        productWaybillId: this.waybillId
       })
     },
     deleteProductSubscription () {
       return this.$Amplify.graphqlOperation(onDeleteProduct, {
         owner: this.owner,
-        productWaybillId: this.id
+        productWaybillId: this.waybillId
       })
     },
+  },
+  watch: {
+    tab () {
+      this.getWaybill()
+    }
   },
   created () {
     this.logger = new this.$Amplify.Logger('WaybillItem')
@@ -238,6 +336,8 @@ export default {
       const newItem = newData.onUpdateProduct
       const index = this.items.findIndex(el => el.id === newItem.id)
       if (index !== -1) {
+        // on update product, should't update `cost`, `store`, `info`, `link`
+        // they uptated by own subs?
         this.items.splice(index, 1, newItem)
       }
     },
@@ -276,7 +376,7 @@ export default {
         this.createLoading = true
         const input = {
           owner: this.owner,
-          productWaybillId: this.id
+          productWaybillId: this.waybillId
         }
         const response = await this.$Amplify.API.graphql(
           this.$Amplify.graphqlOperation(createProduct, { input })

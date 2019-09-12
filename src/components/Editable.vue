@@ -6,6 +6,8 @@
       :id="id"
       :placeholder="placeholder"
       :class="['editable', { 'editable--focused': isFocused, 'editable--outlined': outlined }]"
+      :min="min"
+      :max="max"
       type="number"
       v-on="listeners"
       @keydown="onKeyDown"
@@ -61,6 +63,14 @@ export default {
     type: {
       type: String,
       default: 'text'
+    },
+    min: {
+      type: String,
+      default: null
+    },
+    max: {
+      type: String,
+      default: null
     },
     outlined: {
       type: Boolean,

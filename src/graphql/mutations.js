@@ -61,80 +61,7 @@ export const createProduct = `mutation CreateProduct($input: CreateProductInput!
       price
       amount
       total
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          purchasePrice
-          clientPrice
-          price
-          amount
-          total
-          productId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          productId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          productId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          productId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      productId
+      waybillId
       version
     }
     store {
@@ -149,80 +76,7 @@ export const createProduct = `mutation CreateProduct($input: CreateProductInput!
       inStock
       dimension
       cargoPlaceNumber
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          purchasePrice
-          clientPrice
-          price
-          amount
-          total
-          productId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          productId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          productId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          productId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      productId
+      waybillId
       version
     }
     info {
@@ -231,80 +85,7 @@ export const createProduct = `mutation CreateProduct($input: CreateProductInput!
       team
       images
       description
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          purchasePrice
-          clientPrice
-          price
-          amount
-          total
-          productId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          productId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          productId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          productId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      productId
+      waybillId
       version
     }
     link {
@@ -312,80 +93,7 @@ export const createProduct = `mutation CreateProduct($input: CreateProductInput!
       owner
       team
       url
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          purchasePrice
-          clientPrice
-          price
-          amount
-          total
-          productId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          productId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          productId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          productId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      productId
+      waybillId
       version
     }
     status
@@ -572,7 +280,7 @@ export const createWaybill = `mutation CreateWaybill($input: CreateWaybillInput!
           price
           amount
           total
-          productId
+          waybillId
           version
         }
         store {
@@ -587,7 +295,7 @@ export const createWaybill = `mutation CreateWaybill($input: CreateWaybillInput!
           inStock
           dimension
           cargoPlaceNumber
-          productId
+          waybillId
           version
         }
         info {
@@ -596,7 +304,7 @@ export const createWaybill = `mutation CreateWaybill($input: CreateWaybillInput!
           team
           images
           description
-          productId
+          waybillId
           version
         }
         link {
@@ -604,7 +312,7 @@ export const createWaybill = `mutation CreateWaybill($input: CreateWaybillInput!
           owner
           team
           url
-          productId
+          waybillId
           version
         }
         status
@@ -689,7 +397,7 @@ export const updateWaybill = `mutation UpdateWaybill($input: UpdateWaybillInput!
           price
           amount
           total
-          productId
+          waybillId
           version
         }
         store {
@@ -704,7 +412,7 @@ export const updateWaybill = `mutation UpdateWaybill($input: UpdateWaybillInput!
           inStock
           dimension
           cargoPlaceNumber
-          productId
+          waybillId
           version
         }
         info {
@@ -713,7 +421,7 @@ export const updateWaybill = `mutation UpdateWaybill($input: UpdateWaybillInput!
           team
           images
           description
-          productId
+          waybillId
           version
         }
         link {
@@ -721,7 +429,7 @@ export const updateWaybill = `mutation UpdateWaybill($input: UpdateWaybillInput!
           owner
           team
           url
-          productId
+          waybillId
           version
         }
         status
@@ -806,7 +514,7 @@ export const deleteWaybill = `mutation DeleteWaybill($input: DeleteWaybillInput!
           price
           amount
           total
-          productId
+          waybillId
           version
         }
         store {
@@ -821,7 +529,7 @@ export const deleteWaybill = `mutation DeleteWaybill($input: DeleteWaybillInput!
           inStock
           dimension
           cargoPlaceNumber
-          productId
+          waybillId
           version
         }
         info {
@@ -830,7 +538,7 @@ export const deleteWaybill = `mutation DeleteWaybill($input: DeleteWaybillInput!
           team
           images
           description
-          productId
+          waybillId
           version
         }
         link {
@@ -838,7 +546,7 @@ export const deleteWaybill = `mutation DeleteWaybill($input: DeleteWaybillInput!
           owner
           team
           url
-          productId
+          waybillId
           version
         }
         status
@@ -889,80 +597,7 @@ export const updateProduct = `mutation UpdateProduct($input: UpdateProductInput!
       price
       amount
       total
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          purchasePrice
-          clientPrice
-          price
-          amount
-          total
-          productId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          productId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          productId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          productId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      productId
+      waybillId
       version
     }
     store {
@@ -977,80 +612,7 @@ export const updateProduct = `mutation UpdateProduct($input: UpdateProductInput!
       inStock
       dimension
       cargoPlaceNumber
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          purchasePrice
-          clientPrice
-          price
-          amount
-          total
-          productId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          productId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          productId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          productId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      productId
+      waybillId
       version
     }
     info {
@@ -1059,80 +621,7 @@ export const updateProduct = `mutation UpdateProduct($input: UpdateProductInput!
       team
       images
       description
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          purchasePrice
-          clientPrice
-          price
-          amount
-          total
-          productId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          productId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          productId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          productId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      productId
+      waybillId
       version
     }
     link {
@@ -1140,80 +629,7 @@ export const updateProduct = `mutation UpdateProduct($input: UpdateProductInput!
       owner
       team
       url
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          purchasePrice
-          clientPrice
-          price
-          amount
-          total
-          productId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          productId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          productId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          productId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      productId
+      waybillId
       version
     }
     status
@@ -1282,80 +698,7 @@ export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!
       price
       amount
       total
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          purchasePrice
-          clientPrice
-          price
-          amount
-          total
-          productId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          productId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          productId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          productId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      productId
+      waybillId
       version
     }
     store {
@@ -1370,80 +713,7 @@ export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!
       inStock
       dimension
       cargoPlaceNumber
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          purchasePrice
-          clientPrice
-          price
-          amount
-          total
-          productId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          productId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          productId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          productId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      productId
+      waybillId
       version
     }
     info {
@@ -1452,80 +722,7 @@ export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!
       team
       images
       description
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          purchasePrice
-          clientPrice
-          price
-          amount
-          total
-          productId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          productId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          productId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          productId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      productId
+      waybillId
       version
     }
     link {
@@ -1533,80 +730,7 @@ export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!
       owner
       team
       url
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          purchasePrice
-          clientPrice
-          price
-          amount
-          total
-          productId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          productId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          productId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          productId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      productId
+      waybillId
       version
     }
     status
@@ -1667,144 +791,7 @@ export const updateProductCost = `mutation UpdateProductCost($input: UpdateProdu
     price
     amount
     total
-    product {
-      id
-      owner
-      team
-      article
-      name
-      quantity
-      unit
-      cost {
-        id
-        owner
-        team
-        purchasePrice
-        clientPrice
-        price
-        amount
-        total
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        productId
-        version
-      }
-      store {
-        id
-        owner
-        team
-        net
-        gross
-        width
-        height
-        length
-        inStock
-        dimension
-        cargoPlaceNumber
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        productId
-        version
-      }
-      info {
-        id
-        owner
-        team
-        images
-        description
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        productId
-        version
-      }
-      link {
-        id
-        owner
-        team
-        url
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        productId
-        version
-      }
-      status
-      waybill {
-        id
-        owner
-        team
-        number
-        description
-        contractor
-        purchaseDate
-        deliveryDate
-        spec {
-          id
-          owner
-          team
-        }
-        waybillSpecId
-        products {
-          nextToken
-        }
-        status
-        createdAt
-        updatedAt
-        version
-      }
-      productWaybillId
-      createdAt
-      updatedAt
-      version
-    }
-    productId
+    waybillId
     version
   }
 }
@@ -1822,144 +809,7 @@ export const updateProductStore = `mutation UpdateProductStore($input: UpdatePro
     inStock
     dimension
     cargoPlaceNumber
-    product {
-      id
-      owner
-      team
-      article
-      name
-      quantity
-      unit
-      cost {
-        id
-        owner
-        team
-        purchasePrice
-        clientPrice
-        price
-        amount
-        total
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        productId
-        version
-      }
-      store {
-        id
-        owner
-        team
-        net
-        gross
-        width
-        height
-        length
-        inStock
-        dimension
-        cargoPlaceNumber
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        productId
-        version
-      }
-      info {
-        id
-        owner
-        team
-        images
-        description
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        productId
-        version
-      }
-      link {
-        id
-        owner
-        team
-        url
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        productId
-        version
-      }
-      status
-      waybill {
-        id
-        owner
-        team
-        number
-        description
-        contractor
-        purchaseDate
-        deliveryDate
-        spec {
-          id
-          owner
-          team
-        }
-        waybillSpecId
-        products {
-          nextToken
-        }
-        status
-        createdAt
-        updatedAt
-        version
-      }
-      productWaybillId
-      createdAt
-      updatedAt
-      version
-    }
-    productId
+    waybillId
     version
   }
 }
@@ -1971,144 +821,7 @@ export const updateProductInfo = `mutation UpdateProductInfo($input: UpdateProdu
     team
     images
     description
-    product {
-      id
-      owner
-      team
-      article
-      name
-      quantity
-      unit
-      cost {
-        id
-        owner
-        team
-        purchasePrice
-        clientPrice
-        price
-        amount
-        total
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        productId
-        version
-      }
-      store {
-        id
-        owner
-        team
-        net
-        gross
-        width
-        height
-        length
-        inStock
-        dimension
-        cargoPlaceNumber
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        productId
-        version
-      }
-      info {
-        id
-        owner
-        team
-        images
-        description
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        productId
-        version
-      }
-      link {
-        id
-        owner
-        team
-        url
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        productId
-        version
-      }
-      status
-      waybill {
-        id
-        owner
-        team
-        number
-        description
-        contractor
-        purchaseDate
-        deliveryDate
-        spec {
-          id
-          owner
-          team
-        }
-        waybillSpecId
-        products {
-          nextToken
-        }
-        status
-        createdAt
-        updatedAt
-        version
-      }
-      productWaybillId
-      createdAt
-      updatedAt
-      version
-    }
-    productId
+    waybillId
     version
   }
 }
@@ -2119,144 +832,7 @@ export const updateProductLink = `mutation UpdateProductLink($input: UpdateProdu
     owner
     team
     url
-    product {
-      id
-      owner
-      team
-      article
-      name
-      quantity
-      unit
-      cost {
-        id
-        owner
-        team
-        purchasePrice
-        clientPrice
-        price
-        amount
-        total
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        productId
-        version
-      }
-      store {
-        id
-        owner
-        team
-        net
-        gross
-        width
-        height
-        length
-        inStock
-        dimension
-        cargoPlaceNumber
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        productId
-        version
-      }
-      info {
-        id
-        owner
-        team
-        images
-        description
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        productId
-        version
-      }
-      link {
-        id
-        owner
-        team
-        url
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        productId
-        version
-      }
-      status
-      waybill {
-        id
-        owner
-        team
-        number
-        description
-        contractor
-        purchaseDate
-        deliveryDate
-        spec {
-          id
-          owner
-          team
-        }
-        waybillSpecId
-        products {
-          nextToken
-        }
-        status
-        createdAt
-        updatedAt
-        version
-      }
-      productWaybillId
-      createdAt
-      updatedAt
-      version
-    }
-    productId
+    waybillId
     version
   }
 }

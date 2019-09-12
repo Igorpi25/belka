@@ -6,14 +6,14 @@
     <v-hover v-else v-slot:default="{ hover }">
       <v-card :elevation="hover ? 6 : 2">
         <v-card-title class="flex">
-          <h4 class="flex-grow-1">
+          <div class="flex-grow-1 headline font-weight-bold">
             <Editable
               :value="item.name"
               :version="item.version"
               placeholder="Name"
               @input="updateProject({ name: $event })"
             />
-          </h4>
+          </div>
           <v-menu bottom left>
             <template v-slot:activator="{ on }">
               <v-btn

@@ -144,8 +144,29 @@ export default {
 .w-full {
   width: 100%;
 }
+.h-full {
+  height: 100%;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+}
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
+.overflow-y-auto {
+  overflow-y: auto;
+}
+.overflow-y-hidden {
+  overflow-y: hidden;
+}
+
 .v-toolbar__title.headline a {
   color: #ffffff;
   text-decoration: none;
+}
+
+.v-data-table--overflow-hidden > .v-data-table__wrapper {
+  overflow: hidden;
 }
 </style>

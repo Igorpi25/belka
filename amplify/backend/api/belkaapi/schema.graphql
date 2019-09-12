@@ -61,7 +61,7 @@ type Waybill
   purchaseDate: String
   deliveryDate: String
   spec: Spec @connection(name: "SpecWaybills")
-  waybillSpecId: ID
+  waybillSpecId: ID!
   products: [Product!] @connection(name: "WaybillProducts")
   status: WaybillStatus
   createdAt: String
@@ -90,13 +90,13 @@ type Product
   quantity: Int
   # TODO add connection with type ProductUnit, array in project
   unit: String
-  cost: ProductCost @connection(name: "ProductCost")
-  store: ProductStore @connection(name: "ProductStore")
-  info: ProductInfo @connection(name: "ProductInfo")
-  link: ProductLink @connection(name: "ProductLink")
+  cost: ProductCost @connection
+  store: ProductStore @connection
+  info: ProductInfo @connection
+  link: ProductLink @connection
   status: ProductStatus
   waybill: Waybill @connection(name: "WaybillProducts")
-  productWaybillId: ID
+  productWaybillId: ID!
   createdAt: String
 	updatedAt: String
 }
@@ -123,8 +123,8 @@ type ProductCost
   price: Float
   amount: Float
   total: Float
-  product: Product @connection(name: "ProductCost", keyField: "productId")
-  productId: ID
+  # need for filter on subscription
+  waybillId: ID!
 }
 
 type ProductStore
@@ -147,8 +147,8 @@ type ProductStore
   dimension: Float
   # TODO add connection with type CargoPlace, @model
   cargoPlaceNumber: Int
-  product: Product @connection(name: "ProductStore", keyField: "productId")
-  productId: ID
+  # need for filter on subscription
+  waybillId: ID!
 }
 
 type ProductInfo
@@ -164,8 +164,8 @@ type ProductInfo
   team: [String!]
   images: [String]
   description: String
-  product: Product @connection(name: "ProductInfo", keyField: "productId")
-  productId: ID
+  # need for filter on subscription
+  waybillId: ID!
 }
 
 type ProductLink
@@ -180,8 +180,8 @@ type ProductLink
   owner: String
   team: [String!]
   url: String
-  product: Product @connection(name: "ProductLink", keyField: "productId")
-  productId: ID
+  # need for filter on subscription
+  waybillId: ID!
 }
 
 type Subscription {
@@ -191,10 +191,10 @@ type Subscription {
   onCreateProduct(owner: ID!, productWaybillId: ID!): Product @aws_subscribe(mutations: ["createProduct"])
   onUpdateProduct(owner: ID!, productWaybillId: ID!): Product @aws_subscribe(mutations: ["updateProduct"])
   onDeleteProduct(owner: ID!, productWaybillId: ID!): Product @aws_subscribe(mutations: ["deleteProduct"])
-  onUpdateProductCost(owner: ID!, productId: ID!): ProductCost @aws_subscribe(mutations: ["updateProductCost"])
-  onUpdateProductStore(owner: ID!, productId: ID!): ProductStore @aws_subscribe(mutations: ["updateProductStore"])
-  onUpdateProductInfo(owner: ID!, productId: ID!): ProductInfo @aws_subscribe(mutations: ["updateProductInfo"])
-  onUpdateProductLink(owner: ID!, productId: ID!): ProductLink @aws_subscribe(mutations: ["updateProductLink"])
+  onUpdateProductCost(owner: ID!, waybillId: ID!): ProductCost @aws_subscribe(mutations: ["updateProductCost"])
+  onUpdateProductStore(owner: ID!, waybillId: ID!): ProductStore @aws_subscribe(mutations: ["updateProductStore"])
+  onUpdateProductInfo(owner: ID!, waybillId: ID!): ProductInfo @aws_subscribe(mutations: ["updateProductInfo"])
+  onUpdateProductLink(owner: ID!, waybillId: ID!): ProductLink @aws_subscribe(mutations: ["updateProductLink"])
   onCreateProject(owner: ID!): Project @aws_subscribe(mutations: ["createProject"])
 }
 

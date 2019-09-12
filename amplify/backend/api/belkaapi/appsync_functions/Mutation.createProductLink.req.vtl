@@ -15,6 +15,7 @@ $util.qr($input.put("version", 1))
 ## [End] Setting "version" to 1. **
 
 ## [Start] Prepare DynamoDB PutItem Request. **
+$util.qr($input.put("waybillId", $util.defaultIfNullOrBlank($ctx.stash.input.productWaybillId, $ctx.stash.waybillId)))
 $util.qr($input.put("createdAt", $util.time.nowISO8601()))
 $util.qr($input.put("updatedAt", $util.time.nowISO8601()))
 $util.qr($input.put("__typename", "ProductLink"))
