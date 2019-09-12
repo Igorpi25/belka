@@ -14,6 +14,9 @@
 $util.qr($input.put("version", 1))
 ## [End] Setting "version" to 1. **
 
+## Default values
+$util.qr($input.put("quantity", 0))
+
 ## Connections
 $util.qr($input.put("productCostId", $ctx.stash.productCostId))
 $util.qr($input.put("productStoreId", $ctx.stash.productStoreId))

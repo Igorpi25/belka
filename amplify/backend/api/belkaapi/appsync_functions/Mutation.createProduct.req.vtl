@@ -8,6 +8,11 @@ $util.qr($ctx.stash.input.put("productStoreId", $ctx.stash.productStoreId))
 $util.qr($ctx.stash.input.put("productInfoId", $ctx.stash.productInfoId))
 $util.qr($ctx.stash.input.put("productLinkId", $ctx.stash.productLinkId))
 
+## Default values
+#if ( (! $context.stash.input.containsKey('quantity')) || ( ! $context.stash.input.quantity) || $context.stash.input.quantity < 0 )
+  $util.qr($context.stash.input.put("quantity", 0))
+#end
+
 ## [Start] Prepare DynamoDB PutItem Request. **
 $util.qr($context.stash.input.put("status", $util.defaultIfNullOrBlank($ctx.stash.input.status, "IN_PRODUCTION")))
 $util.qr($context.stash.input.put("systemState", "CREATED"))

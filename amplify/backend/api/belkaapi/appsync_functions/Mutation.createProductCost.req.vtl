@@ -14,6 +14,12 @@
 $util.qr($input.put("version", 1))
 ## [End] Setting "version" to 1. **
 
+## Default values
+$util.qr($input.put("price", 0))
+$util.qr($input.put("clientPrice", 0))
+$util.qr($input.put("amount", 0))
+$util.qr($input.put("total", 0))
+
 ## [Start] Prepare DynamoDB PutItem Request. **
 $util.qr($input.put("waybillId", $util.defaultIfNullOrBlank($ctx.stash.input.productWaybillId, $ctx.stash.waybillId)))
 $util.qr($input.put("createdAt", $util.time.nowISO8601()))

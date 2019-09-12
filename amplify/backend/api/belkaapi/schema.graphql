@@ -118,7 +118,6 @@ type ProductCost
   id: ID!
   owner: String
   team: [String!]
-  purchasePrice: Float
   clientPrice: Float
   price: Float
   amount: Float

@@ -73,7 +73,7 @@ export default {
     updateLoading: null,
     items: [],
     internalHeaders: [
-      { text: 'Цена закупки', value: 'purchasePrice', sortable: false, width: 120 },
+      { text: 'Цена закупки', value: 'price', sortable: false, width: 120 },
       { text: 'Стоимость', value: 'amount', sortable: false, width: 120 },
       { text: 'Для клиента', value: 'clientPrice', sortable: false, width: 120 },
       { text: 'Стоимость', value: 'clientAmount', sortable: false, width: 120 },
