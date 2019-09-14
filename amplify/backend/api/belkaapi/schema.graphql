@@ -90,7 +90,7 @@ enum WaybillStatus {
 }
 
 type Product
-  @model(queries: null, mutations: { update: "updateProduct", delete: "deleteProduct" }, subscriptions: { level: OFF })
+  @model(queries: null, mutations: { delete: "deleteProduct" }, subscriptions: { level: OFF })
   @versioned
   @auth(rules: [
     { allow: owner },
@@ -220,6 +220,7 @@ type Subscription {
 type Mutation {
   createProject(input: CreateProjectInput!): Project
   createProduct(input: CreateProductInput!): Product
+  updateProduct(input: UpdateProductInput!): Product
   updateProductCost(input: UpdateProductCostInput!): ProductCost
   publishWaybillUpdate(owner: ID!, id: ID!): Waybill
 }
@@ -251,6 +252,24 @@ input CreateProductInput {
   unit: String
   status: ProductStatus
   productWaybillId: ID!
+  createdAt: String
+  updatedAt: String
+  productCostId: ID
+  productStoreId: ID
+  productInfoId: ID
+  productLinkId: ID
+}
+
+input UpdateProductInput {
+  id: ID!
+  owner: String
+  team: [String!]
+  article: String
+  name: String
+  quantity: Int
+  unit: String
+  status: ProductStatus
+  productWaybillId: ID
   createdAt: String
   updatedAt: String
   productCostId: ID

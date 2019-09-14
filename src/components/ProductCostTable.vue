@@ -135,9 +135,8 @@ export default {
     async udpateProductCost (input, index) {
       try {
         this.updateLoading = input.id
-        const waybillId = this.waybillId
         const productId = this.products[index].id
-        input = { ...input, waybillId, productId }
+        input = { ...input, productId }
         const response = await this.$Amplify.API.graphql(
           this.$Amplify.graphqlOperation(updateProductCost, {
             input

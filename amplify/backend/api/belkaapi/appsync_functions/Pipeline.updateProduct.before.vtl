@@ -5,8 +5,8 @@
 ## - $ctx.stash.put("badgeNumber", $ctx.args.input.badgeNumber)
 ## - $ctx.stash.put("username", $ctx.identity.username)
 
-$util.qr($ctx.stash.put("updateProductCostInput", $ctx.args.input))
-$util.qr($ctx.stash.put("productId", $ctx.args.input.productId))
+$util.qr($ctx.stash.put("updateProductInput", $ctx.args.input))
+$util.qr($ctx.stash.put("productId", $ctx.args.input.id))
 
 ## No Static Group Authorization Rules **
 
@@ -32,7 +32,7 @@ $util.qr($ctx.stash.put("productId", $ctx.args.input.productId))
   #end
 #end
 #if( $util.isNull($allowedOwners0) && (! $ctx.args.input.containsKey("owner")) )
-  $util.qr($ctx.stash.updateProductCostInput.put("owner", $identityValue))
+  $util.qr($ctx.stash.updateProductInput.put("owner", $identityValue))
   #set( $isOwnerAuthorized = true )
 #end
 ## Authorization rule: { allow: owner, ownerField: "team", identityClaim: "cognito:username" } **
@@ -51,7 +51,7 @@ $util.qr($ctx.stash.put("productId", $ctx.args.input.productId))
   #end
 #end
 #if( $util.isNull($allowedOwners1) && (! $ctx.args.input.containsKey("team")) )
-  $util.qr($ctx.stash.updateProductCostInput.put("team", ["$identityValue"]))
+  $util.qr($ctx.stash.updateProductInput.put("team", ["$identityValue"]))
   #set( $isOwnerAuthorized = true )
 #end
 ## [End] Owner Authorization Checks **

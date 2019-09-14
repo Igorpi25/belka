@@ -78,15 +78,15 @@
 #set( $versionedCondition = {
   "expression": "#version = :expectedVersion",
   "expressionValues": {
-      ":expectedVersion":     $util.dynamodb.toDynamoDB($ctx.stash.updateProductCostInput.expectedVersion)
+      ":expectedVersion":     $util.dynamodb.toDynamoDB($ctx.stash.updateProductInput.expectedVersion)
   },
   "expressionNames": {
       "#version": "version"
   }
 } )
-#set( $newVersion = $ctx.stash.updateProductCostInput.expectedVersion + 1 )
-$util.qr($ctx.stash.updateProductCostInput.put("version", $newVersion))
-$util.qr($ctx.stash.updateProductCostInput.remove("expectedVersion"))
+#set( $newVersion = $ctx.stash.updateProductInput.expectedVersion + 1 )
+$util.qr($ctx.stash.updateProductInput.put("version", $newVersion))
+$util.qr($ctx.stash.updateProductInput.remove("expectedVersion"))
 ## [End] Inject @versioned condition.. **
 
 #if( $authCondition && $authCondition.expression != "" )
@@ -126,17 +126,8 @@ $util.qr($ctx.stash.updateProductCostInput.remove("expectedVersion"))
   #end
 #end
 ## Automatically set the updatedAt timestamp. **
-$util.qr($context.stash.updateProductCostInput.put("updatedAt", $util.defaultIfNull($ctx.stash.updateProductCostInput.updatedAt, $util.time.nowISO8601())))
-
-## calc
-#set( $price = $ctx.stash.updateProductCostInput.clientPrice )
-$util.qr($ctx.stash.updateProductCostInput.put("price", $price))
-#set( $amount = $ctx.stash.product.quantity * $price )
-$util.qr($ctx.stash.updateProductCostInput.put("amount", $amount))
-$util.qr($ctx.stash.updateProductCostInput.put("clientAmount", $amount))
-## end calc
-
-$util.qr($context.stash.updateProductCostInput.put("__typename", "ProductCost"))
+$util.qr($context.stash.updateProductInput.put("updatedAt", $util.defaultIfNull($ctx.stash.updateProductInput.updatedAt, $util.time.nowISO8601())))
+$util.qr($context.stash.updateProductInput.put("__typename", "Product"))
 ## Update condition if type is @versioned **
 #if( $versionedCondition )
   $util.qr($condition.put("expression", "($condition.expression) AND $versionedCondition.expression"))
@@ -156,7 +147,7 @@ $util.qr($context.stash.updateProductCostInput.put("__typename", "ProductCost"))
 #else
   #set( $keyFields = ["id"] )
 #end
-#foreach( $entry in $util.map.copyAndRemoveAllKeys($context.stash.updateProductCostInput, $keyFields).entrySet() )
+#foreach( $entry in $util.map.copyAndRemoveAllKeys($context.stash.updateProductInput, $keyFields).entrySet() )
   #if( !$util.isNull($dynamodbNameOverrideMap) && $dynamodbNameOverrideMap.containsKey("$entry.key") )
     #set( $entryKeyAttributeName = $dynamodbNameOverrideMap.get("$entry.key") )
   #else
@@ -212,7 +203,7 @@ $util.qr($update.put("expression", "$expression"))
   "operation": "UpdateItem",
   "key": #if( $modelObjectKey ) $util.toJson($modelObjectKey) #else {
   "id": {
-      "S": "$context.stash.updateProductCostInput.id"
+      "S": "$context.stash.updateProductInput.id"
   }
 } #end,
   "update": $util.toJson($update),

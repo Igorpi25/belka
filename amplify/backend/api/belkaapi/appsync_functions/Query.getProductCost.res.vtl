@@ -1,0 +1,14 @@
+## Raise a GraphQL field error in case of a datasource invocation error
+#if($ctx.error)
+    $util.error($ctx.error.message, $ctx.error.type)
+#end
+
+## set Product result to stash
+#set( $updateProductCostInput = {} )
+$util.qr($updateProductCostInput.put("id", $ctx.result.id))
+$util.qr($updateProductCostInput.put("clientPrice", $ctx.result.clientPrice))
+$util.qr($updateProductCostInput.put("expectedVersion", $ctx.result.version))
+$util.qr($ctx.stash.put("updateProductCostInput",  $updateProductCostInput))
+
+## Pass back the result from DynamoDB. **
+$util.toJson($ctx.result)
