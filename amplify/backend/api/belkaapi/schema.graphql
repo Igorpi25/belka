@@ -64,8 +64,23 @@ type Waybill
   waybillSpecId: ID!
   products: [Product!] @connection(name: "WaybillProducts")
   status: WaybillStatus
+  profitType: WaybillProfitType
+  profitPercent: Float
+  profitForAll: Boolean
+  discount: Int
+  prepayment: Float
+  prepaymentDate: String
+  residue: Float
+  residueDate: String
+  customerDebt: Float
+  customerDebtDate: String
   createdAt: String
 	updatedAt: String
+}
+
+enum WaybillProfitType {
+  MARGIN
+  COMMISSION
 }
 
 enum WaybillStatus {
@@ -90,10 +105,10 @@ type Product
   quantity: Int
   # TODO add connection with type ProductUnit, array in project
   unit: String
-  cost: ProductCost @connection
-  store: ProductStore @connection
-  info: ProductInfo @connection
-  link: ProductLink @connection
+  cost: ProductCost @connection(name: "ProductCost")
+  store: ProductStore @connection(name: "ProductStore")
+  info: ProductInfo @connection(name: "ProductInfo")
+  link: ProductLink @connection(name: "ProductLink")
   status: ProductStatus
   waybill: Waybill @connection(name: "WaybillProducts")
   productWaybillId: ID!
@@ -108,7 +123,7 @@ enum ProductStatus {
 }
 
 type ProductCost
-  @model(queries: null, mutations: { update: "updateProductCost" }, subscriptions: { level: OFF })
+  @model(queries: null, mutations: null, subscriptions: { level: OFF })
   @versioned
   @auth(rules: [
     { allow: owner },
@@ -118,10 +133,11 @@ type ProductCost
   id: ID!
   owner: String
   team: [String!]
-  clientPrice: Float
   price: Float
   amount: Float
-  total: Float
+  clientPrice: Float
+  clientAmount: Float
+  product: Product @connection(name: "ProductCost")
   # need for filter on subscription
   waybillId: ID!
 }
@@ -146,6 +162,7 @@ type ProductStore
   dimension: Float
   # TODO add connection with type CargoPlace, @model
   cargoPlaceNumber: Int
+  product: Product @connection(name: "ProductStore")
   # need for filter on subscription
   waybillId: ID!
 }
@@ -163,6 +180,7 @@ type ProductInfo
   team: [String!]
   images: [String]
   description: String
+  product: Product @connection(name: "ProductInfo")
   # need for filter on subscription
   waybillId: ID!
 }
@@ -179,13 +197,15 @@ type ProductLink
   owner: String
   team: [String!]
   url: String
+  product: Product @connection(name: "ProductLink")
+  # productLinkProductId: ID
   # need for filter on subscription
   waybillId: ID!
 }
 
 type Subscription {
   onCreateWaybill(owner: ID!, waybillSpecId: ID!): Waybill @aws_subscribe(mutations: ["createWaybill"])
-  onUpdateWaybill(owner: ID!, waybillSpecId: ID!): Waybill @aws_subscribe(mutations: ["updateWaybill"])
+  onUpdateWaybill(owner: ID!, waybillSpecId: ID!): Waybill @aws_subscribe(mutations: ["updateWaybill", "publishWaybillUpdate"])
   onDeleteWaybill(owner: ID!, waybillSpecId: ID!): Waybill @aws_subscribe(mutations: ["deleteWaybill"])
   onCreateProduct(owner: ID!, productWaybillId: ID!): Product @aws_subscribe(mutations: ["createProduct"])
   onUpdateProduct(owner: ID!, productWaybillId: ID!): Product @aws_subscribe(mutations: ["updateProduct"])
@@ -200,6 +220,8 @@ type Subscription {
 type Mutation {
   createProject(input: CreateProjectInput!): Project
   createProduct(input: CreateProductInput!): Product
+  updateProductCost(input: UpdateProductCostInput!): ProductCost
+  publishWaybillUpdate(owner: ID!, id: ID!): Waybill
 }
 
 input CreateProjectInput {
@@ -228,11 +250,23 @@ input CreateProductInput {
   quantity: Int
   unit: String
   status: ProductStatus
-  productWaybillId: ID
+  productWaybillId: ID!
   createdAt: String
   updatedAt: String
   productCostId: ID
   productStoreId: ID
   productInfoId: ID
   productLinkId: ID
+}
+
+input UpdateProductCostInput {
+  id: ID!
+  owner: String
+  team: [String!]
+  price: Float
+  amount: Float
+  clientPrice: Float
+  clientAmount: Float
+  productId: ID
+  waybillId: ID
 }

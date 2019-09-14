@@ -23,7 +23,8 @@ $util.qr($input.put("length", 0))
 $util.qr($input.put("dimension", 0))
 
 ## [Start] Prepare DynamoDB PutItem Request. **
-$util.qr($input.put("waybillId", $util.defaultIfNullOrBlank($ctx.stash.input.productWaybillId, $ctx.stash.waybillId)))
+## $util.qr($input.put("productStoreProductId", $util.defaultIfNullOrBlank($ctx.args.input.productStoreProductId, $ctx.stash.productId))))
+$util.qr($input.put("waybillId", $util.defaultIfNullOrBlank($ctx.args.input.productWaybillId, $ctx.stash.waybillId)))
 $util.qr($input.put("createdAt", $util.time.nowISO8601()))
 $util.qr($input.put("updatedAt", $util.time.nowISO8601()))
 $util.qr($input.put("__typename", "ProductStore"))

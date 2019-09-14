@@ -60,6 +60,16 @@ export const getSpec = `query GetSpec($id: ID!) {
           nextToken
         }
         status
+        profitType
+        profitPercent
+        profitForAll
+        discount
+        prepayment
+        prepaymentDate
+        residue
+        residueDate
+        customerDebt
+        customerDebtDate
         createdAt
         updatedAt
         version
@@ -95,6 +105,16 @@ export const getWaybill = `query GetWaybill($id: ID!) {
           deliveryDate
           waybillSpecId
           status
+          profitType
+          profitPercent
+          profitForAll
+          discount
+          prepayment
+          prepaymentDate
+          residue
+          residueDate
+          customerDebt
+          customerDebtDate
           createdAt
           updatedAt
           version
@@ -116,11 +136,10 @@ export const getWaybill = `query GetWaybill($id: ID!) {
           id
           owner
           team
-          purchasePrice
-          clientPrice
           price
           amount
-          total
+          clientPrice
+          clientAmount
           waybillId
           version
         }
@@ -168,6 +187,16 @@ export const getWaybill = `query GetWaybill($id: ID!) {
           deliveryDate
           waybillSpecId
           status
+          profitType
+          profitPercent
+          profitForAll
+          discount
+          prepayment
+          prepaymentDate
+          residue
+          residueDate
+          customerDebt
+          customerDebtDate
           createdAt
           updatedAt
           version
@@ -180,6 +209,16 @@ export const getWaybill = `query GetWaybill($id: ID!) {
       nextToken
     }
     status
+    profitType
+    profitPercent
+    profitForAll
+    discount
+    prepayment
+    prepaymentDate
+    residue
+    residueDate
+    customerDebt
+    customerDebtDate
     createdAt
     updatedAt
     version

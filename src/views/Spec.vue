@@ -155,6 +155,7 @@ import { getSpec } from '@/graphql/queries'
 import { createWaybill, updateWaybill, deleteWaybill, createProduct } from '@/graphql/mutations'
 import { onCreateWaybill, onUpdateWaybill, onDeleteWaybill } from '@/graphql/subscriptions'
 
+import ErrorMessages from '@/components/ErrorMessages.vue'
 import WaybillItem from '@/components/WaybillItem.vue'
 import Editable from '@/components/Editable.vue'
 
@@ -163,6 +164,7 @@ import { confirmDialog } from '@/utils/helpers'
 export default {
   name: 'Spec',
   components: {
+    ErrorMessages,
     WaybillItem,
     Editable,
   },

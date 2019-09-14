@@ -12,12 +12,9 @@
         <tr v-for="(item, index) in items" :key="index">
           <slot name="product" :item="products[index]" :index="index" />
           <!-- SET DEFAULT VALUE ON CREATE -->
-          <ProductTableCellEditable
-            :item="item"
-            update-prop="price"
-            type="number"
-            @update="udpateProductCost"
-          />
+          <td>
+            {{ item.price }}
+          </td>
           <td>
             {{ item.amount }}
           </td>
@@ -26,10 +23,10 @@
             :item="item"
             update-prop="clientPrice"
             type="number"
-            @update="udpateProductCost"
+            @update="udpateProductCost($event, index)"
           />
           <td>
-            {{ item.total }}
+            {{ item.clientAmount }}
           </td>
           <td>
             <slot name="action" :item="products[index]" />
@@ -41,7 +38,7 @@
 </template>
 
 <script>
-import { updateProductCost } from '@/graphql/mutations'
+import { updateProductCost, publishWaybillUpdate } from '@/graphql/mutations'
 import { onUpdateProductCost } from '@/graphql/subscriptions'
 
 import ProductTableCellEditable from '@/components/ProductTableCellEditable.vue'
@@ -135,9 +132,12 @@ export default {
         this.items.splice(index, 1, newItem)
       }
     },
-    async udpateProductCost (input) {
+    async udpateProductCost (input, index) {
       try {
         this.updateLoading = input.id
+        const waybillId = this.waybillId
+        const productId = this.products[index].id
+        input = { ...input, waybillId, productId }
         const response = await this.$Amplify.API.graphql(
           this.$Amplify.graphqlOperation(updateProductCost, {
             input
@@ -154,6 +154,12 @@ export default {
           }, [])
           throw new Error(response.errors.join('\n'))
         }
+        // TODO move to lambda function with mutation execution
+        await this.$Amplify.API.graphql(
+          this.$Amplify.graphqlOperation(publishWaybillUpdate, {
+            owner: this.owner, id: this.waybillId
+          })
+        )
       } catch (error) {
         if (error && error.errors && error.errors.length > 0) {
           this.errors = error.errors

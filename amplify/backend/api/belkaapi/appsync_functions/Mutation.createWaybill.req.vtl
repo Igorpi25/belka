@@ -14,6 +14,14 @@
 $util.qr($input.put("version", 1))
 ## [End] Setting "version" to 1. **
 
+## Default values
+$util.qr($input.put("profitType", "COMMISSION"))
+$util.qr($input.put("profitPercent", 0))
+$util.qr($input.put("discount", 0))
+$util.qr($input.put("prepayment", 0))
+$util.qr($input.put("residue", 0))
+$util.qr($input.put("customerDebt", 0))
+
 ## Set Spec id
 $util.qr($input.put("waybillSpecId", $ctx.stash.specId))
 

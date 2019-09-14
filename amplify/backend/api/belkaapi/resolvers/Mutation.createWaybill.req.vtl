@@ -57,6 +57,26 @@
 $util.qr($ctx.args.input.put("version", 1))
 ## [End] Setting "version" to 1. **
 
+## Default values
+#if ( (! $context.args.input.containsKey('profitType')) || ( ! $context.args.input.profitType) )
+  $util.qr($context.args.input.put("profitType", "COMMISSION"))
+#end
+#if ( (! $context.args.input.containsKey('profitPercent')) || ( ! $context.args.input.profitPercent) || $context.args.input.profitPercent < 0 )
+  $util.qr($context.args.input.put("profitPercent", 0))
+#end
+#if ( (! $context.args.input.containsKey('discount')) || ( ! $context.args.input.discount) || $context.args.input.discount < 0 )
+  $util.qr($context.args.input.put("discount", 0))
+#end
+#if ( (! $context.args.input.containsKey('prepayment')) || ( ! $context.args.input.prepayment) || $context.args.input.prepayment < 0 )
+  $util.qr($context.args.input.put("prepayment", 0))
+#end
+#if ( (! $context.args.input.containsKey('residue')) || ( ! $context.args.input.residue) || $context.args.input.residue < 0 )
+  $util.qr($context.args.input.put("residue", 0))
+#end
+#if ( (! $context.args.input.containsKey('customerDebt')) || ( ! $context.args.input.customerDebt) || $context.args.input.customerDebt < 0 )
+  $util.qr($context.args.input.put("customerDebt", 0))
+#end
+
 ## [Start] Prepare DynamoDB PutItem Request. **
 $util.qr($context.args.input.put("status", $util.defaultIfNullOrBlank($ctx.args.input.status, "IN_PRODUCTION")))
 $util.qr($context.args.input.put("systemState", "CREATED"))

@@ -14,4 +14,6 @@
   $util.error($ctx.error.message, $ctx.error.type)
 #end
 
+$util.qr($ctx.stash.put("productId", $ctx.result.id))
+
 $util.toJson($context.result)
