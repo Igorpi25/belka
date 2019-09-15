@@ -11,49 +11,42 @@
       <tbody>
         <tr v-for="(item, index) in items" :key="index">
           <slot name="product" :item="products[index]" :index="index" />
-          <!-- SET DEFAULT VALUE ON CREATE -->
           <ProductTableCellEditable
             :item="item"
             update-prop="net"
             type="number"
             @update="udpateProductStore"
           />
-          <!-- SET DEFAULT VALUE ON CREATE -->
           <ProductTableCellEditable
             :item="item"
             update-prop="gross"
             type="number"
             @update="udpateProductStore"
           />
-          <!-- SET DEFAULT VALUE ON CREATE -->
           <ProductTableCellEditable
             :item="item"
             update-prop="width"
             type="number"
             @update="udpateProductStore"
           />
-          <!-- SET DEFAULT VALUE ON CREATE -->
           <ProductTableCellEditable
             :item="item"
             update-prop="height"
             type="number"
             @update="udpateProductStore"
           />
-          <!-- SET DEFAULT VALUE ON CREATE -->
           <ProductTableCellEditable
             :item="item"
             update-prop="length"
             type="number"
             @update="udpateProductStore"
           />
-          <!-- SET DEFAULT VALUE ON CREATE -->
           <ProductTableCellEditable
             :item="item"
             update-prop="dimension"
             type="number"
             @update="udpateProductStore"
           />
-          <!-- SET DEFAULT VALUE ON CREATE -->
           <ProductTableCellEditable
             :item="item"
             update-prop="cargoPlaceNumber"

@@ -43,7 +43,6 @@
                 update-prop="article"
                 @update="updateProduct"
               />
-              <!-- SET DEFAULT VALUE ON CREATE -->
               <ProductTableCellEditable
                 :item="item"
                 update-prop="quantity"
@@ -82,7 +81,6 @@
                 update-prop="article"
                 @update="updateProduct"
               />
-              <!-- SET DEFAULT VALUE ON CREATE -->
               <ProductTableCellEditable
                 :item="item"
                 update-prop="quantity"
@@ -121,7 +119,6 @@
                 update-prop="article"
                 @update="updateProduct"
               />
-              <!-- SET DEFAULT VALUE ON CREATE -->
               <ProductTableCellEditable
                 :item="item"
                 update-prop="quantity"
@@ -161,7 +158,6 @@
                 update-prop="article"
                 @update="updateProduct"
               />
-              <!-- SET DEFAULT VALUE ON CREATE -->
               <ProductTableCellEditable
                 :item="item"
                 update-prop="quantity"
