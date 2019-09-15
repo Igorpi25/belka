@@ -39,9 +39,6 @@ import {
   setCaretToEnd
 } from '@/utils/helpers'
 
-// this undefined on debounce, if use arrow function, this on function undefined
-const DEBOUNCE = 70
-
 const STATUSES = {
   NONE: 'NONE', // call update method on this status
   WAITING: 'WAITING', // status after update method called
@@ -136,6 +133,12 @@ export default {
     },
   },
 
+  created () {
+    // debounce delay for different types
+    const delay = this.type === 'number' ? 300 : 70
+    this.debounceInput = debounce(this.emitChange, delay)
+  },
+
   mounted () {
     this.setValue(this.value, false)
   },
@@ -147,17 +150,16 @@ export default {
       }
       const val = this.type === 'number'
         ? e.target.value : e.target.innerText
-      const value = val || null
-      this.internalValue = value
-      this.debounceInput(value)
+      this.internalValue = val || null
+      this.debounceInput()
     },
 
-    debounceInput: debounce(function (val) {
-      if (this.status === STATUSES.NONE) {
-        this.$emit('input', val)
+    emitChange () {
+       if (this.status === STATUSES.NONE) {
+        this.$emit('input', this.internalValue)
         this.status = STATUSES.WAITING
       }
-    }, DEBOUNCE),
+    },
 
     onFocus () {
       this.isFocused = true
