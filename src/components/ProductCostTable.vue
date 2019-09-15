@@ -11,20 +11,29 @@
       <tbody>
         <tr v-for="(item, index) in items" :key="index">
           <slot name="product" :item="products[index]" :index="index" />
-          <!-- SET DEFAULT VALUE ON CREATE -->
-          <td>
+          <ProductTableCellEditable
+            v-if="isWaybillProfitTypeMargin"
+            :item="item"
+            update-prop="price"
+            type="number"
+            @update="udpateProductCost($event, index)"
+          />
+          <td v-else>
             {{ item.price }}
           </td>
           <td>
             {{ item.amount }}
           </td>
-          <!-- SET DEFAULT VALUE ON CREATE -->
           <ProductTableCellEditable
+            v-if="isWaybillProfitTypeCommission"
             :item="item"
             update-prop="clientPrice"
             type="number"
             @update="udpateProductCost($event, index)"
           />
+          <td v-else>
+            {{ item.clientAmount }}
+          </td>
           <td>
             {{ item.clientAmount }}
           </td>
@@ -65,21 +74,39 @@ export default {
       type: Boolean,
       default: false
     },
+    waybillProfitType: {
+      type: String,
+      default: 'COMMISSION'
+    }
   },
   data: () => ({
     updateLoading: null,
     items: [],
-    internalHeaders: [
-      { text: 'Цена закупки', value: 'price', sortable: false, width: 120 },
-      { text: 'Стоимость', value: 'amount', sortable: false, width: 120 },
-      { text: 'Для клиента', value: 'clientPrice', sortable: false, width: 120 },
-      { text: 'Стоимость', value: 'clientAmount', sortable: false, width: 120 },
-      { text: '', value: 'action', sortable: false, width: 48 }
-    ],
   }),
   computed: {
     owner () {
       return this.$store.getters.username
+    },
+    isWaybillProfitTypeMargin () {
+      return this.waybillProfitType === 'MARGIN'
+    },
+    isWaybillProfitTypeCommission () {
+      return this.waybillProfitType === 'COMMISSION'
+    },
+    internalHeaders () {
+      return [
+        {
+          text: this.isWaybillProfitTypeMargin
+            ? 'Себестоимость' : 'Цена закупки',
+          value: 'price',
+          sortable: false,
+          width: 120
+        },
+        { text: 'Стоимость', value: 'amount', sortable: false, width: 120 },
+        { text: 'Для клиента', value: 'clientPrice', sortable: false, width: 120 },
+        { text: 'Стоимость', value: 'clientAmount', sortable: false, width: 120 },
+        { text: '', value: 'action', sortable: false, width: 48 }
+      ]
     },
     headers () {
       return [...this.productHeaders, ...this.internalHeaders]

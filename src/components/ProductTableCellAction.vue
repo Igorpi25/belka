@@ -27,7 +27,7 @@ export default {
       type: Object,
       default: () => ({})
     },
-    loading: Boolean
+    loading: String
   },
   data: () => ({
     icons: {

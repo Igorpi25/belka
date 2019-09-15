@@ -74,6 +74,32 @@
 #end
 ## [End] Throw if unauthorized **
 
+## [Start] Calc **
+#set( $profitType = $ctx.stash.waybill.profitType )
+#set( $profitPercent = $ctx.stash.waybill.profitPercent )
+#if( $profitType == "COMMISSION" )
+  #set( $clientPrice = $ctx.stash.updateProductCostInput.clientPrice )
+  #set( $profit = $clientPrice * $profitPercent / 100 )
+  #set( $newPrice = $clientPrice - $profit )
+  $util.qr($ctx.stash.updateProductCostInput.put("price", $newPrice))
+  $util.qr($ctx.stash.updateProductCostInput.put("clientPrice", $clientPrice))
+#elseif( $profitType == "MARGIN" )
+  #set( $price = $ctx.stash.updateProductCostInput.price )
+  #set( $profit = $price * $profitPercent / 100 )
+  #set( $newPrice = $price + $profit )
+  $util.qr($ctx.stash.updateProductCostInput.put("clientPrice", $newPrice))
+  $util.qr($ctx.stash.updateProductCostInput.put("price", $price))
+#end
+
+#set( $quantity = $ctx.stash.product.quantity )
+
+#set( $amount = $quantity * $ctx.stash.updateProductCostInput.price )
+$util.qr($ctx.stash.updateProductCostInput.put("amount", $amount))
+
+#set( $clientAmount = $quantity * $ctx.stash.updateProductCostInput.clientPrice )
+$util.qr($ctx.stash.updateProductCostInput.put("clientAmount", $clientAmount))
+## [End] Calc **
+
 ## [Start] Inject @versioned condition.. **
 #set( $versionedCondition = {
   "expression": "#version = :expectedVersion",
@@ -127,15 +153,6 @@ $util.qr($ctx.stash.updateProductCostInput.remove("expectedVersion"))
 #end
 ## Automatically set the updatedAt timestamp. **
 $util.qr($context.stash.updateProductCostInput.put("updatedAt", $util.defaultIfNull($ctx.stash.updateProductCostInput.updatedAt, $util.time.nowISO8601())))
-
-## calc
-#set( $price = $ctx.stash.updateProductCostInput.clientPrice )
-$util.qr($ctx.stash.updateProductCostInput.put("price", $price))
-#set( $amount = $ctx.stash.product.quantity * $price )
-$util.qr($ctx.stash.updateProductCostInput.put("amount", $amount))
-$util.qr($ctx.stash.updateProductCostInput.put("clientAmount", $amount))
-## end calc
-
 $util.qr($context.stash.updateProductCostInput.put("__typename", "ProductCost"))
 ## Update condition if type is @versioned **
 #if( $versionedCondition )

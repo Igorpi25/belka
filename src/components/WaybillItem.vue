@@ -25,6 +25,7 @@
             :products="items"
             :waybill-id="waybillId"
             :loading="loading"
+            :waybill-profit-type="waybillProfitType"
           >
             <template v-slot:product="{ item, index }">
               <ProductTableCellIndex
@@ -234,6 +235,10 @@ export default {
     waybillId: {
       type: String,
       required: true
+    },
+    waybillProfitType: {
+      type: String,
+      default: 'COMMISSION'
     }
   },
   data: () => ({

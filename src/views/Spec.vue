@@ -59,7 +59,115 @@
             </template>
             <template v-slot:expanded-item="{ item, headers }">
               <td :colspan="headers.length">
-                <WaybillItem :waybill-id="item.id" />
+                <WaybillItem
+                  :waybill-id="item.id"
+                  :waybill-profit-type="item.profitType"
+                />
+                <v-row class="grey lighten-4">
+                  <v-col>
+                    <v-row no-gutters>
+                      <v-col>
+                        <v-radio-group
+                          :value="item.profitType"
+                          hide-details
+                          class="mt-0"
+                          @change="updateWaybill({
+                            id: item.id, profitType: $event, expectedVersion: item.version
+                          })"
+                        >
+                          <v-radio
+                            label="Маржа"
+                            value="MARGIN"
+                            color="primary"
+                          ></v-radio>
+                          <v-radio
+                            label="Комиссия"
+                            value="COMMISSION"
+                            color="primary"
+                          ></v-radio>
+                        </v-radio-group>
+                      </v-col>
+                      <v-col align-self="center">
+                        <Editable
+                          :value="item.profitPercent"
+                          :version="item.version"
+                          placeholder="-"
+                          outlined
+                          @input="updateWaybill({
+                            id: item.id, profitPercent: $event, expectedVersion: item.version
+                          })"
+                        />
+                      </v-col>
+                      <v-col align-self="center">
+                        <v-checkbox
+                          :input-value="item.profitForAll"
+                          :ripple="false"
+                          label="Для всех"
+                          color="primary"
+                          class="mt-0 ml-1"
+                          hide-details
+                          @change="updateWaybill({
+                            id: item.id,
+                            profitForAll: $event,
+                            expectedVersion: item.version
+                          })"
+                        />
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                  <v-col>
+                    <v-row no-gutters>
+                      <v-col class="pr-1">
+                        <label class="grey--text darken-3">
+                          Скидка
+                        </label>
+                        <Editable
+                          :value="item.discount"
+                          :version="item.version"
+                          placeholder="-"
+                          outlined
+                          @input="updateWaybill({
+                            id: item.id, discount: $event, expectedVersion: item.version
+                          })"
+                        />
+                      </v-col>
+                      <v-col class="pl-1">
+                        <label class="grey--text darken-3">
+                          Предоплата
+                        </label>
+                        <Editable
+                          :value="item.prepayment"
+                          :version="item.version"
+                          placeholder="-"
+                          outlined
+                          @input="updateWaybill({
+                            id: item.id, prepayment: $event, expectedVersion: item.version
+                          })"
+                        />
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                  <v-col>
+                    <v-row no-gutters>
+                      <v-col class="pr-1">
+                        <label class="grey--text darken-3">
+                          Остаток для закупа
+                        </label>
+                        <div>
+                          {{ item.residue }}
+                        </div>
+                      </v-col>
+                      <v-col class="pl-1">
+                        <label class="grey--text darken-3">
+                          Долг клиента
+                        </label>
+                        <div>
+                          {{ item.customerDebt }}
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
               </td>
             </template>
             <template v-slot:item.number="{ item }">

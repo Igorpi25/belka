@@ -6,6 +6,7 @@
 ## - $ctx.stash.put("username", $ctx.identity.username)
 
 $util.qr($ctx.stash.put("updateProductCostInput", $ctx.args.input))
+$util.qr($ctx.stash.put("productCostId", $ctx.args.input.id))
 $util.qr($ctx.stash.put("productId", $ctx.args.input.productId))
 
 ## No Static Group Authorization Rules **

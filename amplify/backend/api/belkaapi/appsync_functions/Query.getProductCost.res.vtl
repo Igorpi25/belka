@@ -3,12 +3,21 @@
     $util.error($ctx.error.message, $ctx.error.type)
 #end
 
-## set Product result to stash
-#set( $updateProductCostInput = {} )
-$util.qr($updateProductCostInput.put("id", $ctx.result.id))
-$util.qr($updateProductCostInput.put("clientPrice", $ctx.result.clientPrice))
-$util.qr($updateProductCostInput.put("expectedVersion", $ctx.result.version))
-$util.qr($ctx.stash.put("updateProductCostInput",  $updateProductCostInput))
+## if stash not has updateProductCostInput, set all needed values
+#if ( ! $ctx.stash.containsKey('updateProductCostInput') )
+    #set( $updateProductCostInput = {} )
+    $util.qr($updateProductCostInput.put("id", $ctx.result.id))
+    $util.qr($updateProductCostInput.put("price", $ctx.result.price))
+    $util.qr($updateProductCostInput.put("clientPrice", $ctx.result.clientPrice))
+    $util.qr($updateProductCostInput.put("expectedVersion", $ctx.result.version))
+    $util.qr($ctx.stash.put("updateProductCostInput",  $updateProductCostInput))
+#else
+    #if( $ctx.waybill.profitType == "COMMISSION" )
+        $util.qr($ctx.stash.updateProductCostInput.put("price", $ctx.result.price))
+    #elseif ( $ctx.waybill.profitType == "MARGIN" )
+        $util.qr($ctx.stash.updateProductCostInput.put("clientPrice", $ctx.result.clientPrice))
+    #end
+#end
 
 ## Pass back the result from DynamoDB. **
 $util.toJson($ctx.result)
