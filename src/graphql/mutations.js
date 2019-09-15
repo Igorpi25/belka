@@ -19,31 +19,6 @@ export const createProject = `mutation CreateProject($input: CreateProjectInput!
       owner
       team
       waybills {
-        items {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
         nextToken
       }
     }
@@ -53,1044 +28,8 @@ export const createProject = `mutation CreateProject($input: CreateProjectInput!
   }
 }
 `;
-export const createProduct = `mutation CreateProduct($input: CreateProductInput!) {
-  createProduct(input: $input) {
-    id
-    owner
-    team
-    article
-    name
-    quantity
-    unit
-    cost {
-      id
-      owner
-      team
-      price
-      amount
-      clientPrice
-      clientAmount
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      waybillId
-      version
-    }
-    store {
-      id
-      owner
-      team
-      net
-      gross
-      width
-      height
-      length
-      inStock
-      dimension
-      cargoPlaceNumber
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      waybillId
-      version
-    }
-    info {
-      id
-      owner
-      team
-      images
-      description
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      waybillId
-      version
-    }
-    link {
-      id
-      owner
-      team
-      url
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      waybillId
-      version
-    }
-    status
-    waybill {
-      id
-      owner
-      team
-      number
-      description
-      contractor
-      purchaseDate
-      deliveryDate
-      spec {
-        id
-        owner
-        team
-        waybills {
-          nextToken
-        }
-      }
-      waybillSpecId
-      products {
-        items {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        nextToken
-      }
-      status
-      profitType
-      profitPercent
-      profitForAll
-      discount
-      prepayment
-      prepaymentDate
-      residue
-      residueDate
-      customerDebt
-      customerDebtDate
-      createdAt
-      updatedAt
-      version
-    }
-    productWaybillId
-    createdAt
-    updatedAt
-    version
-  }
-}
-`;
-export const updateProduct = `mutation UpdateProduct($input: UpdateProductInput!) {
-  updateProduct(input: $input) {
-    id
-    owner
-    team
-    article
-    name
-    quantity
-    unit
-    cost {
-      id
-      owner
-      team
-      price
-      amount
-      clientPrice
-      clientAmount
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      waybillId
-      version
-    }
-    store {
-      id
-      owner
-      team
-      net
-      gross
-      width
-      height
-      length
-      inStock
-      dimension
-      cargoPlaceNumber
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      waybillId
-      version
-    }
-    info {
-      id
-      owner
-      team
-      images
-      description
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      waybillId
-      version
-    }
-    link {
-      id
-      owner
-      team
-      url
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      waybillId
-      version
-    }
-    status
-    waybill {
-      id
-      owner
-      team
-      number
-      description
-      contractor
-      purchaseDate
-      deliveryDate
-      spec {
-        id
-        owner
-        team
-        waybills {
-          nextToken
-        }
-      }
-      waybillSpecId
-      products {
-        items {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        nextToken
-      }
-      status
-      profitType
-      profitPercent
-      profitForAll
-      discount
-      prepayment
-      prepaymentDate
-      residue
-      residueDate
-      customerDebt
-      customerDebtDate
-      createdAt
-      updatedAt
-      version
-    }
-    productWaybillId
-    createdAt
-    updatedAt
-    version
-  }
-}
-`;
-export const updateProductCost = `mutation UpdateProductCost($input: UpdateProductCostInput!) {
-  updateProductCost(input: $input) {
-    id
-    owner
-    team
-    price
-    amount
-    clientPrice
-    clientAmount
-    product {
-      id
-      owner
-      team
-      article
-      name
-      quantity
-      unit
-      cost {
-        id
-        owner
-        team
-        price
-        amount
-        clientPrice
-        clientAmount
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        waybillId
-        version
-      }
-      store {
-        id
-        owner
-        team
-        net
-        gross
-        width
-        height
-        length
-        inStock
-        dimension
-        cargoPlaceNumber
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        waybillId
-        version
-      }
-      info {
-        id
-        owner
-        team
-        images
-        description
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        waybillId
-        version
-      }
-      link {
-        id
-        owner
-        team
-        url
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        waybillId
-        version
-      }
-      status
-      waybill {
-        id
-        owner
-        team
-        number
-        description
-        contractor
-        purchaseDate
-        deliveryDate
-        spec {
-          id
-          owner
-          team
-        }
-        waybillSpecId
-        products {
-          nextToken
-        }
-        status
-        profitType
-        profitPercent
-        profitForAll
-        discount
-        prepayment
-        prepaymentDate
-        residue
-        residueDate
-        customerDebt
-        customerDebtDate
-        createdAt
-        updatedAt
-        version
-      }
-      productWaybillId
-      createdAt
-      updatedAt
-      version
-    }
-    waybillId
-    version
-  }
-}
-`;
-export const publishWaybillUpdate = `mutation PublishWaybillUpdate($owner: ID!, $id: ID!) {
-  publishWaybillUpdate(owner: $owner, id: $id) {
+export const createWaybill = `mutation CreateWaybill($input: CreateWaybillInput!) {
+  createWaybill(input: $input) {
     id
     owner
     team
@@ -1104,31 +43,6 @@ export const publishWaybillUpdate = `mutation PublishWaybillUpdate($owner: ID!, 
       owner
       team
       waybills {
-        items {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
         nextToken
       }
     }
@@ -1142,75 +56,7 @@ export const publishWaybillUpdate = `mutation PublishWaybillUpdate($owner: ID!, 
         name
         quantity
         unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
         status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
         productWaybillId
         createdAt
         updatedAt
@@ -1235,6 +81,355 @@ export const publishWaybillUpdate = `mutation PublishWaybillUpdate($owner: ID!, 
   }
 }
 `;
+export const updateProductQuantity = `mutation UpdateProductQuantity($input: UpdateProductQuantityInput!) {
+  updateProductQuantity(input: $input) {
+    id
+    owner
+    team
+    number
+    description
+    contractor
+    purchaseDate
+    deliveryDate
+    spec {
+      id
+      owner
+      team
+      waybills {
+        nextToken
+      }
+    }
+    waybillSpecId
+    products {
+      items {
+        id
+        owner
+        team
+        article
+        name
+        quantity
+        unit
+        status
+        productWaybillId
+        createdAt
+        updatedAt
+        version
+      }
+      nextToken
+    }
+    status
+    profitType
+    profitPercent
+    profitForAll
+    discount
+    prepayment
+    prepaymentDate
+    residue
+    residueDate
+    customerDebt
+    customerDebtDate
+    createdAt
+    updatedAt
+    version
+  }
+}
+`;
+export const updateProductCost = `mutation UpdateProductCost($input: UpdateProductCostInput!) {
+  updateProductCost(input: $input) {
+    id
+    owner
+    team
+    number
+    description
+    contractor
+    purchaseDate
+    deliveryDate
+    spec {
+      id
+      owner
+      team
+      waybills {
+        nextToken
+      }
+    }
+    waybillSpecId
+    products {
+      items {
+        id
+        owner
+        team
+        article
+        name
+        quantity
+        unit
+        status
+        productWaybillId
+        createdAt
+        updatedAt
+        version
+      }
+      nextToken
+    }
+    status
+    profitType
+    profitPercent
+    profitForAll
+    discount
+    prepayment
+    prepaymentDate
+    residue
+    residueDate
+    customerDebt
+    customerDebtDate
+    createdAt
+    updatedAt
+    version
+  }
+}
+`;
+export const updateProductStore = `mutation UpdateProductStore($input: UpdateProductStoreInput!) {
+  updateProductStore(input: $input) {
+    id
+    owner
+    team
+    article
+    name
+    quantity
+    unit
+    cost {
+      owner
+      team
+      price
+      amount
+      clientPrice
+      clientAmount
+    }
+    store {
+      owner
+      team
+      net
+      gross
+      width
+      height
+      length
+      inStock
+      dimension
+      cargoPlaceNumber
+    }
+    info {
+      owner
+      team
+      images
+      description
+    }
+    link {
+      owner
+      team
+      url
+    }
+    status
+    waybill {
+      id
+      owner
+      team
+      number
+      description
+      contractor
+      purchaseDate
+      deliveryDate
+      spec {
+        id
+        owner
+        team
+      }
+      waybillSpecId
+      products {
+        nextToken
+      }
+      status
+      profitType
+      profitPercent
+      profitForAll
+      discount
+      prepayment
+      prepaymentDate
+      residue
+      residueDate
+      customerDebt
+      customerDebtDate
+      createdAt
+      updatedAt
+      version
+    }
+    productWaybillId
+    createdAt
+    updatedAt
+    version
+  }
+}
+`;
+export const updateProductInfo = `mutation UpdateProductInfo($input: UpdateProductInfoInput!) {
+  updateProductInfo(input: $input) {
+    id
+    owner
+    team
+    article
+    name
+    quantity
+    unit
+    cost {
+      owner
+      team
+      price
+      amount
+      clientPrice
+      clientAmount
+    }
+    store {
+      owner
+      team
+      net
+      gross
+      width
+      height
+      length
+      inStock
+      dimension
+      cargoPlaceNumber
+    }
+    info {
+      owner
+      team
+      images
+      description
+    }
+    link {
+      owner
+      team
+      url
+    }
+    status
+    waybill {
+      id
+      owner
+      team
+      number
+      description
+      contractor
+      purchaseDate
+      deliveryDate
+      spec {
+        id
+        owner
+        team
+      }
+      waybillSpecId
+      products {
+        nextToken
+      }
+      status
+      profitType
+      profitPercent
+      profitForAll
+      discount
+      prepayment
+      prepaymentDate
+      residue
+      residueDate
+      customerDebt
+      customerDebtDate
+      createdAt
+      updatedAt
+      version
+    }
+    productWaybillId
+    createdAt
+    updatedAt
+    version
+  }
+}
+`;
+export const updateProductLink = `mutation UpdateProductLink($input: UpdateProductLinkInput!) {
+  updateProductLink(input: $input) {
+    id
+    owner
+    team
+    article
+    name
+    quantity
+    unit
+    cost {
+      owner
+      team
+      price
+      amount
+      clientPrice
+      clientAmount
+    }
+    store {
+      owner
+      team
+      net
+      gross
+      width
+      height
+      length
+      inStock
+      dimension
+      cargoPlaceNumber
+    }
+    info {
+      owner
+      team
+      images
+      description
+    }
+    link {
+      owner
+      team
+      url
+    }
+    status
+    waybill {
+      id
+      owner
+      team
+      number
+      description
+      contractor
+      purchaseDate
+      deliveryDate
+      spec {
+        id
+        owner
+        team
+      }
+      waybillSpecId
+      products {
+        nextToken
+      }
+      status
+      profitType
+      profitPercent
+      profitForAll
+      discount
+      prepayment
+      prepaymentDate
+      residue
+      residueDate
+      customerDebt
+      customerDebtDate
+      createdAt
+      updatedAt
+      version
+    }
+    productWaybillId
+    createdAt
+    updatedAt
+    version
+  }
+}
+`;
 export const updateProject = `mutation UpdateProject($input: UpdateProjectInput!) {
   updateProject(input: $input) {
     id
@@ -1253,31 +448,6 @@ export const updateProject = `mutation UpdateProject($input: UpdateProjectInput!
       owner
       team
       waybills {
-        items {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
         nextToken
       }
     }
@@ -1305,180 +475,9 @@ export const deleteProject = `mutation DeleteProject($input: DeleteProjectInput!
       owner
       team
       waybills {
-        items {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
         nextToken
       }
     }
-    createdAt
-    updatedAt
-    version
-  }
-}
-`;
-export const createWaybill = `mutation CreateWaybill($input: CreateWaybillInput!) {
-  createWaybill(input: $input) {
-    id
-    owner
-    team
-    number
-    description
-    contractor
-    purchaseDate
-    deliveryDate
-    spec {
-      id
-      owner
-      team
-      waybills {
-        items {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
-        nextToken
-      }
-    }
-    waybillSpecId
-    products {
-      items {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      nextToken
-    }
-    status
-    profitType
-    profitPercent
-    profitForAll
-    discount
-    prepayment
-    prepaymentDate
-    residue
-    residueDate
-    customerDebt
-    customerDebtDate
     createdAt
     updatedAt
     version
@@ -1500,31 +499,6 @@ export const updateWaybill = `mutation UpdateWaybill($input: UpdateWaybillInput!
       owner
       team
       waybills {
-        items {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
         nextToken
       }
     }
@@ -1538,75 +512,7 @@ export const updateWaybill = `mutation UpdateWaybill($input: UpdateWaybillInput!
         name
         quantity
         unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
         status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
         productWaybillId
         createdAt
         updatedAt
@@ -1646,31 +552,6 @@ export const deleteWaybill = `mutation DeleteWaybill($input: DeleteWaybillInput!
       owner
       team
       waybills {
-        items {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
         nextToken
       }
     }
@@ -1684,75 +565,7 @@ export const deleteWaybill = `mutation DeleteWaybill($input: DeleteWaybillInput!
         name
         quantity
         unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
         status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
         productWaybillId
         createdAt
         updatedAt
@@ -1777,8 +590,8 @@ export const deleteWaybill = `mutation DeleteWaybill($input: DeleteWaybillInput!
   }
 }
 `;
-export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!) {
-  deleteProduct(input: $input) {
+export const createProduct = `mutation CreateProduct($input: CreateProductInput!) {
+  createProduct(input: $input) {
     id
     owner
     team
@@ -1787,100 +600,14 @@ export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!
     quantity
     unit
     cost {
-      id
       owner
       team
       price
       amount
       clientPrice
       clientAmount
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      waybillId
-      version
     }
     store {
-      id
       owner
       team
       net
@@ -1891,271 +618,17 @@ export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!
       inStock
       dimension
       cargoPlaceNumber
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      waybillId
-      version
     }
     info {
-      id
       owner
       team
       images
       description
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      waybillId
-      version
     }
     link {
-      id
       owner
       team
       url
-      product {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
-        status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      waybillId
-      version
     }
     status
     waybill {
@@ -2171,26 +644,9 @@ export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!
         id
         owner
         team
-        waybills {
-          nextToken
-        }
       }
       waybillSpecId
       products {
-        items {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
         nextToken
       }
       status
@@ -2215,481 +671,164 @@ export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!
   }
 }
 `;
-export const updateProductStore = `mutation UpdateProductStore($input: UpdateProductStoreInput!) {
-  updateProductStore(input: $input) {
+export const updateProduct = `mutation UpdateProduct($input: UpdateProductInput!) {
+  updateProduct(input: $input) {
     id
     owner
     team
-    net
-    gross
-    width
-    height
-    length
-    inStock
-    dimension
-    cargoPlaceNumber
-    product {
+    article
+    name
+    quantity
+    unit
+    cost {
+      owner
+      team
+      price
+      amount
+      clientPrice
+      clientAmount
+    }
+    store {
+      owner
+      team
+      net
+      gross
+      width
+      height
+      length
+      inStock
+      dimension
+      cargoPlaceNumber
+    }
+    info {
+      owner
+      team
+      images
+      description
+    }
+    link {
+      owner
+      team
+      url
+    }
+    status
+    waybill {
       id
       owner
       team
-      article
-      name
-      quantity
-      unit
-      cost {
+      number
+      description
+      contractor
+      purchaseDate
+      deliveryDate
+      spec {
         id
         owner
         team
-        price
-        amount
-        clientPrice
-        clientAmount
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        waybillId
-        version
       }
-      store {
-        id
-        owner
-        team
-        net
-        gross
-        width
-        height
-        length
-        inStock
-        dimension
-        cargoPlaceNumber
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        waybillId
-        version
-      }
-      info {
-        id
-        owner
-        team
-        images
-        description
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        waybillId
-        version
-      }
-      link {
-        id
-        owner
-        team
-        url
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        waybillId
-        version
+      waybillSpecId
+      products {
+        nextToken
       }
       status
-      waybill {
-        id
-        owner
-        team
-        number
-        description
-        contractor
-        purchaseDate
-        deliveryDate
-        spec {
-          id
-          owner
-          team
-        }
-        waybillSpecId
-        products {
-          nextToken
-        }
-        status
-        profitType
-        profitPercent
-        profitForAll
-        discount
-        prepayment
-        prepaymentDate
-        residue
-        residueDate
-        customerDebt
-        customerDebtDate
-        createdAt
-        updatedAt
-        version
-      }
-      productWaybillId
+      profitType
+      profitPercent
+      profitForAll
+      discount
+      prepayment
+      prepaymentDate
+      residue
+      residueDate
+      customerDebt
+      customerDebtDate
       createdAt
       updatedAt
       version
     }
-    waybillId
+    productWaybillId
+    createdAt
+    updatedAt
     version
   }
 }
 `;
-export const updateProductInfo = `mutation UpdateProductInfo($input: UpdateProductInfoInput!) {
-  updateProductInfo(input: $input) {
+export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!) {
+  deleteProduct(input: $input) {
     id
     owner
     team
-    images
-    description
-    product {
+    article
+    name
+    quantity
+    unit
+    cost {
+      owner
+      team
+      price
+      amount
+      clientPrice
+      clientAmount
+    }
+    store {
+      owner
+      team
+      net
+      gross
+      width
+      height
+      length
+      inStock
+      dimension
+      cargoPlaceNumber
+    }
+    info {
+      owner
+      team
+      images
+      description
+    }
+    link {
+      owner
+      team
+      url
+    }
+    status
+    waybill {
       id
       owner
       team
-      article
-      name
-      quantity
-      unit
-      cost {
+      number
+      description
+      contractor
+      purchaseDate
+      deliveryDate
+      spec {
         id
         owner
         team
-        price
-        amount
-        clientPrice
-        clientAmount
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        waybillId
-        version
       }
-      store {
-        id
-        owner
-        team
-        net
-        gross
-        width
-        height
-        length
-        inStock
-        dimension
-        cargoPlaceNumber
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        waybillId
-        version
-      }
-      info {
-        id
-        owner
-        team
-        images
-        description
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        waybillId
-        version
-      }
-      link {
-        id
-        owner
-        team
-        url
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        waybillId
-        version
+      waybillSpecId
+      products {
+        nextToken
       }
       status
-      waybill {
-        id
-        owner
-        team
-        number
-        description
-        contractor
-        purchaseDate
-        deliveryDate
-        spec {
-          id
-          owner
-          team
-        }
-        waybillSpecId
-        products {
-          nextToken
-        }
-        status
-        profitType
-        profitPercent
-        profitForAll
-        discount
-        prepayment
-        prepaymentDate
-        residue
-        residueDate
-        customerDebt
-        customerDebtDate
-        createdAt
-        updatedAt
-        version
-      }
-      productWaybillId
+      profitType
+      profitPercent
+      profitForAll
+      discount
+      prepayment
+      prepaymentDate
+      residue
+      residueDate
+      customerDebt
+      customerDebtDate
       createdAt
       updatedAt
       version
     }
-    waybillId
-    version
-  }
-}
-`;
-export const updateProductLink = `mutation UpdateProductLink($input: UpdateProductLinkInput!) {
-  updateProductLink(input: $input) {
-    id
-    owner
-    team
-    url
-    product {
-      id
-      owner
-      team
-      article
-      name
-      quantity
-      unit
-      cost {
-        id
-        owner
-        team
-        price
-        amount
-        clientPrice
-        clientAmount
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        waybillId
-        version
-      }
-      store {
-        id
-        owner
-        team
-        net
-        gross
-        width
-        height
-        length
-        inStock
-        dimension
-        cargoPlaceNumber
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        waybillId
-        version
-      }
-      info {
-        id
-        owner
-        team
-        images
-        description
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        waybillId
-        version
-      }
-      link {
-        id
-        owner
-        team
-        url
-        product {
-          id
-          owner
-          team
-          article
-          name
-          quantity
-          unit
-          status
-          productWaybillId
-          createdAt
-          updatedAt
-          version
-        }
-        waybillId
-        version
-      }
-      status
-      waybill {
-        id
-        owner
-        team
-        number
-        description
-        contractor
-        purchaseDate
-        deliveryDate
-        spec {
-          id
-          owner
-          team
-        }
-        waybillSpecId
-        products {
-          nextToken
-        }
-        status
-        profitType
-        profitPercent
-        profitForAll
-        discount
-        prepayment
-        prepaymentDate
-        residue
-        residueDate
-        customerDebt
-        customerDebtDate
-        createdAt
-        updatedAt
-        version
-      }
-      productWaybillId
-      createdAt
-      updatedAt
-      version
-    }
-    waybillId
+    productWaybillId
+    createdAt
+    updatedAt
     version
   }
 }

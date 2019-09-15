@@ -1,0 +1,361 @@
+type Project
+  @model(
+    queries: { list: "listProjects" },
+    # create Project mutation has custom logic
+    # TODO create function for that
+    mutations: { update: "updateProject", delete: "deleteProject" },
+    subscriptions: { level: ON }
+  )
+  @versioned
+  @auth(rules: [
+    { allow: owner },
+    { allow: owner, ownerField: "team" },
+    # { allow: owner, ownerField: "freelancers", operations: [create] }
+    # {allow: groups, groups: ["Managers"], queries: null, mutations: [create, update, delete]},
+    # {allow: groups, groups: ["Employees"], queries: [get, list], mutations: null}
+  ])
+{
+  id: ID!
+  owner: String
+  team: [String!]
+  managers: [String!]
+  accauntants: [String!]
+  warehousemans: [String!]
+  freelancers: [String!]
+  name: String
+  description: String
+  client: String
+  status: ProjectStatus
+  spec: Spec @connection
+  createdAt: String
+	updatedAt: String
+}
+
+enum ProjectStatus {
+  IN_PROGRESS
+  COMPLETED
+  ARCHIVED
+}
+
+type Spec
+  @model(queries: { get: "getSpec" }, mutations: null, subscriptions: null)
+  @auth(rules: [
+    { allow: owner },
+    { allow: owner, ownerField: "team" },
+  ])
+{
+  id: ID!
+  owner: String
+  team: [String]
+  waybills: [Waybill!] @connection(name: "SpecWaybills")
+}
+
+type Waybill
+  @model(
+    queries: { get: "getWaybill" },
+    # create Waybill mutation has custom logic
+    # TODO create function for custom logic
+    mutations: { update: "updateWaybill", delete: "deleteWaybill" },
+    subscriptions: { level: ON }
+  )
+  @versioned
+  @auth(rules: [
+    { allow: owner },
+    { allow: owner, ownerField: "team" },
+  ])
+{
+  id: ID!
+  owner: String
+  team: [String!]
+  number: String
+  description: String
+  contractor: String
+  purchaseDate: String
+  deliveryDate: String
+  spec: Spec @connection(name: "SpecWaybills")
+  waybillSpecId: ID!
+  products: [Product!] @connection(name: "WaybillProducts")
+  status: WaybillStatus
+  profitType: WaybillProfitType
+  profitPercent: Float
+  profitForAll: Boolean
+  discount: Int
+  prepayment: Float
+  prepaymentDate: String
+  residue: Float
+  residueDate: String
+  customerDebt: Float
+  customerDebtDate: String
+  createdAt: String
+	updatedAt: String
+}
+
+enum WaybillProfitType {
+  MARGIN
+  COMMISSION
+}
+
+enum WaybillStatus {
+  IN_PROCESSING
+  IN_PRODUCTION
+  IN_STOCK
+}
+
+type Product
+  @model(
+    queries: null,
+    mutations: { create: "createProduct", update: "updateProduct", delete: "deleteProduct" },
+    subscriptions: { level: ON }
+  )
+  @versioned
+  @auth(rules: [
+    { allow: owner },
+    { allow: owner, ownerField: "team" },
+  ])
+{
+  id: ID!
+  owner: String
+  team: [String!]
+  article: String
+  name: String
+  quantity: Int
+  # TODO add connection with type ProductUnit, array in project
+  unit: String
+  cost: ProductCost
+  store: ProductStore
+  info: ProductInfo
+  link: ProductLink
+  status: ProductStatus
+  waybill: Waybill @connection(name: "WaybillProducts")
+  productWaybillId: ID!
+  createdAt: String
+	updatedAt: String
+}
+
+enum ProductStatus {
+  IN_PROCESSING
+  IN_PRODUCTION
+  IN_STOCK
+}
+
+type ProductCost {
+  owner: String
+  team: [String!]
+  price: Float
+  amount: Float
+  clientPrice: Float
+  clientAmount: Float
+}
+
+type ProductStore {
+  owner: String
+  team: [String!]
+  net: Float
+  gross: Float
+  width: Float
+  height: Float
+  length: Float
+  inStock: Boolean
+  dimension: Float
+  # TODO add connection with type CargoPlace, @model
+  cargoPlaceNumber: Int
+}
+
+type ProductInfo {
+  owner: String
+  team: [String!]
+  images: [String]
+  description: String
+}
+
+type ProductLink {
+  owner: String
+  team: [String!]
+  url: String
+}
+
+type Subscription {
+  onCreateProject(owner: ID!): Project
+    @aws_subscribe(mutations: ["createProject"])
+  onCreateWaybill(owner: ID!): Waybill
+    @aws_subscribe(mutations: ["createWaybill"])
+  onUpdateWaybillProduct(owner: ID!): Waybill
+    @aws_subscribe(mutations: ["updateProductQuantity", "updateProductCost"])
+  onUpdateProductRelation(owner: ID!): Product
+    @aws_subscribe(mutations: ["updateProductStore", "updateProductInfo", "updateProductLink"])
+}
+
+type Mutation {
+  createProject(input: CreateProjectInput!): Project
+  createWaybill(input: CreateWaybillInput!): Waybill
+  # custom function, with return Waybill
+  updateProductQuantity(input: UpdateProductQuantityInput!): Waybill
+  updateProductCost(input: UpdateProductCostInput!): Waybill
+  updateProductStore(input: UpdateProductStoreInput!): Product
+  updateProductInfo(input: UpdateProductInfoInput!): Product
+  updateProductLink(input: UpdateProductLinkInput!): Product
+}
+
+input CreateProjectInput {
+  id: ID
+  owner: String
+  team: [String!]
+  managers: [String!]
+  accauntants: [String!]
+  warehousemans: [String!]
+  freelancers: [String!]
+  name: String
+  description: String
+  client: String
+  status: ProjectStatus
+  createdAt: String
+  updatedAt: String
+  projectSpecId: ID
+}
+
+input CreateWaybillInput {
+  id: ID
+  owner: String
+  team: [String!]
+  number: String
+  description: String
+  contractor: String
+  purchaseDate: String
+  deliveryDate: String
+  waybillSpecId: ID!
+  status: WaybillStatus
+  profitType: WaybillProfitType
+  profitPercent: Float
+  profitForAll: Boolean
+  discount: Int
+  prepayment: Float
+  prepaymentDate: String
+  residue: Float
+  residueDate: String
+  customerDebt: Float
+  customerDebtDate: String
+  createdAt: String
+  updatedAt: String
+}
+
+input UpdateWaybillInput {
+  id: ID!
+  owner: String
+  team: [String!]
+  number: String
+  description: String
+  contractor: String
+  purchaseDate: String
+  deliveryDate: String
+  waybillSpecId: ID
+  status: WaybillStatus
+  # excluded fields that has affect to calcs
+  # profitType, profitPercent, profitForAll, discount, prepayment, residue, customerDebt
+  prepaymentDate: String
+  residueDate: String
+  customerDebtDate: String
+  createdAt: String
+  updatedAt: String
+}
+
+input CreateProductInput {
+  id: ID
+  owner: String
+  team: [String!]
+  article: String
+  name: String
+  # on create quantity default is 0
+  unit: String
+  status: ProductStatus
+  productWaybillId: ID!
+  createdAt: String
+  updatedAt: String
+}
+
+input UpdateProductInput {
+  id: ID!
+  owner: String
+  team: [String!]
+  article: String
+  name: String
+  # for quantity update use updateProductQuantity
+  unit: String
+  status: ProductStatus
+  createdAt: String
+  updatedAt: String
+}
+
+input UpdateProductQuantityInput {
+  id: ID!
+  owner: String
+  team: [String!]
+  quantity: Int
+  expectedVersion: Int!
+}
+
+input UpdateProductCostInput {
+  id: ID!
+  owner: String
+  team: [String!]
+  cost: ProductCostInput
+  expectedVersion: Int!
+}
+
+input UpdateProductStoreInput {
+  id: ID!
+  owner: String
+  team: [String!]
+  store: ProductStoreInput
+  expectedVersion: Int!
+}
+
+input UpdateProductInfoInput {
+  id: ID!
+  owner: String
+  team: [String!]
+  info: ProductInfoInput
+  expectedVersion: Int!
+}
+
+input UpdateProductLinkInput {
+  id: ID!
+  owner: String
+  team: [String!]
+  link: ProductLinkInput
+  expectedVersion: Int!
+}
+
+input ProductCostInput {
+  owner: String
+  team: [String!]
+  price: Float
+  amount: Float
+  clientPrice: Float
+  clientAmount: Float
+}
+
+input ProductStoreInput {
+  owner: String
+  team: [String!]
+  net: Float
+  gross: Float
+  width: Float
+  height: Float
+  length: Float
+  inStock: Boolean
+  dimension: Float
+  cargoPlaceNumber: Int
+}
+
+input ProductInfoInput {
+  owner: String
+  team: [String!]
+  images: [String]
+  description: String
+}
+
+input ProductLinkInput {
+  owner: String
+  team: [String!]
+  url: String
+}

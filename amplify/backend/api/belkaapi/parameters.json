@@ -1,0 +1,11 @@
+{
+    "AppSyncApiName": "belkaapi",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": "false",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authbelkaapid7786dd4d7786dd4",
+            "Outputs.UserPoolId"
+        ]
+    }
+}

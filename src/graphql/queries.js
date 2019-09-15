@@ -23,9 +23,6 @@ export const listProjects = `query ListProjects(
         id
         owner
         team
-        waybills {
-          nextToken
-        }
       }
       createdAt
       updatedAt
@@ -50,15 +47,7 @@ export const getSpec = `query GetSpec($id: ID!) {
         contractor
         purchaseDate
         deliveryDate
-        spec {
-          id
-          owner
-          team
-        }
         waybillSpecId
-        products {
-          nextToken
-        }
         status
         profitType
         profitPercent
@@ -94,31 +83,6 @@ export const getWaybill = `query GetWaybill($id: ID!) {
       owner
       team
       waybills {
-        items {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
         nextToken
       }
     }
@@ -132,75 +96,7 @@ export const getWaybill = `query GetWaybill($id: ID!) {
         name
         quantity
         unit
-        cost {
-          id
-          owner
-          team
-          price
-          amount
-          clientPrice
-          clientAmount
-          waybillId
-          version
-        }
-        store {
-          id
-          owner
-          team
-          net
-          gross
-          width
-          height
-          length
-          inStock
-          dimension
-          cargoPlaceNumber
-          waybillId
-          version
-        }
-        info {
-          id
-          owner
-          team
-          images
-          description
-          waybillId
-          version
-        }
-        link {
-          id
-          owner
-          team
-          url
-          waybillId
-          version
-        }
         status
-        waybill {
-          id
-          owner
-          team
-          number
-          description
-          contractor
-          purchaseDate
-          deliveryDate
-          waybillSpecId
-          status
-          profitType
-          profitPercent
-          profitForAll
-          discount
-          prepayment
-          prepaymentDate
-          residue
-          residueDate
-          customerDebt
-          customerDebtDate
-          createdAt
-          updatedAt
-          version
-        }
         productWaybillId
         createdAt
         updatedAt
