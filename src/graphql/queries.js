@@ -23,6 +23,9 @@ export const listProjects = `query ListProjects(
         id
         owner
         team
+        waybills {
+          nextToken
+        }
       }
       createdAt
       updatedAt
@@ -47,7 +50,15 @@ export const getSpec = `query GetSpec($id: ID!) {
         contractor
         purchaseDate
         deliveryDate
+        spec {
+          id
+          owner
+          team
+        }
         waybillSpecId
+        products {
+          nextToken
+        }
         status
         profitType
         profitPercent
@@ -59,6 +70,12 @@ export const getSpec = `query GetSpec($id: ID!) {
         residueDate
         customerDebt
         customerDebtDate
+        totalAmount
+        totalClientAmount
+        totalNet
+        totalGross
+        totalCapacity
+        totalCargoPlaceCount
         createdAt
         updatedAt
         version
@@ -83,6 +100,37 @@ export const getWaybill = `query GetWaybill($id: ID!) {
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          profitType
+          profitPercent
+          profitForAll
+          discount
+          prepayment
+          prepaymentDate
+          residue
+          residueDate
+          customerDebt
+          customerDebtDate
+          totalAmount
+          totalClientAmount
+          totalNet
+          totalGross
+          totalCapacity
+          totalCargoPlaceCount
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
     }
@@ -96,7 +144,71 @@ export const getWaybill = `query GetWaybill($id: ID!) {
         name
         quantity
         unit
+        customProfit
+        cost {
+          owner
+          team
+          price
+          amount
+          clientPrice
+          clientAmount
+        }
+        store {
+          owner
+          team
+          net
+          gross
+          width
+          height
+          length
+          capacity
+          inStock
+          cargoPlaceCount
+          cargoPlaceNumber
+        }
+        info {
+          owner
+          team
+          images
+          description
+        }
+        link {
+          owner
+          team
+          url
+        }
         status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          profitType
+          profitPercent
+          profitForAll
+          discount
+          prepayment
+          prepaymentDate
+          residue
+          residueDate
+          customerDebt
+          customerDebtDate
+          totalAmount
+          totalClientAmount
+          totalNet
+          totalGross
+          totalCapacity
+          totalCargoPlaceCount
+          createdAt
+          updatedAt
+          version
+        }
         productWaybillId
         createdAt
         updatedAt
@@ -115,6 +227,12 @@ export const getWaybill = `query GetWaybill($id: ID!) {
     residueDate
     customerDebt
     customerDebtDate
+    totalAmount
+    totalClientAmount
+    totalNet
+    totalGross
+    totalCapacity
+    totalCargoPlaceCount
     createdAt
     updatedAt
     version

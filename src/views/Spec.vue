@@ -310,20 +310,17 @@ export default {
     },
     createWaybillSubscription () {
       return this.$Amplify.graphqlOperation(onCreateWaybill, {
-        owner: this.owner,
-        waybillSpecId: this.specId
+        owner: this.owner
       })
     },
     updateWaybillSubscription () {
       return this.$Amplify.graphqlOperation(onUpdateWaybill, {
-        owner: this.owner,
-        waybillSpecId: this.specId
+        owner: this.owner
       })
     },
     deleteWaybillSubscription () {
       return this.$Amplify.graphqlOperation(onDeleteWaybill, {
-        owner: this.owner,
-        waybillSpecId: this.specId
+        owner: this.owner
       })
     },
   },
@@ -361,6 +358,16 @@ export default {
     }
   },
   methods: {
+    updateWaybillItem (newData) {
+      this.logger.info('Update waybill from product update...', newData)
+      const newItem = newData
+      const index = this.items.findIndex(el => el.id === newItem.id)
+      if (index !== -1) {
+        delete newItem.products
+        const item = Object.assign({}, this.items[index], newItem)
+        this.items.splice(index, 1, item)
+      }
+    },
     onCreateWaybill (newData) {
       this.logger.info('New waybill from subscription...', newData)
       const newItem = newData.onCreateWaybill

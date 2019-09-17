@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="items"
+    :items="products"
     :mobile-breakpoint="0"
     :loading="loading"
     hide-default-footer
@@ -11,7 +11,84 @@
       <tbody>
         <tr v-for="(item, index) in items" :key="index">
           <slot name="product" :item="products[index]" :index="index" />
-          <ProductTableCellEditable
+          <td>
+            <Editable
+              :value="item.store && item.store.net"
+              :version="item.version"
+              type="number"
+              min="0"
+              placeholder="-"
+              arrow-move
+              @input="$emit('update', { id: item.id, store: { net: $event }, expectedVersion: item.version })"
+            />
+          </td>
+          <td>
+            <Editable
+              :value="item.store && item.store.gross"
+              :version="item.version"
+              type="number"
+              min="0"
+              placeholder="-"
+              arrow-move
+              @input="$emit('update', { id: item.id, store: { gross: $event }, expectedVersion: item.version })"
+            />
+          </td>
+          <td>
+            <Editable
+              :value="item.store && item.store.width"
+              :version="item.version"
+              type="number"
+              min="0"
+              placeholder="-"
+              arrow-move
+              @input="$emit('update', { id: item.id, store: { width: $event }, expectedVersion: item.version })"
+            />
+          </td>
+          <td>
+            <Editable
+              :value="item.store && item.store.height"
+              :version="item.version"
+              type="number"
+              min="0"
+              placeholder="-"
+              arrow-move
+              @input="$emit('update', { id: item.id, store: { height: $event }, expectedVersion: item.version })"
+            />
+          </td>
+          <td>
+            <Editable
+              :value="item.store && item.store.length"
+              :version="item.version"
+              type="number"
+              min="0"
+              placeholder="-"
+              arrow-move
+              @input="$emit('update', { id: item.id, store: { length: $event }, expectedVersion: item.version })"
+            />
+          </td>
+          <td>
+            <Editable
+              :value="item.store && item.store.capacity"
+              :version="item.version"
+              type="number"
+              min="0"
+              placeholder="-"
+              arrow-move
+              @input="$emit('update', { id: item.id, store: { capacity: $event }, expectedVersion: item.version })"
+            />
+          </td>
+          <td>
+            <Editable
+              :value="item.store && item.store.cargoPlaceNumber"
+              :version="item.version"
+              type="number"
+              min="0"
+              placeholder="-"
+              arrow-move
+              @input="$emit('update', { id: item.id, store: { cargoPlaceNumber: $event }, expectedVersion: item.version })"
+            />
+          </td>
+          <!-- <ProductTableCellEditable
             :item="item"
             update-prop="net"
             type="number"
@@ -43,7 +120,7 @@
           />
           <ProductTableCellEditable
             :item="item"
-            update-prop="dimension"
+            update-prop="capacity"
             type="number"
             @update="udpateProductStore"
           />
@@ -52,7 +129,7 @@
             update-prop="cargoPlaceNumber"
             type="number"
             @update="udpateProductStore"
-          />
+          /> -->
           <td>
             <v-checkbox
               :input-value="item.inStock"
@@ -77,15 +154,12 @@
 </template>
 
 <script>
-import { updateProductStore } from '@/graphql/mutations'
-import { onUpdateProductStore } from '@/graphql/subscriptions'
-
-import ProductTableCellEditable from '@/components/ProductTableCellEditable.vue'
+import Editable from '@/components/Editable.vue'
 
 export default {
   name: 'ProductStore',
   components: {
-    ProductTableCellEditable,
+    Editable,
   },
   props: {
     waybillId: {
@@ -107,7 +181,6 @@ export default {
   },
   data: () => ({
     updateLoading: null,
-    items: [],
     internalHeaders: [
       { text: 'Нетто, ед.', value: 'net', sortable: false, width: 120 },
       { text: 'Брутто, ед.', value: 'gross', sortable: false, width: 120 },
@@ -127,88 +200,9 @@ export default {
     headers () {
       return [...this.productHeaders, ...this.internalHeaders]
     },
-    updateProductStoreSubscription () {
-      return this.$Amplify.graphqlOperation(onUpdateProductStore, {
-        owner: this.owner,
-        waybillId: this.waybillId
-      })
-    },
-  },
-  watch: {
-    products: {
-      handler (val) {
-        const products = val || []
-        this.setItems(products)
-      },
-      immediate: true
-    }
   },
   created () {
     this.logger = new this.$Amplify.Logger('ProductStore')
-    this.updateSubscription = this.$Amplify.API.graphql(this.updateProductStoreSubscription)
-      .subscribe({
-        next: ({ value: { data } }) => {
-          this.onUpdateProductStore(data)
-        }
-      })
   },
-  beforeDestroy () {
-    if (this.updateSubscription) {
-      this.updateSubscription.unsubscribe()
-    }
-  },
-  methods: {
-    setItems (products) {
-      // TODO add to ProductStore type productId to not map the param
-      this.items = products.map(item => {
-        return item.store
-      })
-    },
-    onUpdateProductStore (newData, onError = false) {
-      const msg = onError
-        ? 'Update product store from update error data...'
-        : 'Update product store from subscription...'
-      this.logger.info(msg, newData)
-      const newItem = newData.onUpdateProductStore
-      const index = this.items.findIndex(el => el.id === newItem.id)
-      if (index !== -1) {
-        this.items.splice(index, 1, newItem)
-      }
-    },
-    async udpateProductStore (input) {
-      try {
-        this.updateLoading = input.id
-        const response = await this.$Amplify.API.graphql(
-          this.$Amplify.graphqlOperation(updateProductStore, {
-            input
-          })
-        )
-        if (response && response.errors && response.errors.length > 0) {
-          // exclude version check condition
-          this.errors = response.errors.reduce((acc, curr) => {
-            if (curr.errorType === 'DynamoDB:ConditionalCheckFailedException') {
-              this.onUpdateProductStore({ onUpdateProductStore: curr.data }, true)
-            } else {
-              return [...acc, curr]
-            }
-          }, [])
-          throw new Error(response.errors.join('\n'))
-        }
-      } catch (error) {
-        if (error && error.errors && error.errors.length > 0) {
-          this.errors = error.errors
-        }
-        this.logger.warn('Error: ', error)
-        // this.$Amplify.Analytics.record({
-        //   name: 'UpdateProductStoreError',
-        //   attributes: {
-        //     error: error.message
-        //   }
-        // })
-      } finally {
-        this.updateLoading = null
-      }
-    },
-  }
 }
 </script>

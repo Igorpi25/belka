@@ -1,0 +1,11 @@
+{
+    "permissions": {
+        "api": {
+            "belkaapi": [
+                "create",
+                "read",
+                "update"
+            ]
+        }
+    }
+}

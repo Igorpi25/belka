@@ -2,7 +2,7 @@ projects:
   belkaapi:
     schemaPath: src\graphql\schema.json
     includes:
-      - src\graphql\**\*.js
+      - src\graphql\generated\**\*.js
     excludes:
       - ./amplify/**
     extensions:

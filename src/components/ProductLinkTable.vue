@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="items"
+    :items="products"
     :mobile-breakpoint="0"
     :loading="loading"
     hide-default-footer
@@ -11,12 +11,14 @@
       <tbody>
         <tr v-for="(item, index) in items" :key="index">
           <slot name="product" :item="products[index]" :index="index" />
-          <ProductTableCellEditable
-            :item="item"
-            update-prop="url"
-            placeholder="Пустое поле"
-            @update="udpateProductLink"
-          />
+          <td>
+            <Editable
+              :item="item"
+              update-prop="url"
+              placeholder="Пустое поле"
+              @update="udpateProductLink"
+            />
+          </td>
           <td>
             <!-- TODO open link -->
           </td>
@@ -30,15 +32,12 @@
 </template>
 
 <script>
-import { updateProductLink } from '@/graphql/mutations'
-import { onUpdateProductLink } from '@/graphql/subscriptions'
-
-import ProductTableCellEditable from '@/components/ProductTableCellEditable.vue'
+import Editable from '@/components/Editable.vue'
 
 export default {
   name: 'ProductLinkTable',
   components: {
-    ProductTableCellEditable,
+    Editable,
   },
   props: {
     waybillId: {
@@ -60,7 +59,6 @@ export default {
   },
   data: () => ({
     updateLoading: null,
-    items: [],
     internalHeaders: [
       { text: 'Поле для ссылки', value: 'url', sortable: false },
       { text: 'Откр.', value: 'openLink', sortable: false, width: 80 },
@@ -74,88 +72,9 @@ export default {
     headers () {
       return [...this.productHeaders, ...this.internalHeaders]
     },
-    updateProductLinkSubscription () {
-      return this.$Amplify.graphqlOperation(onUpdateProductLink, {
-        owner: this.owner,
-        waybillId: this.waybillId
-      })
-    },
-  },
-  watch: {
-    products: {
-      handler (val) {
-        const products = val || []
-        this.setItems(products)
-      },
-      immediate: true
-    }
   },
   created () {
     this.logger = new this.$Amplify.Logger('ProductLink')
-    this.updateSubscription = this.$Amplify.API.graphql(this.updateProductLinkSubscription)
-      .subscribe({
-        next: ({ value: { data } }) => {
-          this.onUpdateProductLink(data)
-        }
-      })
   },
-  beforeDestroy () {
-    if (this.updateSubscription) {
-      this.updateSubscription.unsubscribe()
-    }
-  },
-  methods: {
-    setItems (products) {
-      // TODO add to ProductLink type productId to not map the param
-      this.items = products.map(item => {
-        return item.link
-      })
-    },
-    onUpdateProductLink (newData, onError = false) {
-      const msg = onError
-        ? 'Update product link from update error data...'
-        : 'Update product link from subscription...'
-      this.logger.info(msg, newData)
-      const newItem = newData.onUpdateProductLink
-      const index = this.items.findIndex(el => el.id === newItem.id)
-      if (index !== -1) {
-        this.items.splice(index, 1, newItem)
-      }
-    },
-    async udpateProductLink (input) {
-      try {
-        this.updateLoading = input.id
-        const response = await this.$Amplify.API.graphql(
-          this.$Amplify.graphqlOperation(updateProductLink, {
-            input
-          })
-        )
-        if (response && response.errors && response.errors.length > 0) {
-          // exclude version check condition
-          this.errors = response.errors.reduce((acc, curr) => {
-            if (curr.errorType === 'DynamoDB:ConditionalCheckFailedException') {
-              this.onUpdateProductLink({ onUpdateProductLink: curr.data }, true)
-            } else {
-              return [...acc, curr]
-            }
-          }, [])
-          throw new Error(response.errors.join('\n'))
-        }
-      } catch (error) {
-        if (error && error.errors && error.errors.length > 0) {
-          this.errors = error.errors
-        }
-        this.logger.warn('Error: ', error)
-        // this.$Amplify.Analytics.record({
-        //   name: 'UpdateProductLinkError',
-        //   attributes: {
-        //     error: error.message
-        //   }
-        // })
-      } finally {
-        this.updateLoading = null
-      }
-    },
-  }
 }
 </script>

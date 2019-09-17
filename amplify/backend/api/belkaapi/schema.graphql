@@ -2,7 +2,6 @@ type Project
   @model(
     queries: { list: "listProjects" },
     # create Project mutation has custom logic
-    # TODO create function for that
     mutations: { update: "updateProject", delete: "deleteProject" },
     subscriptions: { level: ON }
   )
@@ -53,9 +52,8 @@ type Spec
 type Waybill
   @model(
     queries: { get: "getWaybill" },
-    # create Waybill mutation has custom logic
-    # TODO create function for custom logic
-    mutations: { update: "updateWaybill", delete: "deleteWaybill" },
+    # create, update, delete Waybill mutation has custom logic
+    mutations: null,
     subscriptions: { level: ON }
   )
   @versioned
@@ -76,6 +74,9 @@ type Waybill
   waybillSpecId: ID!
   products: [Product!] @connection(name: "WaybillProducts")
   status: WaybillStatus
+  # profitType, profitPercent - recalc products
+  # profitForAll - restore products prices and reset customProfit field
+  # discount, prepayment - recalc waybill residue and customerDebt
   profitType: WaybillProfitType
   profitPercent: Float
   profitForAll: Boolean
@@ -86,6 +87,12 @@ type Waybill
   residueDate: String
   customerDebt: Float
   customerDebtDate: String
+  totalAmount: Float
+  totalClientAmount: Float
+  totalNet: Float
+  totalGross: Float
+  totalCapacity: Float
+  totalCargoPlaceCount: Float
   createdAt: String
 	updatedAt: String
 }
@@ -104,7 +111,9 @@ enum WaybillStatus {
 type Product
   @model(
     queries: null,
-    mutations: { create: "createProduct", update: "updateProduct", delete: "deleteProduct" },
+    # create, update, delete Product mutation has custom logic
+    # on create waybill status should change
+    mutations: null,
     subscriptions: { level: ON }
   )
   @versioned
@@ -121,6 +130,7 @@ type Product
   quantity: Int
   # TODO add connection with type ProductUnit, array in project
   unit: String
+  customProfit: Boolean
   cost: ProductCost
   store: ProductStore
   info: ProductInfo
@@ -155,8 +165,9 @@ type ProductStore {
   width: Float
   height: Float
   length: Float
+  capacity: Float
   inStock: Boolean
-  dimension: Float
+  cargoPlaceCount: Float
   # TODO add connection with type CargoPlace, @model
   cargoPlaceNumber: Int
 }
@@ -179,23 +190,36 @@ type Subscription {
     @aws_subscribe(mutations: ["createProject"])
   onCreateWaybill(owner: ID!): Waybill
     @aws_subscribe(mutations: ["createWaybill"])
-  onUpdateWaybillProduct(owner: ID!): Waybill
-    @aws_subscribe(mutations: ["updateProductQuantity", "updateProductCost"])
-  onUpdateProductRelation(owner: ID!): Product
-    @aws_subscribe(mutations: ["updateProductStore", "updateProductInfo", "updateProductLink"])
+  onUpdateWaybill(owner: ID!): Waybill
+    @aws_subscribe(mutations: ["updateWaybill"])
+  onDeleteWaybill(owner: ID!): Waybill
+    @aws_subscribe(mutations: ["deleteWaybill"])
+  onCreateProduct(owner: ID!): Product
+    @aws_subscribe(mutations: ["createProduct"])
+  onUpdateProduct(owner: ID!): Product
+    @aws_subscribe(mutations: ["updateProduct"])
+  onDeleteProduct(owner: ID!): Product
+    @aws_subscribe(mutations: ["deleteProduct"])
 }
 
 type Mutation {
   createProject(input: CreateProjectInput!): Project
+    @function(name: "belkaapiGraphQLResolver-${env}")
   createWaybill(input: CreateWaybillInput!): Waybill
-  # custom function, with return Waybill
-  updateProductQuantity(input: UpdateProductQuantityInput!): Waybill
-  updateProductCost(input: UpdateProductCostInput!): Waybill
-  updateProductStore(input: UpdateProductStoreInput!): Product
-  updateProductInfo(input: UpdateProductInfoInput!): Product
-  updateProductLink(input: UpdateProductLinkInput!): Product
+    @function(name: "belkaapiGraphQLResolver-${env}")
+  updateWaybill(input: UpdateWaybillInput!): Waybill
+    @function(name: "belkaapiGraphQLResolver-${env}")
+  deleteWaybill(input: DeleteWaybillInput!): Waybill
+    @function(name: "belkaapiGraphQLResolver-${env}")
+  createProduct(input: CreateProductInput!): Product
+    @function(name: "belkaapiGraphQLResolver-${env}")
+  updateProduct(input: UpdateProductInput!): Product
+    @function(name: "belkaapiGraphQLResolver-${env}")
+  deleteProduct(input: DeleteProductInput!): Product
+    @function(name: "belkaapiGraphQLResolver-${env}")
 }
 
+# fake update
 input CreateProjectInput {
   id: ID
   owner: String
@@ -234,6 +258,12 @@ input CreateWaybillInput {
   residueDate: String
   customerDebt: Float
   customerDebtDate: String
+  totalAmount: Float
+  totalClientAmount: Float
+  totalNet: Float
+  totalGross: Float
+  totalCapacity: Float
+  totalCargoPlaceCount: Float
   createdAt: String
   updatedAt: String
 }
@@ -250,12 +280,30 @@ input UpdateWaybillInput {
   waybillSpecId: ID
   status: WaybillStatus
   # excluded fields that has affect to calcs
-  # profitType, profitPercent, profitForAll, discount, prepayment, residue, customerDebt
+  # profitType, profitPercent, profitForAll, discount, prepayment - values to trigger calc
+  # residue, customerDebt - values do should do not change from client?
+  profitType: WaybillProfitType
+  profitPercent: Float
+  profitForAll: Boolean
+  discount: Int
+  prepayment: Float
   prepaymentDate: String
+  residue: Float
   residueDate: String
+  customerDebt: Float
   customerDebtDate: String
+  totalAmount: Float
+  totalClientAmount: Float
+  totalNet: Float
+  totalGross: Float
+  totalCapacity: Float
+  totalCargoPlaceCount: Float
   createdAt: String
   updatedAt: String
+}
+
+input DeleteWaybillInput {
+  id: ID
 }
 
 input CreateProductInput {
@@ -267,6 +315,7 @@ input CreateProductInput {
   # on create quantity default is 0
   unit: String
   status: ProductStatus
+  customProfit: Boolean
   productWaybillId: ID!
   createdAt: String
   updatedAt: String
@@ -278,51 +327,23 @@ input UpdateProductInput {
   team: [String!]
   article: String
   name: String
-  # for quantity update use updateProductQuantity
+  # quantity update trigger calc
+  quantity: Int
   unit: String
+  customProfit: Boolean
+  # cost update trigger calc
+  cost: ProductCostInput
+  # quantity trigger calc
+  store: ProductStoreInput
+  info: ProductInfoInput
+  link: ProductLinkInput
   status: ProductStatus
   createdAt: String
   updatedAt: String
 }
 
-input UpdateProductQuantityInput {
-  id: ID!
-  owner: String
-  team: [String!]
-  quantity: Int
-  expectedVersion: Int!
-}
-
-input UpdateProductCostInput {
-  id: ID!
-  owner: String
-  team: [String!]
-  cost: ProductCostInput
-  expectedVersion: Int!
-}
-
-input UpdateProductStoreInput {
-  id: ID!
-  owner: String
-  team: [String!]
-  store: ProductStoreInput
-  expectedVersion: Int!
-}
-
-input UpdateProductInfoInput {
-  id: ID!
-  owner: String
-  team: [String!]
-  info: ProductInfoInput
-  expectedVersion: Int!
-}
-
-input UpdateProductLinkInput {
-  id: ID!
-  owner: String
-  team: [String!]
-  link: ProductLinkInput
-  expectedVersion: Int!
+input DeleteProductInput {
+  id: ID
 }
 
 input ProductCostInput {
@@ -342,8 +363,9 @@ input ProductStoreInput {
   width: Float
   height: Float
   length: Float
+  capacity: Float
   inStock: Boolean
-  dimension: Float
+  cargoPlaceCount: Float
   cargoPlaceNumber: Int
 }
 

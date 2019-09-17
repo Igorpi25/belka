@@ -26,6 +26,7 @@
             :waybill-id="waybillId"
             :loading="loading"
             :waybill-profit-type="waybillProfitType"
+            @update="updateProduct"
           >
             <template v-slot:product="{ item, index }">
               <ProductTableCellIndex
@@ -64,6 +65,7 @@
             :products="items"
             :waybill-id="waybillId"
             :loading="loading"
+            @update="updateProduct"
           >
             <template v-slot:product="{ item, index }">
               <ProductTableCellIndex
@@ -102,6 +104,7 @@
             :products="items"
             :waybill-id="waybillId"
             :loading="loading"
+            @update="updateProduct"
           >
             <template v-slot:product="{ item, index }">
               <ProductTableCellIndex
@@ -141,6 +144,7 @@
             :products="items"
             :waybill-id="waybillId"
             :loading="loading"
+            @update="updateProduct"
           >
             <template v-slot:product="{ item, index }">
               <ProductTableCellIndex
@@ -268,20 +272,17 @@ export default {
     },
     createProductSubscription () {
       return this.$Amplify.graphqlOperation(onCreateProduct, {
-        owner: this.owner,
-        productWaybillId: this.waybillId
+        owner: this.owner
       })
     },
     updateProductSubscription () {
       return this.$Amplify.graphqlOperation(onUpdateProduct, {
-        owner: this.owner,
-        productWaybillId: this.waybillId
+        owner: this.owner
       })
     },
     deleteProductSubscription () {
       return this.$Amplify.graphqlOperation(onDeleteProduct, {
-        owner: this.owner,
-        productWaybillId: this.waybillId
+        owner: this.owner
       })
     },
   },
@@ -341,6 +342,8 @@ export default {
         // they uptated by own subs?
         this.items.splice(index, 1, newItem)
       }
+      // UPDATE WAYBILL
+      this.$parent.updateWaybillItem(newItem.waybill)
     },
     onDeleteProduct (newData) {
       this.logger.info('Delete product from subscription...', newData)

@@ -19,6 +19,37 @@ export const createProject = `mutation CreateProject($input: CreateProjectInput!
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          profitType
+          profitPercent
+          profitForAll
+          discount
+          prepayment
+          prepaymentDate
+          residue
+          residueDate
+          customerDebt
+          customerDebtDate
+          totalAmount
+          totalClientAmount
+          totalNet
+          totalGross
+          totalCapacity
+          totalCargoPlaceCount
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
     }
@@ -43,6 +74,37 @@ export const createWaybill = `mutation CreateWaybill($input: CreateWaybillInput!
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          profitType
+          profitPercent
+          profitForAll
+          discount
+          prepayment
+          prepaymentDate
+          residue
+          residueDate
+          customerDebt
+          customerDebtDate
+          totalAmount
+          totalClientAmount
+          totalNet
+          totalGross
+          totalCapacity
+          totalCargoPlaceCount
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
     }
@@ -56,7 +118,71 @@ export const createWaybill = `mutation CreateWaybill($input: CreateWaybillInput!
         name
         quantity
         unit
+        customProfit
+        cost {
+          owner
+          team
+          price
+          amount
+          clientPrice
+          clientAmount
+        }
+        store {
+          owner
+          team
+          net
+          gross
+          width
+          height
+          length
+          capacity
+          inStock
+          cargoPlaceCount
+          cargoPlaceNumber
+        }
+        info {
+          owner
+          team
+          images
+          description
+        }
+        link {
+          owner
+          team
+          url
+        }
         status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          profitType
+          profitPercent
+          profitForAll
+          discount
+          prepayment
+          prepaymentDate
+          residue
+          residueDate
+          customerDebt
+          customerDebtDate
+          totalAmount
+          totalClientAmount
+          totalNet
+          totalGross
+          totalCapacity
+          totalCargoPlaceCount
+          createdAt
+          updatedAt
+          version
+        }
         productWaybillId
         createdAt
         updatedAt
@@ -75,14 +201,20 @@ export const createWaybill = `mutation CreateWaybill($input: CreateWaybillInput!
     residueDate
     customerDebt
     customerDebtDate
+    totalAmount
+    totalClientAmount
+    totalNet
+    totalGross
+    totalCapacity
+    totalCargoPlaceCount
     createdAt
     updatedAt
     version
   }
 }
 `;
-export const updateProductQuantity = `mutation UpdateProductQuantity($input: UpdateProductQuantityInput!) {
-  updateProductQuantity(input: $input) {
+export const updateWaybill = `mutation UpdateWaybill($input: UpdateWaybillInput!) {
+  updateWaybill(input: $input) {
     id
     owner
     team
@@ -96,6 +228,37 @@ export const updateProductQuantity = `mutation UpdateProductQuantity($input: Upd
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          profitType
+          profitPercent
+          profitForAll
+          discount
+          prepayment
+          prepaymentDate
+          residue
+          residueDate
+          customerDebt
+          customerDebtDate
+          totalAmount
+          totalClientAmount
+          totalNet
+          totalGross
+          totalCapacity
+          totalCargoPlaceCount
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
     }
@@ -109,7 +272,71 @@ export const updateProductQuantity = `mutation UpdateProductQuantity($input: Upd
         name
         quantity
         unit
+        customProfit
+        cost {
+          owner
+          team
+          price
+          amount
+          clientPrice
+          clientAmount
+        }
+        store {
+          owner
+          team
+          net
+          gross
+          width
+          height
+          length
+          capacity
+          inStock
+          cargoPlaceCount
+          cargoPlaceNumber
+        }
+        info {
+          owner
+          team
+          images
+          description
+        }
+        link {
+          owner
+          team
+          url
+        }
         status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          profitType
+          profitPercent
+          profitForAll
+          discount
+          prepayment
+          prepaymentDate
+          residue
+          residueDate
+          customerDebt
+          customerDebtDate
+          totalAmount
+          totalClientAmount
+          totalNet
+          totalGross
+          totalCapacity
+          totalCargoPlaceCount
+          createdAt
+          updatedAt
+          version
+        }
         productWaybillId
         createdAt
         updatedAt
@@ -128,14 +355,20 @@ export const updateProductQuantity = `mutation UpdateProductQuantity($input: Upd
     residueDate
     customerDebt
     customerDebtDate
+    totalAmount
+    totalClientAmount
+    totalNet
+    totalGross
+    totalCapacity
+    totalCargoPlaceCount
     createdAt
     updatedAt
     version
   }
 }
 `;
-export const updateProductCost = `mutation UpdateProductCost($input: UpdateProductCostInput!) {
-  updateProductCost(input: $input) {
+export const deleteWaybill = `mutation DeleteWaybill($input: DeleteWaybillInput!) {
+  deleteWaybill(input: $input) {
     id
     owner
     team
@@ -149,6 +382,37 @@ export const updateProductCost = `mutation UpdateProductCost($input: UpdateProdu
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          profitType
+          profitPercent
+          profitForAll
+          discount
+          prepayment
+          prepaymentDate
+          residue
+          residueDate
+          customerDebt
+          customerDebtDate
+          totalAmount
+          totalClientAmount
+          totalNet
+          totalGross
+          totalCapacity
+          totalCargoPlaceCount
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
     }
@@ -162,7 +426,71 @@ export const updateProductCost = `mutation UpdateProductCost($input: UpdateProdu
         name
         quantity
         unit
+        customProfit
+        cost {
+          owner
+          team
+          price
+          amount
+          clientPrice
+          clientAmount
+        }
+        store {
+          owner
+          team
+          net
+          gross
+          width
+          height
+          length
+          capacity
+          inStock
+          cargoPlaceCount
+          cargoPlaceNumber
+        }
+        info {
+          owner
+          team
+          images
+          description
+        }
+        link {
+          owner
+          team
+          url
+        }
         status
+        waybill {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          profitType
+          profitPercent
+          profitForAll
+          discount
+          prepayment
+          prepaymentDate
+          residue
+          residueDate
+          customerDebt
+          customerDebtDate
+          totalAmount
+          totalClientAmount
+          totalNet
+          totalGross
+          totalCapacity
+          totalCargoPlaceCount
+          createdAt
+          updatedAt
+          version
+        }
         productWaybillId
         createdAt
         updatedAt
@@ -181,14 +509,20 @@ export const updateProductCost = `mutation UpdateProductCost($input: UpdateProdu
     residueDate
     customerDebt
     customerDebtDate
+    totalAmount
+    totalClientAmount
+    totalNet
+    totalGross
+    totalCapacity
+    totalCargoPlaceCount
     createdAt
     updatedAt
     version
   }
 }
 `;
-export const updateProductStore = `mutation UpdateProductStore($input: UpdateProductStoreInput!) {
-  updateProductStore(input: $input) {
+export const createProduct = `mutation CreateProduct($input: CreateProductInput!) {
+  createProduct(input: $input) {
     id
     owner
     team
@@ -196,6 +530,7 @@ export const updateProductStore = `mutation UpdateProductStore($input: UpdatePro
     name
     quantity
     unit
+    customProfit
     cost {
       owner
       team
@@ -212,8 +547,9 @@ export const updateProductStore = `mutation UpdateProductStore($input: UpdatePro
       width
       height
       length
+      capacity
       inStock
-      dimension
+      cargoPlaceCount
       cargoPlaceNumber
     }
     info {
@@ -241,9 +577,27 @@ export const updateProductStore = `mutation UpdateProductStore($input: UpdatePro
         id
         owner
         team
+        waybills {
+          nextToken
+        }
       }
       waybillSpecId
       products {
+        items {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          customProfit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
       status
@@ -257,6 +611,12 @@ export const updateProductStore = `mutation UpdateProductStore($input: UpdatePro
       residueDate
       customerDebt
       customerDebtDate
+      totalAmount
+      totalClientAmount
+      totalNet
+      totalGross
+      totalCapacity
+      totalCargoPlaceCount
       createdAt
       updatedAt
       version
@@ -268,8 +628,8 @@ export const updateProductStore = `mutation UpdateProductStore($input: UpdatePro
   }
 }
 `;
-export const updateProductInfo = `mutation UpdateProductInfo($input: UpdateProductInfoInput!) {
-  updateProductInfo(input: $input) {
+export const updateProduct = `mutation UpdateProduct($input: UpdateProductInput!) {
+  updateProduct(input: $input) {
     id
     owner
     team
@@ -277,6 +637,7 @@ export const updateProductInfo = `mutation UpdateProductInfo($input: UpdateProdu
     name
     quantity
     unit
+    customProfit
     cost {
       owner
       team
@@ -293,8 +654,9 @@ export const updateProductInfo = `mutation UpdateProductInfo($input: UpdateProdu
       width
       height
       length
+      capacity
       inStock
-      dimension
+      cargoPlaceCount
       cargoPlaceNumber
     }
     info {
@@ -322,9 +684,27 @@ export const updateProductInfo = `mutation UpdateProductInfo($input: UpdateProdu
         id
         owner
         team
+        waybills {
+          nextToken
+        }
       }
       waybillSpecId
       products {
+        items {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          customProfit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
       status
@@ -338,6 +718,12 @@ export const updateProductInfo = `mutation UpdateProductInfo($input: UpdateProdu
       residueDate
       customerDebt
       customerDebtDate
+      totalAmount
+      totalClientAmount
+      totalNet
+      totalGross
+      totalCapacity
+      totalCargoPlaceCount
       createdAt
       updatedAt
       version
@@ -349,8 +735,8 @@ export const updateProductInfo = `mutation UpdateProductInfo($input: UpdateProdu
   }
 }
 `;
-export const updateProductLink = `mutation UpdateProductLink($input: UpdateProductLinkInput!) {
-  updateProductLink(input: $input) {
+export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!) {
+  deleteProduct(input: $input) {
     id
     owner
     team
@@ -358,6 +744,7 @@ export const updateProductLink = `mutation UpdateProductLink($input: UpdateProdu
     name
     quantity
     unit
+    customProfit
     cost {
       owner
       team
@@ -374,8 +761,9 @@ export const updateProductLink = `mutation UpdateProductLink($input: UpdateProdu
       width
       height
       length
+      capacity
       inStock
-      dimension
+      cargoPlaceCount
       cargoPlaceNumber
     }
     info {
@@ -403,9 +791,27 @@ export const updateProductLink = `mutation UpdateProductLink($input: UpdateProdu
         id
         owner
         team
+        waybills {
+          nextToken
+        }
       }
       waybillSpecId
       products {
+        items {
+          id
+          owner
+          team
+          article
+          name
+          quantity
+          unit
+          customProfit
+          status
+          productWaybillId
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
       status
@@ -419,6 +825,12 @@ export const updateProductLink = `mutation UpdateProductLink($input: UpdateProdu
       residueDate
       customerDebt
       customerDebtDate
+      totalAmount
+      totalClientAmount
+      totalNet
+      totalGross
+      totalCapacity
+      totalCargoPlaceCount
       createdAt
       updatedAt
       version
@@ -448,6 +860,37 @@ export const updateProject = `mutation UpdateProject($input: UpdateProjectInput!
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          profitType
+          profitPercent
+          profitForAll
+          discount
+          prepayment
+          prepaymentDate
+          residue
+          residueDate
+          customerDebt
+          customerDebtDate
+          totalAmount
+          totalClientAmount
+          totalNet
+          totalGross
+          totalCapacity
+          totalCargoPlaceCount
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
     }
@@ -475,358 +918,40 @@ export const deleteProject = `mutation DeleteProject($input: DeleteProjectInput!
       owner
       team
       waybills {
+        items {
+          id
+          owner
+          team
+          number
+          description
+          contractor
+          purchaseDate
+          deliveryDate
+          waybillSpecId
+          status
+          profitType
+          profitPercent
+          profitForAll
+          discount
+          prepayment
+          prepaymentDate
+          residue
+          residueDate
+          customerDebt
+          customerDebtDate
+          totalAmount
+          totalClientAmount
+          totalNet
+          totalGross
+          totalCapacity
+          totalCargoPlaceCount
+          createdAt
+          updatedAt
+          version
+        }
         nextToken
       }
     }
-    createdAt
-    updatedAt
-    version
-  }
-}
-`;
-export const updateWaybill = `mutation UpdateWaybill($input: UpdateWaybillInput!) {
-  updateWaybill(input: $input) {
-    id
-    owner
-    team
-    number
-    description
-    contractor
-    purchaseDate
-    deliveryDate
-    spec {
-      id
-      owner
-      team
-      waybills {
-        nextToken
-      }
-    }
-    waybillSpecId
-    products {
-      items {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        status
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      nextToken
-    }
-    status
-    profitType
-    profitPercent
-    profitForAll
-    discount
-    prepayment
-    prepaymentDate
-    residue
-    residueDate
-    customerDebt
-    customerDebtDate
-    createdAt
-    updatedAt
-    version
-  }
-}
-`;
-export const deleteWaybill = `mutation DeleteWaybill($input: DeleteWaybillInput!) {
-  deleteWaybill(input: $input) {
-    id
-    owner
-    team
-    number
-    description
-    contractor
-    purchaseDate
-    deliveryDate
-    spec {
-      id
-      owner
-      team
-      waybills {
-        nextToken
-      }
-    }
-    waybillSpecId
-    products {
-      items {
-        id
-        owner
-        team
-        article
-        name
-        quantity
-        unit
-        status
-        productWaybillId
-        createdAt
-        updatedAt
-        version
-      }
-      nextToken
-    }
-    status
-    profitType
-    profitPercent
-    profitForAll
-    discount
-    prepayment
-    prepaymentDate
-    residue
-    residueDate
-    customerDebt
-    customerDebtDate
-    createdAt
-    updatedAt
-    version
-  }
-}
-`;
-export const createProduct = `mutation CreateProduct($input: CreateProductInput!) {
-  createProduct(input: $input) {
-    id
-    owner
-    team
-    article
-    name
-    quantity
-    unit
-    cost {
-      owner
-      team
-      price
-      amount
-      clientPrice
-      clientAmount
-    }
-    store {
-      owner
-      team
-      net
-      gross
-      width
-      height
-      length
-      inStock
-      dimension
-      cargoPlaceNumber
-    }
-    info {
-      owner
-      team
-      images
-      description
-    }
-    link {
-      owner
-      team
-      url
-    }
-    status
-    waybill {
-      id
-      owner
-      team
-      number
-      description
-      contractor
-      purchaseDate
-      deliveryDate
-      spec {
-        id
-        owner
-        team
-      }
-      waybillSpecId
-      products {
-        nextToken
-      }
-      status
-      profitType
-      profitPercent
-      profitForAll
-      discount
-      prepayment
-      prepaymentDate
-      residue
-      residueDate
-      customerDebt
-      customerDebtDate
-      createdAt
-      updatedAt
-      version
-    }
-    productWaybillId
-    createdAt
-    updatedAt
-    version
-  }
-}
-`;
-export const updateProduct = `mutation UpdateProduct($input: UpdateProductInput!) {
-  updateProduct(input: $input) {
-    id
-    owner
-    team
-    article
-    name
-    quantity
-    unit
-    cost {
-      owner
-      team
-      price
-      amount
-      clientPrice
-      clientAmount
-    }
-    store {
-      owner
-      team
-      net
-      gross
-      width
-      height
-      length
-      inStock
-      dimension
-      cargoPlaceNumber
-    }
-    info {
-      owner
-      team
-      images
-      description
-    }
-    link {
-      owner
-      team
-      url
-    }
-    status
-    waybill {
-      id
-      owner
-      team
-      number
-      description
-      contractor
-      purchaseDate
-      deliveryDate
-      spec {
-        id
-        owner
-        team
-      }
-      waybillSpecId
-      products {
-        nextToken
-      }
-      status
-      profitType
-      profitPercent
-      profitForAll
-      discount
-      prepayment
-      prepaymentDate
-      residue
-      residueDate
-      customerDebt
-      customerDebtDate
-      createdAt
-      updatedAt
-      version
-    }
-    productWaybillId
-    createdAt
-    updatedAt
-    version
-  }
-}
-`;
-export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!) {
-  deleteProduct(input: $input) {
-    id
-    owner
-    team
-    article
-    name
-    quantity
-    unit
-    cost {
-      owner
-      team
-      price
-      amount
-      clientPrice
-      clientAmount
-    }
-    store {
-      owner
-      team
-      net
-      gross
-      width
-      height
-      length
-      inStock
-      dimension
-      cargoPlaceNumber
-    }
-    info {
-      owner
-      team
-      images
-      description
-    }
-    link {
-      owner
-      team
-      url
-    }
-    status
-    waybill {
-      id
-      owner
-      team
-      number
-      description
-      contractor
-      purchaseDate
-      deliveryDate
-      spec {
-        id
-        owner
-        team
-      }
-      waybillSpecId
-      products {
-        nextToken
-      }
-      status
-      profitType
-      profitPercent
-      profitForAll
-      discount
-      prepayment
-      prepaymentDate
-      residue
-      residueDate
-      customerDebt
-      customerDebtDate
-      createdAt
-      updatedAt
-      version
-    }
-    productWaybillId
     createdAt
     updatedAt
     version

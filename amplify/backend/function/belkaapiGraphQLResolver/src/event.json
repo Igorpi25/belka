@@ -1,0 +1,17 @@
+{
+  "typeName": "Query",
+  "fieldName": "getWaybill",
+  "arguments": {
+      "input": {
+          "id": "7cd7e60a-c586-45b0-8b59-c816a8289f56"
+      }
+  },
+  "identity": {
+      "claims": {
+        "username": ""
+      }
+  },
+  "source": {},
+  "request": {},
+  "prev": {}
+}

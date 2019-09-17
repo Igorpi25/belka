@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="items"
+    :items="products"
     :mobile-breakpoint="0"
     :loading="loading"
     hide-default-footer
@@ -10,32 +10,56 @@
     <template v-slot:body="{ items, headers }">
       <tbody>
         <tr v-for="(item, index) in items" :key="index">
-          <slot name="product" :item="products[index]" :index="index" />
-          <ProductTableCellEditable
+
+          <slot name="product" :item="item" :index="index" />
+
+          <!-- <ProductTableCellEditable
             v-if="isWaybillProfitTypeMargin"
-            :item="item"
+            :item="item.cost"
             update-prop="price"
             type="number"
             @update="udpateProductCost($event, index)"
-          />
+          /> -->
+          <td v-if="isWaybillProfitTypeMargin">
+            <Editable
+              :value="item.cost && item.cost.price"
+              :version="item.version"
+              type="number"
+              min="0"
+              placeholder="-"
+              arrow-move
+              @input="$emit('update', { id: item.id, cost: { price: $event }, expectedVersion: item.version })"
+            />
+          </td>
           <td v-else>
-            {{ item.price }}
+            {{ item.cost && item.cost.price }}
           </td>
           <td>
-            {{ item.amount }}
+            {{ item.cost && item.cost.amount }}
           </td>
-          <ProductTableCellEditable
+          <!-- <ProductTableCellEditable
             v-if="isWaybillProfitTypeCommission"
             :item="item"
             update-prop="clientPrice"
             type="number"
             @update="udpateProductCost($event, index)"
-          />
+          /> -->
+          <td v-if="isWaybillProfitTypeCommission">
+            <Editable
+              :value="item.cost && item.cost.clientPrice"
+              :version="item.version"
+              type="number"
+              min="0"
+              placeholder="-"
+              arrow-move
+              @input="$emit('update', { id: item.id, cost: { clientPrice: $event }, expectedVersion: item.version })"
+            />
+          </td>
           <td v-else>
-            {{ item.clientAmount }}
+            {{ item.cost && item.cost.clientAmount }}
           </td>
           <td>
-            {{ item.clientAmount }}
+            {{ item.cost && item.cost.clientAmount }}
           </td>
           <td>
             <slot name="action" :item="products[index]" />
@@ -47,15 +71,15 @@
 </template>
 
 <script>
-import { updateProductCost, publishWaybillUpdate } from '@/graphql/mutations'
-import { onUpdateProductCost } from '@/graphql/subscriptions'
+// import { updateProductCost } from '@/graphql/mutations'
+// import { onUpdateProductCost } from '@/graphql/subscriptions'
 
-import ProductTableCellEditable from '@/components/ProductTableCellEditable.vue'
+import Editable from '@/components/Editable.vue'
 
 export default {
   name: 'ProductCostTable',
   components: {
-    ProductTableCellEditable,
+    Editable,
   },
   props: {
     waybillId: {
@@ -81,7 +105,6 @@ export default {
   },
   data: () => ({
     updateLoading: null,
-    items: [],
   }),
   computed: {
     owner () {
@@ -110,97 +133,10 @@ export default {
     },
     headers () {
       return [...this.productHeaders, ...this.internalHeaders]
-    },
-    updateProductCostSubscription () {
-      return this.$Amplify.graphqlOperation(onUpdateProductCost, {
-        owner: this.owner,
-        waybillId: this.waybillId
-      })
-    },
-  },
-  watch: {
-    products: {
-      handler (val) {
-        const products = val || []
-        this.setItems(products)
-      },
-      immediate: true
     }
   },
   created () {
     this.logger = new this.$Amplify.Logger('ProductCost')
-    this.updateSubscription = this.$Amplify.API.graphql(this.updateProductCostSubscription)
-      .subscribe({
-        next: ({ value: { data } }) => {
-          this.onUpdateProductCost(data)
-        }
-      })
   },
-  beforeDestroy () {
-    if (this.updateSubscription) {
-      this.updateSubscription.unsubscribe()
-    }
-  },
-  methods: {
-    setItems (products) {
-      // TODO add to ProductCost type productId to not map the param
-      this.items = products.map(item => {
-        return item.cost
-      })
-    },
-    onUpdateProductCost (newData, onError = false) {
-      const msg = onError
-        ? 'Update product cost from update error data...'
-        : 'Update product cost from subscription...'
-      this.logger.info(msg, newData)
-      const newItem = newData.onUpdateProductCost
-      const index = this.items.findIndex(el => el.id === newItem.id)
-      if (index !== -1) {
-        this.items.splice(index, 1, newItem)
-      }
-    },
-    async udpateProductCost (input, index) {
-      try {
-        this.updateLoading = input.id
-        const productId = this.products[index].id
-        input = { ...input, productId }
-        const response = await this.$Amplify.API.graphql(
-          this.$Amplify.graphqlOperation(updateProductCost, {
-            input
-          })
-        )
-        if (response && response.errors && response.errors.length > 0) {
-          // exclude version check condition
-          this.errors = response.errors.reduce((acc, curr) => {
-            if (curr.errorType === 'DynamoDB:ConditionalCheckFailedException') {
-              this.onUpdateProductCost({ onUpdateProductCost: curr.data }, true)
-            } else {
-              return [...acc, curr]
-            }
-          }, [])
-          throw new Error(response.errors.join('\n'))
-        }
-        // TODO move to lambda function with mutation execution
-        await this.$Amplify.API.graphql(
-          this.$Amplify.graphqlOperation(publishWaybillUpdate, {
-            owner: this.owner, id: this.waybillId
-          })
-        )
-      } catch (error) {
-        if (error && error.errors && error.errors.length > 0) {
-          this.errors = error.errors
-        }
-        this.logger.warn('Error: ', error)
-        // this.$Amplify.Analytics.record({
-        //   name: 'UpdateProductCostError',
-        //   attributes: {
-        //     error: error.message
-        //   }
-        // })
-      } finally {
-        this.updateLoading = null
-      }
-    },
-  }
 }
 </script>

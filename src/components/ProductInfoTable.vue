@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="items"
+    :items="products"
     :mobile-breakpoint="0"
     :loading="loading"
     hide-default-footer
@@ -14,12 +14,21 @@
           <td>
             <!-- TODO images actions -->
           </td>
-          <ProductTableCellEditable
+          <!-- <ProductTableCellEditable
             :item="item"
             update-prop="description"
             placeholder="Пустое поле"
             @update="udpateProductInfo"
-          />
+          /> -->
+          <td>
+            <Editable
+              :value="item.info && item.info.description"
+              :version="item.version"
+              placeholder="----"
+              arrow-move
+              @input="$emit('update', { id: item.id, info: { description: $event }, expectedVersion: item.version })"
+            />
+          </td>
           <td>
             <slot name="action" :item="products[index]" />
           </td>
@@ -30,15 +39,12 @@
 </template>
 
 <script>
-import { updateProductInfo } from '@/graphql/mutations'
-import { onUpdateProductInfo } from '@/graphql/subscriptions'
-
-import ProductTableCellEditable from '@/components/ProductTableCellEditable.vue'
+import Editable from '@/components/Editable.vue'
 
 export default {
   name: 'ProductInfo',
   components: {
-    ProductTableCellEditable,
+    Editable,
   },
   props: {
     waybillId: {
@@ -60,7 +66,6 @@ export default {
   },
   data: () => ({
     updateLoading: null,
-    items: [],
     internalHeaders: [
       { text: 'Доп. фото', value: 'images', sortable: false, width: 140 },
       { text: 'Дополнительная информация', value: 'description', sortable: false },
@@ -74,88 +79,9 @@ export default {
     headers () {
       return [...this.productHeaders, ...this.internalHeaders]
     },
-    updateProductInfoSubscription () {
-      return this.$Amplify.graphqlOperation(onUpdateProductInfo, {
-        owner: this.owner,
-        waybillId: this.waybillId
-      })
-    },
-  },
-  watch: {
-    products: {
-      handler (val) {
-        const products = val || []
-        this.setItems(products)
-      },
-      immediate: true
-    }
   },
   created () {
     this.logger = new this.$Amplify.Logger('ProductInfo')
-    this.updateSubscription = this.$Amplify.API.graphql(this.updateProductInfoSubscription)
-      .subscribe({
-        next: ({ value: { data } }) => {
-          this.onUpdateProductInfo(data)
-        }
-      })
   },
-  beforeDestroy () {
-    if (this.updateSubscription) {
-      this.updateSubscription.unsubscribe()
-    }
-  },
-  methods: {
-    setItems (products) {
-      // TODO add to ProductInfo type productId to not map the param
-      this.items = products.map(item => {
-        return item.info
-      })
-    },
-    onUpdateProductInfo (newData, onError = false) {
-      const msg = onError
-        ? 'Update product info from update error data...'
-        : 'Update product info from subscription...'
-      this.logger.info(msg, newData)
-      const newItem = newData.onUpdateProductInfo
-      const index = this.items.findIndex(el => el.id === newItem.id)
-      if (index !== -1) {
-        this.items.splice(index, 1, newItem)
-      }
-    },
-    async udpateProductInfo (input) {
-      try {
-        this.updateLoading = input.id
-        const response = await this.$Amplify.API.graphql(
-          this.$Amplify.graphqlOperation(updateProductInfo, {
-            input
-          })
-        )
-        if (response && response.errors && response.errors.length > 0) {
-          // exclude version check condition
-          this.errors = response.errors.reduce((acc, curr) => {
-            if (curr.errorType === 'DynamoDB:ConditionalCheckFailedException') {
-              this.onUpdateProductInfo({ onUpdateProductInfo: curr.data }, true)
-            } else {
-              return [...acc, curr]
-            }
-          }, [])
-          throw new Error(response.errors.join('\n'))
-        }
-      } catch (error) {
-        if (error && error.errors && error.errors.length > 0) {
-          this.errors = error.errors
-        }
-        this.logger.warn('Error: ', error)
-        // this.$Amplify.Analytics.record({
-        //   name: 'UpdateProductInfoError',
-        //   attributes: {
-        //     error: error.message
-        //   }
-        // })
-      } finally {
-        this.updateLoading = null
-      }
-    },
-  }
 }
 </script>
