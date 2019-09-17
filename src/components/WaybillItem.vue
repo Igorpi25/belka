@@ -4,7 +4,7 @@
       <ErrorMessages :items.sync="errors" />
     </div>
 
-    <div v-else-if="items">
+    <div>
       <div>
         <div class="d-flex">
           <div :style="{ width: productsTableWidth + 'px' }" />
@@ -199,13 +199,14 @@
 <script>
 import { mdiDelete } from '@mdi/js'
 
+import { mapMutations, mapGetters } from 'vuex'
+
 import { getWaybill } from '@/graphql/queries'
 import {
   createProduct,
   updateProduct,
   deleteProduct
 } from '@/graphql/mutations'
-import { onCreateProduct, onUpdateProduct, onDeleteProduct } from '@/graphql/subscriptions'
 
 import ErrorMessages from '@/components/ErrorMessages.vue'
 import ProductCostTable from '@/components/ProductCostTable.vue'
@@ -250,7 +251,6 @@ export default {
     createLoading: null,
     updateLoading: null,
     deleteLoading: null,
-    items: [],
     errors: [],
     headers: [
       { text: '#', sortable: false, value: 'index', width: 48 },
@@ -262,27 +262,16 @@ export default {
     productsTableWidth: 520
   }),
   computed: {
+    ...mapGetters(['waybillProducts']),
+    items () {
+      return this.waybillProducts(this.waybillId)
+    },
     owner () {
       return this.$store.getters.username
     },
     getWaybillQuery () {
       return this.$Amplify.graphqlOperation(getWaybill, {
         id: this.waybillId
-      })
-    },
-    createProductSubscription () {
-      return this.$Amplify.graphqlOperation(onCreateProduct, {
-        owner: this.owner
-      })
-    },
-    updateProductSubscription () {
-      return this.$Amplify.graphqlOperation(onUpdateProduct, {
-        owner: this.owner
-      })
-    },
-    deleteProductSubscription () {
-      return this.$Amplify.graphqlOperation(onDeleteProduct, {
-        owner: this.owner
       })
     },
   },
@@ -294,65 +283,11 @@ export default {
   created () {
     this.logger = new this.$Amplify.Logger('WaybillItem')
     this.getWaybill()
-    this.createSubscription = this.$Amplify.API.graphql(this.createProductSubscription)
-      .subscribe({
-        next: ({ value: { data } }) => {
-          this.onCreateProduct(data)
-        }
-      })
-    this.updateSubscription = this.$Amplify.API.graphql(this.updateProductSubscription)
-      .subscribe({
-        next: ({ value: { data } }) => {
-          this.onUpdateProduct(data)
-        }
-      })
-    this.deleteSubscription = this.$Amplify.API.graphql(this.deleteProductSubscription)
-      .subscribe({
-        next: ({ value: { data } }) => {
-          this.onDeleteProduct(data)
-        }
-      })
-  },
-  beforeDestroy () {
-    if (this.createSubscription) {
-      this.createSubscription.unsubscribe()
-    }
-    if (this.updateSubscription) {
-      this.updateSubscription.unsubscribe()
-    }
-    if (this.deleteSubscription) {
-      this.deleteSubscription.unsubscribe()
-    }
   },
   methods: {
-    onCreateProduct (newData) {
-      this.logger.info('New product from subscription...', newData)
-      const newItem = newData.onCreateProduct
-      this.items.push(newItem)
-    },
-    onUpdateProduct (newData, onError = false) {
-      const msg = onError
-        ? 'Update product from update error data...'
-        : 'Update product from subscription...'
-      this.logger.info(msg, newData)
-      const newItem = newData.onUpdateProduct
-      const index = this.items.findIndex(el => el.id === newItem.id)
-      if (index !== -1) {
-        // on update product, should't update `cost`, `store`, `info`, `link`
-        // they uptated by own subs?
-        this.items.splice(index, 1, newItem)
-      }
-      // UPDATE WAYBILL
-      this.$parent.updateWaybillItem(newItem.waybill)
-    },
-    onDeleteProduct (newData) {
-      this.logger.info('Delete product from subscription...', newData)
-      const newItem = newData.onDeleteProduct
-      const index = this.items.findIndex(el => el.id === newItem.id)
-      if (index !== -1) {
-        this.items.splice(index, 1)
-      }
-    },
+    ...mapMutations([
+      'setWaybillProductItems',
+    ]),
     async getWaybill () {
       try {
         this.loading = true
@@ -361,9 +296,9 @@ export default {
           this.errors = response.errors
           throw new Error(response.errors.join('\n'))
         }
-        this.items = response.data.getWaybill.products.items || []
+        const items = response.data.getWaybill.products.items || []
+        this.setWaybillProductItems({ waybillId: this.waybillId, items })
       } catch (error) {
-        this.items = null
         if (error && error.errors && error.errors.length > 0) {
           this.errors = error.errors
         }

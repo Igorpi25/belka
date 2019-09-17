@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import waybill from './modules/waybill'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -8,6 +10,7 @@ export default new Vuex.Store({
     user: null,
     initialized: false
   },
+
   getters: {
     loggedIn (state) {
       return state.user && state.initialized
@@ -16,6 +19,7 @@ export default new Vuex.Store({
       return state.user && state.user.username
     }
   },
+
   mutations: {
     setUser (state, payload) {
       state.user = payload
@@ -24,6 +28,7 @@ export default new Vuex.Store({
       state.initialized = true
     }
   },
+
   actions: {
     async checkAuth ({ state, commit }) {
       try {
@@ -45,5 +50,11 @@ export default new Vuex.Store({
         }
       }
     }
-  }
+  },
+
+  modules: {
+    waybill
+  },
+
+  strict: process.env.NODE_ENV !== 'production'
 })

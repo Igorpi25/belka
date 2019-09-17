@@ -13,7 +13,7 @@
           <ErrorMessages :items.sync="errors" />
         </div>
 
-        <div v-else-if="items">
+        <div>
           <v-data-table
             :headers="headers"
             :items="items"
@@ -259,9 +259,18 @@
 <script>
 import { mdiDelete, mdiChevronDown } from '@mdi/js'
 
+import { mapMutations, mapGetters } from 'vuex'
+
 import { getSpec } from '@/graphql/queries'
-import { createWaybill, updateWaybill, deleteWaybill, createProduct } from '@/graphql/mutations'
-import { onCreateWaybill, onUpdateWaybill, onDeleteWaybill } from '@/graphql/subscriptions'
+import { createWaybill, updateWaybill, deleteWaybill } from '@/graphql/mutations'
+import {
+  onCreateWaybill,
+  onUpdateWaybill,
+  onDeleteWaybill,
+  onCreateProduct,
+  onUpdateProduct,
+  onDeleteProduct
+} from '@/graphql/subscriptions'
 
 import ErrorMessages from '@/components/ErrorMessages.vue'
 import WaybillItem from '@/components/WaybillItem.vue'
@@ -286,7 +295,6 @@ export default {
     updateLoading: null,
     deleteLoading: null,
     expanded: [],
-    items: [],
     errors: [],
     headers: [
       { text: 'Number', value: 'number', width: 140 },
@@ -297,6 +305,10 @@ export default {
     ],
   }),
   computed: {
+    ...mapGetters(['waybills']),
+    items () {
+      return this.waybills
+    },
     owner () {
       return this.$store.getters.username
     },
@@ -323,55 +335,96 @@ export default {
         owner: this.owner
       })
     },
+    createProductSubscription () {
+      return this.$Amplify.graphqlOperation(onCreateProduct, {
+        owner: this.owner
+      })
+    },
+    updateProductSubscription () {
+      return this.$Amplify.graphqlOperation(onUpdateProduct, {
+        owner: this.owner
+      })
+    },
+    deleteProductSubscription () {
+      return this.$Amplify.graphqlOperation(onDeleteProduct, {
+        owner: this.owner
+      })
+    },
   },
   created () {
     this.logger = new this.$Amplify.Logger('Spec')
     this.getSpec()
-    this.createSubscription = this.$Amplify.API.graphql(this.createWaybillSubscription)
+    this.createWaybillSubscriptionInstance = this.$Amplify.API.graphql(this.createWaybillSubscription)
       .subscribe({
         next: ({ value: { data } }) => {
           this.onCreateWaybill(data)
         }
       })
-    this.updateSubscription = this.$Amplify.API.graphql(this.updateWaybillSubscription)
+    this.updateWaybillSubscriptionInstance = this.$Amplify.API.graphql(this.updateWaybillSubscription)
       .subscribe({
         next: ({ value: { data } }) => {
           this.onUpdateWaybill(data)
         }
       })
-    this.deleteSubscription = this.$Amplify.API.graphql(this.deleteWaybillSubscription)
+    this.deleteWaybillSubscriptionInstance = this.$Amplify.API.graphql(this.deleteWaybillSubscription)
       .subscribe({
         next: ({ value: { data } }) => {
           this.onDeleteWaybill(data)
         }
       })
+    this.createProductSubscriptionInstance = this.$Amplify.API.graphql(this.createProductSubscription)
+      .subscribe({
+        next: ({ value: { data } }) => {
+          this.onCreateProduct(data)
+        }
+      })
+    this.updateProductSubscriptionInstance = this.$Amplify.API.graphql(this.updateProductSubscription)
+      .subscribe({
+        next: ({ value: { data } }) => {
+          this.onUpdateProduct(data)
+        }
+      })
+    this.deleteProductSubscriptionInstance = this.$Amplify.API.graphql(this.deleteProductSubscription)
+      .subscribe({
+        next: ({ value: { data } }) => {
+          this.onDeleteProduct(data)
+        }
+      })
   },
   beforeDestroy () {
-    if (this.createSubscription) {
-      this.createSubscription.unsubscribe()
+    if (this.createWaybillSubscriptionInstance) {
+      this.createWaybillSubscriptionInstance.unsubscribe()
     }
-    if (this.updateSubscription) {
-      this.updateSubscription.unsubscribe()
+    if (this.updateWaybillSubscriptionInstance) {
+      this.updateWaybillSubscriptionInstance.unsubscribe()
     }
-    if (this.deleteSubscription) {
-      this.deleteSubscription.unsubscribe()
+    if (this.deleteWaybillSubscriptionInstance) {
+      this.deleteWaybillSubscriptionInstance.unsubscribe()
+    }
+    if (this.createProductSubscriptionInstance) {
+      this.createProductSubscriptionInstance.unsubscribe()
+    }
+    if (this.updateProductSubscriptionInstance) {
+      this.updateProductSubscriptionInstance.unsubscribe()
+    }
+    if (this.deleteProductSubscriptionInstance) {
+      this.deleteProductSubscriptionInstance.unsubscribe()
     }
   },
   methods: {
-    updateWaybillItem (newData) {
-      this.logger.info('Update waybill from product update...', newData)
-      const newItem = newData
-      const index = this.items.findIndex(el => el.id === newItem.id)
-      if (index !== -1) {
-        delete newItem.products
-        const item = Object.assign({}, this.items[index], newItem)
-        this.items.splice(index, 1, item)
-      }
-    },
+    ...mapMutations([
+      'setWaybillItems',
+      'putWaybillItem',
+      'updateWaybillItem',
+      'deleteWaybillItem',
+      'putWaybillProductItem',
+      'updateWaybillProductItem',
+      'deleteWaybillProductItem'
+    ]),
     onCreateWaybill (newData) {
       this.logger.info('New waybill from subscription...', newData)
       const newItem = newData.onCreateWaybill
-      this.items.push(newItem)
+      this.putWaybillItem(newItem)
     },
     onUpdateWaybill (newData, onError = false) {
       const msg = onError
@@ -379,18 +432,39 @@ export default {
         : 'Update waybill from subscription...'
       this.logger.info(msg, newData)
       const newItem = newData.onUpdateWaybill
-      const index = this.items.findIndex(el => el.id === newItem.id)
-      if (index !== -1) {
-        this.items.splice(index, 1, newItem)
-      }
+      this.updateWaybillItem(newItem)
     },
     onDeleteWaybill (newData) {
       this.logger.info('Delete waybill from subscription...', newData)
       const newItem = newData.onDeleteWaybill
-      const index = this.items.findIndex(el => el.id === newItem.id)
-      if (index !== -1) {
-        this.items.splice(index, 1)
-      }
+      this.deleteWaybillItem(newItem)
+    },
+    onCreateProduct (newData) {
+      this.logger.info('New product from subscription...', newData)
+      const newItem = newData.onCreateProduct
+      this.putWaybillProductItem(newItem)
+      // UPDATE WAYBILL
+    },
+    onUpdateProduct (newData, onError = false) {
+      const msg = onError
+        ? 'Update product from update error data...'
+        : 'Update product from subscription...'
+      this.logger.info(msg, newData)
+      const newItem = newData.onUpdateProduct
+      this.updateWaybillProductItem(newItem)
+      // UPDATE WAYBILL
+      const udpatedWaybill = newItem.waybill
+      delete udpatedWaybill.products
+      this.updateWaybillItem(udpatedWaybill)
+    },
+    onDeleteProduct (newData) {
+      this.logger.info('Delete product from subscription...', newData)
+      const newItem = newData.onDeleteProduct
+      this.deleteWaybillProductItem(newItem)
+      // UPDATE WAYBILL
+      const udpatedWaybill = newItem.waybill
+      delete udpatedWaybill.products
+      this.updateWaybillItem(udpatedWaybill)
     },
     async getSpec () {
       try {
@@ -400,9 +474,9 @@ export default {
           this.errors = response.errors
           throw new Error(response.errors.join('\n'))
         }
-        this.items = response.data.getSpec.waybills.items || []
+        const items = response.data.getSpec.waybills.items || []
+        this.setWaybillItems(items)
       } catch (error) {
-        this.items = null
         if (error && error.errors && error.errors.length > 0) {
           this.errors = error.errors
         }
@@ -415,23 +489,6 @@ export default {
         // })
       } finally {
         this.loading = false
-      }
-    },
-    async createProduct (productWaybillId) {
-      try {
-        const input = {
-          owner: this.owner,
-          productWaybillId
-        }
-        const response = await this.$Amplify.API.graphql(
-          this.$Amplify.graphqlOperation(createProduct, { input })
-        )
-        if (response && response.errors && response.errors.length > 0) {
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
-        }
-      } catch (error) {
-        throw error
       }
     },
     async createWaybill () {
@@ -449,7 +506,6 @@ export default {
           this.errors = response.errors
           throw new Error(response.errors.join('\n'))
         }
-        await this.createProduct(response.data.createWaybill.id)
       } catch (error) {
         if (error && error.errors && error.errors.length > 0) {
           this.errors = error.errors

@@ -160,6 +160,13 @@ const methods = {
       throw new Error(error)
     }
   },
+  deleteWaybill: async (input, identity) => {
+    try {
+      return await db.delete(input, identity, WAYBILL_TABLE_NAME)
+    } catch (error) {
+      throw new Error(error)
+    }
+  },
   getProduct: async (id, identity) => {
     try {
       return await db.get(id, identity, PRODUCT_TABLE_NAME)
@@ -254,15 +261,15 @@ const resolvers = {
             let cost = product.cost || {}
             if (profitType === WAYBILL_PROFIT_TYPES.COMMISSION) {
               const clientPrice = (cost && cost.clientPrice)
-              cost.clientPrice = ((isNumber(clientPrice) ? clientPrice : (cost.clientPrice || 0)))
+              cost.clientPrice = ((isNumber(clientPrice) ? clientPrice : 0))
               let profit = (cost.clientPrice * profitPercent) / 100
               const newPrice = cost.clientPrice - profit
               cost.price = newPrice
             } else if (profitType === WAYBILL_PROFIT_TYPES.MARGIN) {
               const price = (cost && cost.price)
-              cost.price = ((isNumber(price) ? price : (cost.price || 0)))
+              cost.price = ((isNumber(price) ? price : 0))
               let profit = (cost.price * profitPercent) / 100
-              const newPrice = cost.price - profit
+              const newPrice = cost.price + profit
               cost.clientPrice = newPrice
             }
             cost.amount = quantity * cost.price
@@ -287,18 +294,28 @@ const resolvers = {
     },
     deleteWaybill: async ctx => {
       try {
-        return await methods.deleteWaybill(ctx.arguments.input.id, ctx.identity)
+        const input = ctx.arguments.input
+        let waybill = await methods.getWaybill(input.id, ctx.identity)
+        await methods.deleteWaybill(input, ctx.identity)
+        // dynamodb delete not return item, on subsription response resolver need result
+        return waybill
       } catch (error) {
         throw new Error(error)
       }
     },
     createProduct: async ctx => {
       try {
-        const owner = ctx.arguments.input.owner
-        await methods.putProduct(ctx.arguments.input, ctx.identity)
+        // const owner = ctx.arguments.input.owner
+        const product = await methods.putProduct(ctx.arguments.input, ctx.identity)
         // update waybill status
-        const productInput = { owner, id: ctx.arguments.input.productWaybillId, status: WAYBILL_STATUSES.IN_PROCESSING }
-        return await methods.updateWaybill(productInput, ctx.identity)
+        // TODO NEED version
+        // const waybillInput = {
+        //   owner,
+        //   id: ctx.arguments.input.productWaybillId,
+        //   status: WAYBILL_STATUSES.IN_PROCESSING
+        // }
+        // await methods.updateWaybill(waybillInput, ctx.identity)
+        return product
       } catch (error) {
         throw new Error(error)
       }
@@ -309,7 +326,7 @@ const resolvers = {
         let product = await methods.getProduct(input.id, ctx.identity)
         let waybill = await methods.getWaybill(product.productWaybillId, ctx.identity)
         let waybillProducts = await methods.getWaybillProducts(product.productWaybillId, ctx.identity)
-        let udpateWaybillInput = null
+        let udpateWaybillInput = {}
         if (input.hasOwnProperty('quantity') || input.hasOwnProperty('cost')) {
           const profitType =  waybill.profitType
           const profitPercent = waybill.profitPercent || 0
@@ -317,15 +334,15 @@ const resolvers = {
           let cost = product.cost || {}
           if (profitType === WAYBILL_PROFIT_TYPES.COMMISSION) {
             const clientPrice = (input.cost && input.cost.clientPrice)
-            cost.clientPrice = ((isNumber(clientPrice) ? clientPrice : (cost.clientPrice || 0)))
+            cost.clientPrice = ((isNumber(clientPrice) ? clientPrice : 0))
             let profit = (cost.clientPrice * profitPercent) / 100
             const newPrice = cost.clientPrice - profit
             cost.price = newPrice
           } else if (profitType === WAYBILL_PROFIT_TYPES.MARGIN) {
             const price = (input.cost && input.cost.price)
-            cost.price = ((isNumber(price) ? price : (cost.price || 0)))
+            cost.price = ((isNumber(price) ? price : 0))
             let profit = (cost.price * profitPercent) / 100
-            const newPrice = cost.price - profit
+            const newPrice = cost.price + profit
             cost.clientPrice = newPrice
           }
           cost.amount = quantity * cost.price
@@ -337,8 +354,8 @@ const resolvers = {
           let totalAmount = 0
           let totalClientAmount = 0
           waybillProducts.forEach(el => {
-            totalAmount += (el.cost && el.cost.price) || 0
-            totalClientAmount += (el.cost && el.cost.clientPrice) || 0
+            totalAmount += (el.cost && el.cost.amount) || 0
+            totalClientAmount += (el.cost && el.cost.clientAmount) || 0
           })
           const prepayment = waybill.prepayment || 0
           const discount = waybill.discount || 0
@@ -346,7 +363,7 @@ const resolvers = {
           waybill.totalClientAmount = totalClientAmount
           waybill.residue = totalAmount - prepayment - discount
           waybill.customerDebt = totalClientAmount - discount
-          Object.assign({}, udpateWaybillInput, {
+          Object.assign(udpateWaybillInput, {
             id: waybill.id,
             expectedVersion: waybill.version,
             totalAmount,
@@ -376,7 +393,7 @@ const resolvers = {
             totalCapacity += (el.store && el.store.capacity) || 0
             totalCargoPlaceCount += (el.store && el.store.cargoPlaceCount) || 0
           })
-          Object.assign({}, udpateWaybillInput, {
+          Object.assign(udpateWaybillInput, {
             id: waybill.id,
             expectedVersion: waybill.version,
             totalNet,
@@ -419,7 +436,7 @@ const resolvers = {
 
         product = await methods.updateProduct(input, ctx.identity)
 
-        if (udpateWaybillInput) {
+        if (udpateWaybillInput.id && udpateWaybillInput.expectedVersion) {
           await methods.updateWaybill(udpateWaybillInput, ctx.identity)
         }
         return product
@@ -438,8 +455,8 @@ const resolvers = {
         let totalAmount = 0
         let totalClientAmount = 0
         waybillProducts.forEach(el => {
-          totalAmount += (el.cost && el.cost.price) || 0
-          totalClientAmount += (el.cost && el.cost.clientPrice) || 0
+          totalAmount += (el.cost && el.cost.amount) || 0
+          totalClientAmount += (el.cost && el.cost.clientAmount) || 0
         })
         const prepayment = waybill.prepayment || 0
         const discount = waybill.discount || 0
@@ -465,7 +482,9 @@ const resolvers = {
           udpateWaybillInput.status = WAYBILL_STATUSES.IN_STOCK
         }
         await methods.updateWaybill(udpateWaybillInput, ctx.identity)
-        return await methods.deleteProduct(input, ctx.identity)
+        await methods.deleteProduct(input, ctx.identity)
+        // dynamodb delete not return item, on subsription response resolver need result
+        return product
       } catch (error) {
         throw new Error(error)
       }

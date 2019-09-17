@@ -219,7 +219,6 @@ type Mutation {
     @function(name: "belkaapiGraphQLResolver-${env}")
 }
 
-# fake update
 input CreateProjectInput {
   id: ID
   owner: String
