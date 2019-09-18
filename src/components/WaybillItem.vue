@@ -1,15 +1,16 @@
 <template>
   <div>
-    <div v-if="errors.length > 0">
+    <div v-if="errors && errors.length > 0">
       <ErrorMessages :items.sync="errors" />
     </div>
 
     <div>
       <div>
         <div class="d-flex">
-          <div :style="{ width: productsTableWidth + 'px' }" />
+          <div :style="{ minWidth: productsTableWidth + 'px' }" />
           <v-tabs
             v-model="tab"
+            :class="{ 'v-tabs--no-margin': !$vuetify.breakpoint.xs }"
             grow
           >
             <v-tab>Цены</v-tab>
@@ -19,164 +20,29 @@
           </v-tabs>
         </div>
         <div>
-          <ProductCostTable
-            v-if="tab === 0"
-            :productHeaders="headers"
-            :products="items"
-            :waybill-id="waybillId"
-            :loading="loading"
-            :waybill-profit-type="waybillProfitType"
-            @update="updateProduct"
-          >
-            <template v-slot:product="{ item, index }">
-              <ProductTableCellIndex
-                :item="item"
-                :index="index"
-              />
-              <td></td>
-              <ProductTableCellEditable
-                :item="item"
-                update-prop="name"
-                @update="updateProduct"
-              />
-              <ProductTableCellEditable
-                :item="item"
-                update-prop="article"
-                @update="updateProduct"
-              />
-              <ProductTableCellEditable
-                :item="item"
-                update-prop="quantity"
-                type="number"
-                @update="updateProduct"
-              />
-            </template>
-            <template v-slot:action="{ item }">
-              <ProductTableCellAction
-                :item="item"
-                :loading="deleteLoading"
-                @delete="deleteProduct"
-              />
-            </template>
-          </ProductCostTable>
-          <ProductStoreTable
-            v-else-if="tab === 1"
-            :productHeaders="headers"
-            :products="items"
-            :waybill-id="waybillId"
-            :loading="loading"
-            @update="updateProduct"
-          >
-            <template v-slot:product="{ item, index }">
-              <ProductTableCellIndex
-                :item="item"
-                :index="index"
-              />
-              <td></td>
-              <ProductTableCellEditable
-                :item="item"
-                update-prop="name"
-                @update="updateProduct"
-              />
-              <ProductTableCellEditable
-                :item="item"
-                update-prop="article"
-                @update="updateProduct"
-              />
-              <ProductTableCellEditable
-                :item="item"
-                update-prop="quantity"
-                type="number"
-                @update="updateProduct"
-              />
-            </template>
-            <template v-slot:action="{ item }">
-              <ProductTableCellAction
-                :item="item"
-                :loading="deleteLoading"
-                @delete="deleteProduct"
-              />
-            </template>
-          </ProductStoreTable>
-          <ProductInfoTable
-            v-else-if="tab === 2"
-            :productHeaders="headers"
-            :products="items"
-            :waybill-id="waybillId"
-            :loading="loading"
-            @update="updateProduct"
-          >
-            <template v-slot:product="{ item, index }">
-              <ProductTableCellIndex
-                :item="item"
-                :index="index"
-              />
-              <td></td>
-              <ProductTableCellEditable
-                :item="item"
-                update-prop="name"
-                @update="updateProduct"
-              />
-              <ProductTableCellEditable
-                :item="item"
-                update-prop="article"
-                @update="updateProduct"
-              />
-              <ProductTableCellEditable
-                :item="item"
-                update-prop="quantity"
-                type="number"
-                @update="updateProduct"
-              />
-            </template>
-            <template v-slot:action="{ item }">
-              <ProductTableCellAction
-                :item="item"
-                :loading="deleteLoading"
-                @delete="deleteProduct"
-              />
-            </template>
-          </ProductInfoTable>
-          <ProductLinkTable
-            v-else-if="tab === 3"
-            :productHeaders="headers"
+          <v-data-table
+            :headers="headers"
             :items="items"
-            :products="items"
-            :waybill-id="waybillId"
+            :mobile-breakpoint="0"
             :loading="loading"
-            @update="updateProduct"
+            hide-default-footer
+            class="v-data-table--overflow-hidden"
           >
-            <template v-slot:product="{ item, index }">
-              <ProductTableCellIndex
-                :item="item"
-                :index="index"
-              />
-              <td></td>
-              <ProductTableCellEditable
-                :item="item"
-                update-prop="name"
-                @update="updateProduct"
-              />
-              <ProductTableCellEditable
-                :item="item"
-                update-prop="article"
-                @update="updateProduct"
-              />
-              <ProductTableCellEditable
-                :item="item"
-                update-prop="quantity"
-                type="number"
-                @update="updateProduct"
-              />
+            <template v-slot:body="{ items, headers }">
+              <tbody>
+                <ProductTableRow
+                  v-for="(item, index) in items"
+                  :key="index"
+                  :item="item"
+                  :index="index"
+                  :waybill-id="waybillId"
+                  :tab="tab"
+                  :is-profit-type-margin="isWaybillProfitTypeMargin"
+                  :is-profit-type-commission="isWaybillProfitTypeCommission"
+                />
+              </tbody>
             </template>
-            <template v-slot:action="{ item }">
-              <ProductTableCellAction
-                :item="item"
-                :loading="deleteLoading"
-                @delete="deleteProduct"
-              />
-            </template>
-          </ProductLinkTable>
+          </v-data-table>
         </div>
       </div>
       <v-btn
@@ -197,40 +63,28 @@
 </template>
 
 <script>
-import { mdiDelete } from '@mdi/js'
-
 import { mapMutations, mapGetters } from 'vuex'
 
 import { getWaybill } from '@/graphql/queries'
 import {
   createProduct,
-  updateProduct,
-  deleteProduct
 } from '@/graphql/mutations'
 
 import ErrorMessages from '@/components/ErrorMessages.vue'
-import ProductCostTable from '@/components/ProductCostTable.vue'
-import ProductStoreTable from '@/components/ProductStoreTable.vue'
-import ProductInfoTable from '@/components/ProductInfoTable.vue'
-import ProductLinkTable from '@/components/ProductLinkTable.vue'
 
-import ProductTableCellIndex from '@/components/ProductTableCellIndex.vue'
-import ProductTableCellEditable from '@/components/ProductTableCellEditable.vue'
-import ProductTableCellAction from '@/components/ProductTableCellAction.vue'
+import ProductTableRow from '@/components/ProductTableRow.vue'
 
-import { confirmDialog } from '@/utils/helpers'
+const UPDATE_STATESES = {
+  NONE: 'NONE', // call update method on this updateStatus
+  WAITING: 'WAITING', // updateStatus after update method called
+  WAITING_EDIT: 'WAITING_EDIT' // updateStatus after value update on WAITING updateStatus, to call update method on VERSION update
+}
 
 export default {
   name: 'WaybillItem',
   components: {
     ErrorMessages,
-    ProductCostTable,
-    ProductStoreTable,
-    ProductInfoTable,
-    ProductLinkTable,
-    ProductTableCellIndex,
-    ProductTableCellEditable,
-    ProductTableCellAction,
+    ProductTableRow,
   },
   props: {
     waybillId: {
@@ -243,23 +97,19 @@ export default {
     }
   },
   data: () => ({
+    updateStatus: UPDATE_STATESES.NONE,
+    updatePromises: [],
     tab: 0,
-    icons: {
-      mdiDelete
-    },
     loading: false,
     createLoading: null,
-    updateLoading: null,
-    deleteLoading: null,
     errors: [],
-    headers: [
+    productHeaders: [
       { text: '#', sortable: false, value: 'index', width: 48 },
       { text: 'Фото', sortable: false, value: 'photo', width: 100 },
-      { text: 'Наименование', sortable: false, value: 'name' },
+      { text: 'Наименование', sortable: false, value: 'name', width: 160 },
       { text: 'Модель', value: 'article', sortable: false, width: 140 },
       { text: 'Кол-во', value: 'quantity', sortable: false, width: 120 },
     ],
-    productsTableWidth: 520
   }),
   computed: {
     ...mapGetters(['waybillProducts']),
@@ -274,20 +124,81 @@ export default {
         id: this.waybillId
       })
     },
+    headers () {
+      switch (this.tab) {
+        case 0: return [...this.productHeaders, ...this.costHeaders]
+        case 1: return [...this.productHeaders, ...this.storeHeaders]
+        case 2: return [...this.productHeaders, ...this.infoHeaders]
+        case 3: return [...this.productHeaders, ...this.linkHeaders]
+        default: return []
+      }
+    },
+    productsTableWidth () {
+      const w = this.productHeaders.reduce((acc, curr) => {
+        return acc + (curr.width || 0)
+      }, 0)
+      return !this.$vuetify.breakpoint.xs ? w : 0
+    },
+    isWaybillProfitTypeMargin () {
+      return this.waybillProfitType === 'MARGIN'
+    },
+    isWaybillProfitTypeCommission () {
+      return this.waybillProfitType === 'COMMISSION'
+    },
+    costHeaders () {
+      return [
+        {
+          text: this.isWaybillProfitTypeMargin
+            ? 'Себестоимость' : 'Цена закупки',
+          value: 'price',
+          sortable: false,
+          width: 120
+        },
+        { text: 'Стоимость', value: 'amount', sortable: false, width: 120 },
+        { text: 'Для клиента', value: 'clientPrice', sortable: false, width: 120 },
+        { text: 'Стоимость', value: 'clientAmount', sortable: false, width: 120 },
+        { text: '', value: 'action', sortable: false, width: 48 }
+      ]
+    },
+    storeHeaders () {
+      return [
+        { text: 'Нетто, ед.', value: 'net', sortable: false, width: 120 },
+        { text: 'Брутто, ед.', value: 'gross', sortable: false, width: 120 },
+        { text: 'l, мм', value: 'length', sortable: false, width: 100 },
+        { text: 'w, мм', value: 'width', sortable: false, width: 100 },
+        { text: 'h, мм', value: 'height', sortable: false, width: 100 },
+        { text: 'Кол гр.м', value: 'dimension', sortable: false, width: 120 },
+        { text: '№ гр.м', value: 'cargoPlaceNumber', sortable: false, width: 100 },
+        { text: 'На складе', value: 'inStock', sortable: false, width: 100 },
+        { text: '', value: 'action', sortable: false, width: 48 }
+      ]
+    },
+    infoHeaders () {
+      return [
+        { text: 'Доп. фото', value: 'images', sortable: false, width: 140 },
+        { text: 'Дополнительная информация', value: 'description', sortable: false },
+        { text: '', value: 'action', sortable: false, width: 48 }
+      ]
+    },
+    linkHeaders () {
+      return [
+        { text: 'Поле для ссылки', value: 'url', sortable: false },
+        { text: 'Откр.', value: 'openLink', sortable: false, width: 80 },
+        { text: '', value: 'action', sortable: false, width: 48 }
+      ]
+    },
   },
   watch: {
     tab () {
       this.getWaybill()
-    }
+    },
   },
   created () {
     this.logger = new this.$Amplify.Logger('WaybillItem')
     this.getWaybill()
   },
   methods: {
-    ...mapMutations([
-      'setWaybillProductItems',
-    ]),
+    ...mapMutations(['putWaybillItem']),
     async getWaybill () {
       try {
         this.loading = true
@@ -296,8 +207,7 @@ export default {
           this.errors = response.errors
           throw new Error(response.errors.join('\n'))
         }
-        const items = response.data.getWaybill.products.items || []
-        this.setWaybillProductItems({ waybillId: this.waybillId, items })
+        this.putWaybillItem(response.data.getWaybill)
       } catch (error) {
         if (error && error.errors && error.errors.length > 0) {
           this.errors = error.errors
@@ -342,73 +252,12 @@ export default {
         this.createLoading = null
       }
     },
-    async updateProduct (input) {
-      try {
-        this.updateLoading = input.id
-        const response = await this.$Amplify.API.graphql(
-          this.$Amplify.graphqlOperation(updateProduct, {
-            input
-          })
-        )
-        if (response && response.errors && response.errors.length > 0) {
-          // exclude version check condition
-          this.errors = response.errors.reduce((acc, curr) => {
-            if (curr.errorType === 'DynamoDB:ConditionalCheckFailedException') {
-              this.onUpdateProduct({ onUpdateProduct: curr.data }, true)
-            } else {
-              return [...acc, curr]
-            }
-          }, [])
-          throw new Error(response.errors.join('\n'))
-        }
-      } catch (error) {
-        if (error && error.errors && error.errors.length > 0) {
-          this.errors = error.errors
-        }
-        this.logger.warn('Error: ', error)
-        // this.$Amplify.Analytics.record({
-        //   name: 'UpdateProductError',
-        //   attributes: {
-        //     error: error.message
-        //   }
-        // })
-      } finally {
-        this.updateLoading = null
-      }
-    },
-    async deleteProduct (input) {
-      try {
-        const msg = 'Вы действительно хотите удалить товар?'
-        const confirm = await confirmDialog(msg)
-        if (confirm === 'not_confirmed') {
-          return
-        }
-        this.deleteLoading = input.id
-        const response = await this.$Amplify.API.graphql(
-          this.$Amplify.graphqlOperation(deleteProduct, {
-            input
-          })
-        )
-        if (response && response.errors && response.errors.length > 0) {
-          this.errors = response.errors
-          throw new Error(response.errors.join('\n'))
-        }
-      } catch (error) {
-        if (error === 'not_confirmed') return
-        if (error && error.errors && error.errors.length > 0) {
-          this.errors = error.errors
-        }
-        this.logger.warn('Error: ', error)
-        // this.$Amplify.Analytics.record({
-        //   name: 'DeleteProductError',
-        //   attributes: {
-        //     error: error.message
-        //   }
-        // })
-      } finally {
-        this.deleteLoading = null
-      }
-    },
   }
 }
 </script>
+
+<style>
+.v-tabs.v-tabs--no-margin .v-tabs-bar__content .v-tab {
+  margin-left: 0!important;
+}
+</style>

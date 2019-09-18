@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-alert
-      v-for="(error, index) in items"
+      v-for="(error, index) in errors"
       :key="index"
       :value="true"
       border="left"
@@ -64,9 +64,14 @@ export default {
       mdiCloseCircle
     }
   }),
+  computed: {
+    errors () {
+      return this.items || []
+    }
+  },
   methods: {
     close (index) {
-      const updated = this.items.filter((el, i) => i !== index)
+      const updated = this.errors.filter((el, i) => i !== index)
       this.$emit('update:items', updated)
     }
   }

@@ -122,8 +122,10 @@ module.exports = class DB {
       for (let [key, val] of Object.entries(input)) {
         if (isObject(val)) {
           for (let [k, v] of Object.entries(val)) {
+            const nameKey = `#${key}${k}`
             const valueKey = `:${key}${k}`
-            updateExpression += `, ${key}.${k} = ${valueKey}`
+            updateExpression += `, ${nameKey} = ${valueKey}`
+            expressionAttributeNames[nameKey] = `${key}.${k}`
             expressionAttributeValues[`${valueKey}`] = v
           }
         } else {

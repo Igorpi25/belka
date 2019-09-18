@@ -278,6 +278,12 @@ import Editable from '@/components/Editable.vue'
 
 import { confirmDialog } from '@/utils/helpers'
 
+const UPDATE_STATESES = {
+  NONE: 'NONE', // call update method on this status
+  WAITING: 'WAITING', // status after update method called
+  WAITING_EDIT: 'WAITING_EDIT' // status after value update on WAITING status, to call update method on VERSION update
+}
+
 export default {
   name: 'Spec',
   components: {
@@ -286,6 +292,7 @@ export default {
     Editable,
   },
   data: () => ({
+    updateStatus: UPDATE_STATESES.NONE,
     icons: {
       mdiDelete,
       mdiChevronDown
@@ -413,7 +420,7 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'setWaybillItems',
+      'setSpecItem',
       'putWaybillItem',
       'updateWaybillItem',
       'deleteWaybillItem',
@@ -433,6 +440,18 @@ export default {
       this.logger.info(msg, newData)
       const newItem = newData.onUpdateWaybill
       this.updateWaybillItem(newItem)
+      if (
+        this.updateStatus === UPDATE_STATESES.WAITING &&
+        this.updatePromises && this.updatePromises.length > 0
+      ) {
+        const shifted = this.updatePromises.shift()
+        const input = { ...shifted, expectedVersion: newItem.version }
+        this.updateStatus = UPDATE_STATESES.NONE
+        this.logger.info('CALLED PROMISE', input)
+        this.updateWaybill(input)
+      } else {
+        this.updateStatus = UPDATE_STATESES.NONE
+      }
     },
     onDeleteWaybill (newData) {
       this.logger.info('Delete waybill from subscription...', newData)
@@ -444,6 +463,9 @@ export default {
       const newItem = newData.onCreateProduct
       this.putWaybillProductItem(newItem)
       // UPDATE WAYBILL
+      const udpatedWaybill = newItem.waybill
+      delete udpatedWaybill.products
+      this.updateWaybillItem(udpatedWaybill)
     },
     onUpdateProduct (newData, onError = false) {
       const msg = onError
@@ -474,8 +496,7 @@ export default {
           this.errors = response.errors
           throw new Error(response.errors.join('\n'))
         }
-        const items = response.data.getSpec.waybills.items || []
-        this.setWaybillItems(items)
+        this.setSpecItem(response.data.getSpec)
       } catch (error) {
         if (error && error.errors && error.errors.length > 0) {
           this.errors = error.errors
@@ -523,24 +544,79 @@ export default {
     },
     async updateWaybill (input) {
       try {
+        if (this.updateStatus === UPDATE_STATESES.WAITING) {
+          if (!this.updatePromises) {
+            this.updatePromises = []
+          }
+          const wIndex = this.updatePromises.findIndex(w => w.id === input.id)
+          if (wIndex) {
+            const w = { ...this.updatePromises[wIndex], ...input }
+            this.updatePromises.splice(wIndex, 1, w)
+          } else {
+            this.updatePromises.push(input)
+          }
+          return
+        }
+        this.updateStatus = UPDATE_STATESES.WAITING
+        this.logger.info('WAYBILL UPDATE CALLED', input)
         this.updateLoading = input.id
         const response = await this.$Amplify.API.graphql(
           this.$Amplify.graphqlOperation(updateWaybill, { input })
         )
         if (response && response.errors && response.errors.length > 0) {
+          this.logger.warn('Error: ', response)
           // exclude version check condition
           this.errors = response.errors.reduce((acc, curr) => {
-            if (curr.errorType === 'DynamoDB:ConditionalCheckFailedException') {
-              this.onUpdateWaybill({ onUpdateWaybill: curr.data }, true)
+            if (
+              (curr.errorType === 'DynamoDB:ConditionalCheckFailedException' ||
+              curr.message === 'Error: ConditionalCheckFailedException: The conditional request failed') &&
+              curr.data
+            ) {
+              if (!this.updatePromises) {
+                this.updatePromises = []
+              }
+              const wIndex = this.updatePromises.findIndex(w => w.id === input.id)
+              if (wIndex) {
+                const w = { ...this.updatePromises[wIndex], ...input }
+                this.updatePromises.splice(wIndex, 1, w)
+              } else {
+                this.updatePromises.push(input)
+              }
+              this.updateStatus = UPDATE_STATESES.WAITING
+              this.updateWaybillItem(curr.data)
             } else {
               return [...acc, curr]
             }
           }, [])
           throw new Error(response.errors.join('\n'))
+        } else if (response && response.data) {
+          this.updateWaybillItem(response.data.updateWaybill)
         }
       } catch (error) {
         if (error && error.errors && error.errors.length > 0) {
-          this.errors = error.errors
+          // exclude version check condition
+          this.errors = error.errors.reduce((acc, curr) => {
+            if (
+              (curr.errorType === 'DynamoDB:ConditionalCheckFailedException' ||
+              curr.message === 'Error: ConditionalCheckFailedException: The conditional request failed') &&
+              curr.data
+            ) {
+              if (!this.updatePromises) {
+                this.updatePromises = []
+              }
+              const wIndex = this.updatePromises.findIndex(w => w.id === input.id)
+              if (wIndex) {
+                const w = { ...this.updatePromises[wIndex], ...input }
+                this.updatePromises.splice(wIndex, 1, w)
+              } else {
+                this.updatePromises.push(input)
+              }
+              this.updateStatus = UPDATE_STATESES.WAITING
+              this.updateWaybillItem(curr.data)
+            } else {
+              return [...acc, curr]
+            }
+          }, [])
         }
         this.logger.warn('Error: ', error)
         // this.$Amplify.Analytics.record({

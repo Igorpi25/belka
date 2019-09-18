@@ -235,12 +235,13 @@ const resolvers = {
       }
     },
     updateWaybill: async ctx => {
+      let waybill = {}
       try {
         let input = ctx.arguments.input || {}
         const hasProductsCostChange = input.hasOwnProperty('profitType') || input.hasOwnProperty('profitPercent')
         const hasProfitForAllChange = input.hasOwnProperty('profitForAll')
         const hasSummChange = input.hasOwnProperty('discount') || input.hasOwnProperty('prepayment')
-        let waybill = {}
+
         if (hasProductsCostChange || hasProfitForAllChange || hasSummChange) {
           waybill = await methods.getWaybill(input.id, ctx.identity)
         }
@@ -260,14 +261,12 @@ const resolvers = {
             const quantity = product.quantity || 0
             let cost = product.cost || {}
             if (profitType === WAYBILL_PROFIT_TYPES.COMMISSION) {
-              const clientPrice = (cost && cost.clientPrice)
-              cost.clientPrice = ((isNumber(clientPrice) ? clientPrice : 0))
+              cost.clientPrice = (cost && cost.clientPrice) || 0
               let profit = (cost.clientPrice * profitPercent) / 100
               const newPrice = cost.clientPrice - profit
               cost.price = newPrice
             } else if (profitType === WAYBILL_PROFIT_TYPES.MARGIN) {
-              const price = (cost && cost.price)
-              cost.price = ((isNumber(price) ? price : 0))
+              cost.price = (cost && cost.price) || 0
               let profit = (cost.price * profitPercent) / 100
               const newPrice = cost.price + profit
               cost.clientPrice = newPrice
@@ -287,9 +286,14 @@ const resolvers = {
           input.customerDebt = totalClientAmount - discount
         }
 
-        return await methods.updateWaybill(input, ctx.identity)
+        const result = await methods.updateWaybill(input, ctx.identity)
+        return result
       } catch (error) {
-        throw new Error(error)
+        if (error.code === 'ConditionalCheckFailedException') {
+          error.name = 'DynamoDB:ConditionalCheckFailedException'
+          error.data = waybill
+        }
+        throw error
       }
     },
     deleteWaybill: async ctx => {
@@ -321,9 +325,9 @@ const resolvers = {
       }
     },
     updateProduct: async ctx => {
+      let input = ctx.arguments.input || {}
+      let product = await methods.getProduct(input.id, ctx.identity)
       try {
-        let input = ctx.arguments.input || {}
-        let product = await methods.getProduct(input.id, ctx.identity)
         let waybill = await methods.getWaybill(product.productWaybillId, ctx.identity)
         let waybillProducts = await methods.getWaybillProducts(product.productWaybillId, ctx.identity)
         let udpateWaybillInput = {}
@@ -333,14 +337,12 @@ const resolvers = {
           const quantity = (input.quantity || product.quantity) || 0
           let cost = product.cost || {}
           if (profitType === WAYBILL_PROFIT_TYPES.COMMISSION) {
-            const clientPrice = (input.cost && input.cost.clientPrice)
-            cost.clientPrice = ((isNumber(clientPrice) ? clientPrice : 0))
+            cost.clientPrice = (input.cost && input.cost.clientPrice) || (cost.clientPrice || 0)
             let profit = (cost.clientPrice * profitPercent) / 100
             const newPrice = cost.clientPrice - profit
             cost.price = newPrice
           } else if (profitType === WAYBILL_PROFIT_TYPES.MARGIN) {
-            const price = (input.cost && input.cost.price)
-            cost.price = ((isNumber(price) ? price : 0))
+            cost.price = (input.cost && input.cost.price) || (cost.clientPrice || 0)
             let profit = (cost.price * profitPercent) / 100
             const newPrice = cost.price + profit
             cost.clientPrice = newPrice
@@ -434,14 +436,18 @@ const resolvers = {
           }
         }
 
-        product = await methods.updateProduct(input, ctx.identity)
+        const result = await db.update(input, ctx.identity, PRODUCT_TABLE_NAME)
 
         if (udpateWaybillInput.id && udpateWaybillInput.expectedVersion) {
           await methods.updateWaybill(udpateWaybillInput, ctx.identity)
         }
-        return product
+        return result
       } catch (error) {
-        throw new Error(error)
+        if (error.code === 'ConditionalCheckFailedException') {
+          error.name = 'DynamoDB:ConditionalCheckFailedException'
+          error.data = product
+        }
+        throw error
       }
     },
     deleteProduct: async ctx => {
@@ -507,7 +513,14 @@ exports.handler = async (event) => {
   if (typeHandler) {
     const resolver = typeHandler[event.fieldName]
     if (resolver) {
-      return await resolver(event)
+      try {
+        return await resolver(event)
+      } catch (error) {
+        if (error.code === 'ConditionalCheckFailedException') {
+          return { data: error.data, errorMessage: error.message, errorType: `DynamoDB:${error.code}` }
+        }
+        throw error
+      }
     }
   }
   throw new Error('Resolver not found.')

@@ -1,8 +1,7 @@
 <template>
   <td>
     <Editable
-      :value="item[updateProp]"
-      :version="item.version"
+      :value="value"
       :type="type"
       :min="min"
       :placeholder="compPlaceholder"
@@ -29,6 +28,10 @@ export default {
       type: String,
       required: true
     },
+    objectProp: {
+      type: String,
+      default: null
+    },
     type: {
       type: String,
       default: 'text'
@@ -39,6 +42,11 @@ export default {
     },
   },
   computed: {
+    value () {
+      return this.objectProp
+        ? this.item[this.objectProp][this.updateProp]
+        : this.item[this.updateProp]
+    },
     isNumberType () {
       return this.type === 'number'
     },
@@ -53,10 +61,14 @@ export default {
   },
   methods: {
     update (value) {
-      const input = {
+      let input = {
         id: this.item.id,
-        [this.updateProp]: value,
         expectedVersion: this.item.version
+      }
+      if (this.objectProp) {
+        input[this.objectProp] = { [this.updateProp]: value }
+      } else {
+        input[this.updateProp] = value
       }
       this.$emit('update', input)
     }

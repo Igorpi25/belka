@@ -32,6 +32,7 @@
 
 <script>
 import debounce from 'lodash.debounce'
+
 import {
   uuid,
   setCaretPosition,
@@ -39,7 +40,7 @@ import {
   setCaretToEnd
 } from '@/utils/helpers'
 
-const STATUSES = {
+const UPDATE_STATESES = {
   NONE: 'NONE', // call update method on this status
   WAITING: 'WAITING', // status after update method called
   WAITING_EDIT: 'WAITING_EDIT' // status after value update on WAITING status, to call update method on VERSION update
@@ -52,10 +53,6 @@ export default {
     value: {
       type: [String, Number],
       default: ''
-    },
-    version: {
-      type: Number,
-      required: true
     },
     type: {
       type: String,
@@ -99,7 +96,7 @@ export default {
   data () {
     return {
       id: uuid(),
-      status: STATUSES.NONE,
+      status: UPDATE_STATESES.NONE,
       lazyValue: this.value,
       isFocused: false,
     }
@@ -121,21 +118,22 @@ export default {
 
   watch: {
     value (val) {
-      if (this.status === STATUSES.NONE) {
-        this.setValue(val, this.isFocused)
-      } else if (this.status === STATUSES.WAITING) {
-        this.status = STATUSES.NONE
-        this.setValue(val, this.isFocused)
-      } else if (this.status === STATUSES.WAITING_EDIT) {
-        this.status = STATUSES.WAITING
-        this.$emit('input', this.internalValue)
-      }
+      this.internalValue = val
+      // if (this.status === UPDATE_STATESES.NONE) {
+      //   this.setValue(val, this.isFocused)
+      // } else if (this.status === UPDATE_STATESES.WAITING) {
+      //   this.status = UPDATE_STATESES.NONE
+      //   this.setValue(val, this.isFocused)
+      // } else if (this.status === UPDATE_STATESES.WAITING_EDIT) {
+      //   this.status = UPDATE_STATESES.WAITING
+      //   this.$emit('input', this.internalValue)
+      // }
     },
   },
 
   created () {
     // debounce delay for different types
-    const delay = this.type === 'number' ? 300 : 70
+    const delay = this.type === 'number' ? 250 : 75
     this.debounceInput = debounce(this.emitChange, delay)
   },
 
@@ -145,9 +143,9 @@ export default {
 
   methods: {
     input (e) {
-      if (this.status === STATUSES.WAITING) {
-        this.status = STATUSES.WAITING_EDIT
-      }
+      // if (this.status === UPDATE_STATESES.WAITING) {
+      //   this.status = UPDATE_STATESES.WAITING_EDIT
+      // }
       const val = this.type === 'number'
         ? e.target.value : e.target.innerText
       this.internalValue = val || null
@@ -155,10 +153,10 @@ export default {
     },
 
     emitChange () {
-       if (this.status === STATUSES.NONE) {
-        this.$emit('input', this.internalValue)
-        this.status = STATUSES.WAITING
-      }
+      // if (this.status === UPDATE_STATESES.NONE) {
+      this.$emit('input', this.internalValue)
+        // this.status = UPDATE_STATESES.WAITING
+      // }
     },
 
     onFocus () {
