@@ -342,7 +342,7 @@ const resolvers = {
             const newPrice = cost.clientPrice - profit
             cost.price = newPrice
           } else if (profitType === WAYBILL_PROFIT_TYPES.MARGIN) {
-            cost.price = (input.cost && input.cost.price) || (cost.clientPrice || 0)
+            cost.price = (input.cost && input.cost.price) || (cost.price || 0)
             let profit = (cost.price * profitPercent) / 100
             const newPrice = cost.price + profit
             cost.clientPrice = newPrice
