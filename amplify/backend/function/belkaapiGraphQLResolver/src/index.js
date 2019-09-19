@@ -167,6 +167,10 @@ const methods = {
     input.info = {
       images: []
     }
+    // TODO PUT logic on db.update
+    input.link = {
+      url: null
+    }
     input.__typename = 'Product'
     input.systemState = SYSTEM_STATUSES.CREATED
     input.status = input.status || PRODUCT_STATUSES.IN_PROCESSING
@@ -433,7 +437,7 @@ const resolvers = {
 
         if (input.hasOwnProperty('store')) {
           const store = product.store || {}
-          if (!input.store.hasOwnProperty('capacity') || !isNumber(capacity)) {
+          if (!input.store.hasOwnProperty('capacity') || !isNumber(input.store.capacity)) {
             const width = input.store.width || store.width || 0
             const height = input.store.height || store.height || 0
             const length = input.store.length || store.length || 0
