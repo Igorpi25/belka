@@ -37,8 +37,10 @@
                   :index="index"
                   :waybill-id="waybillId"
                   :tab="tab"
+                  :is-custom-profit="item.customProfit"
                   :is-profit-type-margin="isWaybillProfitTypeMargin"
                   :is-profit-type-commission="isWaybillProfitTypeCommission"
+                  :errors.sync="errors"
                 />
               </tbody>
             </template>

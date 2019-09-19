@@ -77,7 +77,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "belkaapi-develop-20190831235720-deployment",
-					"S3Key": "amplify-builds/belkaapiGraphQLResolver-5146664c61546d393972-build.zip"
+					"S3Key": "amplify-builds/belkaapiGraphQLResolver-76435366486b43756b32-build.zip"
 				}
 			}
 		},

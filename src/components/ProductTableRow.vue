@@ -27,7 +27,7 @@
     <!-- START COST TABLE -->
     <template v-if="tab === 0">
       <ProductTableCellEditable
-        v-if="isProfitTypeMargin"
+        v-if="isProfitTypeMargin || isCustomProfit"
         :item="item"
         object-prop="cost"
         update-prop="price"
@@ -41,7 +41,7 @@
         {{ item.cost && item.cost.amount }}
       </td>
       <ProductTableCellEditable
-        v-if="isProfitTypeCommission"
+        v-if="isProfitTypeCommission || isCustomProfit"
         :item="item"
         object-prop="cost"
         update-prop="clientPrice"
@@ -212,6 +212,10 @@ export default {
       type: Number,
       default: 0
     },
+    isCustomProfit: {
+      type: Boolean,
+      default: false
+    },
     isProfitTypeMargin: {
       type: Boolean,
       default: false
@@ -220,6 +224,10 @@ export default {
       type: Boolean,
       default: false
     },
+    errors: {
+      type: Array,
+      default: () => ([])
+    }
   },
   data: () => ({
     updateStatus: UPDATE_STATESES.NONE,
@@ -228,14 +236,6 @@ export default {
     },
     updateLoading: null,
     deleteLoading: null,
-    errors: [],
-    productHeaders: [
-      { text: '#', sortable: false, value: 'index', width: 48 },
-      { text: 'Фото', sortable: false, value: 'photo', width: 100 },
-      { text: 'Наименование', sortable: false, value: 'name', width: 160 },
-      { text: 'Модель', value: 'article', sortable: false, width: 140 },
-      { text: 'Кол-во', value: 'quantity', sortable: false, width: 120 },
-    ],
   }),
   computed: {
     ...mapGetters(['waybillProducts']),
@@ -286,7 +286,7 @@ export default {
         if (response && response.errors && response.errors.length > 0) {
           this.logger.warn('Error: ', response)
           // exclude version check condition
-          this.errors = response.errors.reduce((acc, curr) => {
+          const errors = response.errors.reduce((acc, curr) => {
             if (
               (curr.errorType === 'DynamoDB:ConditionalCheckFailedException' ||
               curr.message === 'Error: ConditionalCheckFailedException: The conditional request failed') &&
@@ -303,6 +303,7 @@ export default {
               return [...acc, curr]
             }
           }, [])
+          this.$emit('update:errors', errors)
           throw new Error(response.errors.join('\n'))
         } else if (response && response.data) {
           this.updateWaybillProductItem(response.data.updateProduct)
@@ -310,7 +311,7 @@ export default {
       } catch (error) {
         if (error && error.errors && error.errors.length > 0) {
           // exclude version check condition
-          this.errors = error.errors.reduce((acc, curr) => {
+          const errors = error.errors.reduce((acc, curr) => {
             if (
               (curr.errorType === 'DynamoDB:ConditionalCheckFailedException' ||
               curr.message === 'Error: ConditionalCheckFailedException: The conditional request failed') &&
@@ -327,6 +328,7 @@ export default {
               return [...acc, curr]
             }
           }, [])
+          this.$emit('update:errors', errors)
         }
         this.logger.warn('Error: ', error)
         // this.$Amplify.Analytics.record({
@@ -353,13 +355,13 @@ export default {
           })
         )
         if (response && response.errors && response.errors.length > 0) {
-          this.errors = response.errors
+          this.$emit('update:errors', response.errors)
           throw new Error(response.errors.join('\n'))
         }
       } catch (error) {
         if (error === 'not_confirmed') return
         if (error && error.errors && error.errors.length > 0) {
-          this.errors = error.errors
+          this.$emit('update:errors', error.errors)
         }
         this.logger.warn('Error: ', error)
         // this.$Amplify.Analytics.record({
