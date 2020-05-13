@@ -8,7 +8,7 @@
     "notRecieveEmailSubhead": "повторите запрос.",
     "restoreBySms": "восстановите данные по СМС",
     "submit": "Получить ссылку",
-    "resendSMS": ""
+    "resendSMS": "Получить СМС"
   },
   "passwordRestoreConfirm": {
     "changePasswordHead": "Парольгун уларыт,",
