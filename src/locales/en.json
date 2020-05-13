@@ -7,7 +7,8 @@
     "notRecieveEmailHead": "If you didn’t receive the message, check the \"Spam\" folder or",
     "notRecieveEmailSubhead": "try again.",
     "restoreBySms": "Restore by SMS",
-    "submit": "Get link"
+    "submit": "Get link",
+    "resendSMS": "Resend SMS"
   },
   "passwordRestoreConfirm": {
     "changePasswordHead": "Password Change,",
