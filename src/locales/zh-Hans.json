@@ -8,7 +8,7 @@
     "notRecieveEmailSubhead": "重新发送。",
     "restoreBySms": "通过手机短信登录",
     "submit": "找回密码",
-    "resendSMS": ""
+    "resendSMS": "重新发送短信"
   },
   "passwordRestoreConfirm": {
     "changePasswordHead": "重置密码",

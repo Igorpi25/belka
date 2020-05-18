@@ -8,7 +8,7 @@
     "notRecieveEmailSubhead": "повторіть запит.",
     "restoreBySms": "відновіть дані по СМС",
     "submit": "Отримати посилання",
-    "resendSMS": ""
+    "resendSMS": "Повторне надсилання SMS"
   },
   "passwordRestoreConfirm": {
     "changePasswordHead": "Зміна пароля,",
