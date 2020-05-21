@@ -7,8 +7,7 @@
     "notRecieveEmailHead": "Если вы не получили письмо, проверьте папку \"Спам\" или",
     "notRecieveEmailSubhead": "повторите запрос.",
     "restoreBySms": "восстановите данные по СМС",
-    "submit": "Получить ссылку",
-    "resendSMS": "Переотправить СМС"
+    "submit": "Получить ссылку"
   },
   "passwordRestoreConfirm": {
     "changePasswordHead": "Парольгун уларыт,",

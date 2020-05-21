@@ -7,8 +7,7 @@
     "notRecieveEmailHead": "如尚未收到信息请检查是否为垃圾邮件或者",
     "notRecieveEmailSubhead": "重新发送。",
     "restoreBySms": "通过手机短信登录",
-    "submit": "找回密码",
-    "resendSMS": "重新发送短信"
+    "submit": "找回密码"
   },
   "passwordRestoreConfirm": {
     "changePasswordHead": "重置密码",
